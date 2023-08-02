@@ -9,4 +9,9 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+
+    <string name="per_cancel">Cancel</string>
+    <string name="per_sure">Go open it</string>
+    <string name="per_title">Digital Shoots Need location permission</string>
+    <string name="per_message">Bluetooth communication relies on system location permission, please allow permission to open</string>
 </resources>
