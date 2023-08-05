@@ -256,9 +256,9 @@ public class BleDeviceManager {
             super.onCharacteristicChanged(gatt, characteristic);
             //接收数据
             byte[] bytes = characteristic.getValue();
-            int speed = bytes2Hex(bytes);
-            Log.i(TAG, "收到数据str:" + speed);
-            sendBroadcast(speed + "", INCOMING_MSG);
+//            int speed = bytes2Hex(bytes);
+            Log.i(TAG, "收到数据str:" + bytes.toString());
+//            sendBroadcast(speed + "", INCOMING_MSG);
 
         }
 
