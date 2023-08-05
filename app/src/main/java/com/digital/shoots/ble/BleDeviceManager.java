@@ -38,11 +38,15 @@ public class BleDeviceManager {
     private static final String TAG = "BleDeviceManager";
 
 
-    //设备的UUID
-    private static final String SERVICE_UUID = "0000ffe0-0000-1000-8000-00805f9b34fb";
+    //接收设备的UUID
+    private static final String RECEIVE_SERVICE_UUID = "0000ffe0-0000-1000-8000-00805f9b34fb";
+    //发送设备的UUID
+    private static final String WRITE_SERVICE_UUID = "0000ffe5-0000-1000-8000-00805f9b34fb";
 
     //DATA_UUID
-    private static final String DATA_UUID = "0000ffe4-0000-1000-8000-00805f9b34fb";
+    private static final String RECEIVE_DATA_UUID = "0000ffe4-0000-1000-8000-00805f9b34fb";
+    //DATA_UUID
+    private static final String WRITE_DATA_UUID = "0000ffe9-0000-1000-8000-00805f9b34fb";
 
     public static final String ALERT_MSG = "ALERT_MSG";
 
@@ -284,11 +288,11 @@ public class BleDeviceManager {
 
 
     private void setNotification() {
-        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(SERVICE_UUID));
+        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(RECEIVE_SERVICE_UUID));
         if (service == null) {
             return;
         }
-        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(DATA_UUID));
+        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(RECEIVE_DATA_UUID));
         boolean isEnableNotification = bluetoothGatt.setCharacteristicNotification(characteristic, true);
 
         if (isEnableNotification) {
@@ -327,5 +331,16 @@ public class BleDeviceManager {
 
     private void showToast(String str) {
         handler.post(() -> Toast.makeText(DigitalApplication.getContext(), str, Toast.LENGTH_LONG).show());
+    }
+
+    public void writeBle(byte[] value) {
+        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
+        if (service == null) {
+            return;
+        }
+        BluetoothGattCharacteristic writeChar = service.getCharacteristic(UUID.fromString(WRITE_DATA_UUID));
+
+        writeChar.setValue(value);
+        bluetoothGatt.writeCharacteristic(writeChar);
     }
 }
