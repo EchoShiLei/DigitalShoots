@@ -2,6 +2,7 @@ package com.digital.shoots.main;
 
 import android.app.Application;
 
+import com.digital.shoots.R;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.ble.BleDeviceManager;
 import com.digital.shoots.utils.ToastUtils;
@@ -14,7 +15,7 @@ import androidx.lifecycle.AndroidViewModel;
 
 public class MainViewModel extends AndroidViewModel {
 
-    Map<String, BleDeviceControl> deviceControlMap = new HashMap<>();
+    public Map<String, BleDeviceControl> deviceControlMap = new HashMap<>();
 
     public MainViewModel(@NonNull Application application) {
         super(application);
@@ -43,8 +44,17 @@ public class MainViewModel extends AndroidViewModel {
 
     }
 
-    public void deviceConnected() {
+    public void deviceConnected(String mac) {
 
+    }
+
+    public void startModel1() {
+        if (deviceControlMap.size() == 0) {
+            ToastUtils.showToast(R.string.pls_connect);
+            return;
+        }
+        BleDeviceControl control = deviceControlMap.entrySet().stream().findFirst().get().getValue();
+        control.startModel(1);
     }
 
 

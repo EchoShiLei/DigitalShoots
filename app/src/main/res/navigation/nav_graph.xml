@@ -14,6 +14,9 @@
         <action
             android:id="@+id/action_FirstFragment_to_SecondFragment"
             app:destination="@id/SecondFragment" />
+        <action
+            android:id="@+id/action_FirstFragment_to_mainModelFragment"
+            app:destination="@id/mainModelFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -25,4 +28,18 @@
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mainModelFragment"
+        android:name="com.digital.shoots.model.MainModelFragment"
+        android:label="fragment_main_model"
+        tools:layout="@layout/fragment_main_model" >
+        <action
+            android:id="@+id/action_mainModelFragment_to_model1Fragment"
+            app:destination="@id/model1Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/model1Fragment"
+        android:name="com.digital.shoots.model.Model1Fragment"
+        android:label="fragment_model1"
+        tools:layout="@layout/fragment_model1" />
 </navigation>

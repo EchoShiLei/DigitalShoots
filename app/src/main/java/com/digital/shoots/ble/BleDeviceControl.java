@@ -61,7 +61,7 @@ public class BleDeviceControl {
         }
     }
 
-    public void disConnect(){
+    public void disConnect() {
 
     }
 
@@ -146,7 +146,7 @@ public class BleDeviceControl {
         }
     };
 
-    public void writeBle(byte[] value) {
+    private void writeBle(byte[] value) {
         BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
         if (service == null) {
             return;
@@ -161,6 +161,10 @@ public class BleDeviceControl {
     //处理接收到到数据
     private void handleReceiveData(byte[] bytes) {
 
+    }
+
+    public void startModel(int model) {
+        writeBle(BleDataUtils.getCountdownData());
     }
 
 

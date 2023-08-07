@@ -14,4 +14,8 @@
     <string name="per_sure">Go open it</string>
     <string name="per_title">Digital Shoots Need location permission</string>
     <string name="per_message">Bluetooth communication relies on system location permission, please allow permission to open</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="pls_connect">Please connect Bluetooth </string>
 </resources>

@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.digital.shoots.R;
+import com.digital.shoots.base.BaseFragment;
 import com.digital.shoots.ble.BleDeviceManager;
 import com.digital.shoots.ble.BleItem;
 import com.digital.shoots.main.MainViewModel;
@@ -24,12 +25,10 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class BleFragment extends Fragment {
+public class BleFragment extends BaseFragment {
     RecyclerView deviceList;
     DeviceAdapter adapter;
     List<BleItem> list = new ArrayList<>();
-
-    private MainViewModel mainViewModel;
 
     @Override
     public View onCreateView(
@@ -41,7 +40,6 @@ public class BleFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
         deviceList = view.findViewById(R.id.device_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
