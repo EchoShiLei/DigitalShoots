@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.digital.shoots.R;
 import com.digital.shoots.ble.BleDeviceManager;
 import com.digital.shoots.ble.BleItem;
+import com.digital.shoots.main.MainViewModel;
 import com.digital.shoots.utils.ToastUtils;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,6 +29,7 @@ public class BleFragment extends Fragment {
     DeviceAdapter adapter;
     List<BleItem> list = new ArrayList<>();
 
+    private MainViewModel mainViewModel;
 
     @Override
     public View onCreateView(
@@ -38,22 +41,13 @@ public class BleFragment extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
         deviceList = view.findViewById(R.id.device_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         deviceList.setLayoutManager(linearLayoutManager);
 
-        adapter = new DeviceAdapter(getActivity(), list, new BleDeviceManager.UiConnectCallback() {
-            @Override
-            public void onSuccess() {
-                ToastUtils.showToastD("success");
-            }
-
-            @Override
-            public void onFailed() {
-                ToastUtils.showToastD("failed");
-            }
-        });
+        adapter = new DeviceAdapter(getActivity(), list, mac -> mainViewModel.deviceClick(mac));
         deviceList.setAdapter(adapter);
 
 
@@ -67,10 +61,10 @@ public class BleFragment extends Fragment {
 
     private class DeviceAdapter extends RecyclerView.Adapter {
         List<BleItem> list = new ArrayList<>();
-        BleDeviceManager.UiConnectCallback callback;
+        ItemClick callback;
         Context mContext;
 
-        public DeviceAdapter(Context context, List<BleItem> list, BleDeviceManager.UiConnectCallback callback) {
+        public DeviceAdapter(Context context, List<BleItem> list, ItemClick callback) {
             this.list = list;
             mContext = context;
             this.callback = callback;
@@ -85,17 +79,7 @@ public class BleFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            holder.itemView.setOnClickListener(view -> BleDeviceManager.getInstance().connect(list.get(position).mac, new BleDeviceManager.UiConnectCallback() {
-                @Override
-                public void onSuccess() {
-                    callback.onSuccess();
-                }
-
-                @Override
-                public void onFailed() {
-                    callback.onFailed();
-                }
-            }));
+            holder.itemView.setOnClickListener(view -> callback.click(list.get(position).mac));
             ((BleViewHolder) holder).name.setText(list.get(position).name);
         }
 
@@ -112,5 +96,10 @@ public class BleFragment extends Fragment {
                 name = itemView.findViewById(R.id.ble_name);
             }
         }
+
+    }
+
+    public interface ItemClick {
+        void click(String mac);
     }
 }
