@@ -10,10 +10,10 @@ import com.digital.shoots.R;
 import com.digital.shoots.base.BaseFragment;
 import com.digital.shoots.views.LedTextView;
 
-import java.text.DecimalFormat;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
+import static com.digital.shoots.model.BaseModel.ModelType.NOVICE;
 
 public class Model1Fragment extends BaseFragment {
     LedTextView time;
@@ -36,10 +36,10 @@ public class Model1Fragment extends BaseFragment {
             double dbTime = liveTime;
             double ss = dbTime / 1000;
             String stTime = df2.format(ss);
-            Log.d("time",stTime);
+//            Log.d("time",stTime);
             time.setText(stTime);
         });
-        mainViewModel.startModel1();
+        mainViewModel.startModel(NOVICE);
     }
 
     @Override

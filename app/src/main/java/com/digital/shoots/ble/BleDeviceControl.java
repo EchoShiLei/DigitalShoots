@@ -37,12 +37,17 @@ public class BleDeviceControl {
     private BluetoothGatt bluetoothGatt;
 
     private UiConnectCallback uiConnectCallback;
+    private DataCallback dataCallback;
     private MainViewModel mainViewModel;
 
 
     public BleDeviceControl(MainViewModel viewModel, UiConnectCallback connectCallback) {
         this.uiConnectCallback = connectCallback;
         mainViewModel = viewModel;
+    }
+
+    public void setDataCallback(DataCallback callback) {
+        dataCallback = callback;
     }
 
 
@@ -161,14 +166,20 @@ public class BleDeviceControl {
 
     //处理接收到到数据
     private void handleReceiveData(byte[] bytes) {
+        if (dataCallback != null) {
+            dataCallback.onData(bytes);
+        }
 
     }
-
 
 
     public interface UiConnectCallback {
         void onSuccess();
 
         void onFailed();
+    }
+
+    public interface DataCallback {
+        void onData(byte[] data);
     }
 }

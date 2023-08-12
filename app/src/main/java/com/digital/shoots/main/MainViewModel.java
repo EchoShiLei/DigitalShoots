@@ -6,16 +6,12 @@ import com.digital.shoots.R;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.ble.BleDeviceManager;
 import com.digital.shoots.model.BaseModel;
+import com.digital.shoots.model.BaseModel.ModelType;
 import com.digital.shoots.model.NoviceModel;
 import com.digital.shoots.utils.ToastUtils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
 public class MainViewModel extends AndroidViewModel {
@@ -55,18 +51,30 @@ public class MainViewModel extends AndroidViewModel {
 
     }
 
-    public void startModel1() {
+    public void startModel(ModelType modelType) {
         if (modelControl == null) {
             ToastUtils.showToast(R.string.pls_connect);
             return;
         }
 
-        model = new NoviceModel(modelControl, new BaseModel.ModelCallback() {
+        BaseModel.ModelCallback callback = new BaseModel.ModelCallback() {
             @Override
             public void countdownTime(long time) {
                 livTime.postValue(time);
             }
-        });
+        };
+
+        switch (modelType) {
+            case NOVICE:
+                model = new NoviceModel(modelControl, callback);
+                break;
+            case BATTLE:
+                break;
+            case JUNIOR:
+                break;
+            default:
+                break;
+        }
         model.start();
     }
 
@@ -74,10 +82,12 @@ public class MainViewModel extends AndroidViewModel {
         if (model == null) {
             return;
         }
-        model.getClass();
+        model.end();
     }
 
     public MutableLiveData<Long> getLivTime() {
         return livTime;
     }
+
+
 }

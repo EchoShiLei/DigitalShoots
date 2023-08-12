@@ -3,7 +3,7 @@ package com.digital.shoots.ble;
 public class BleDataUtils {
 
     // 改变红灯颜色
-    public static byte[] getChangeRedData(int i) {
+    public static byte[] OpenRedData(int i) {
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
