@@ -37,7 +37,7 @@ public class MainModelFragment extends BaseFragment {
         model3 = view.findViewById(R.id.model3_layout);
 
         model1.setOnClickListener(view1 -> {
-            if (mainViewModel.deviceControlMap.size() == 0) {
+            if (mainViewModel.modelControl == null) {
                 ToastUtils.showToast(R.string.pls_connect);
                 return;
             }

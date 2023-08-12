@@ -4,6 +4,7 @@ import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
 
+import com.digital.shoots.utils.ThreadPoolManager;
 import com.zyq.easypermission.EasyPermissionHelper;
 
 public class DigitalApplication extends Application {
@@ -17,6 +18,7 @@ public class DigitalApplication extends Application {
         mContext=getApplicationContext();
         mainHandler= new Handler();
         EasyPermissionHelper.getInstance().init(this);
+        ThreadPoolManager.getInstance().initThreadPool();
     }
 
     public static Context getContext(){

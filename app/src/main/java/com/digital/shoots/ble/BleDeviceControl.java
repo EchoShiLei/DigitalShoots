@@ -12,6 +12,7 @@ import android.util.Log;
 
 import com.digital.shoots.DigitalApplication;
 import com.digital.shoots.main.MainViewModel;
+import com.digital.shoots.model.BaseModel;
 import com.digital.shoots.utils.ToastUtils;
 
 import java.util.List;
@@ -146,7 +147,7 @@ public class BleDeviceControl {
         }
     };
 
-    private void writeBle(byte[] value) {
+    public void writeBle(byte[] value) {
         BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
         if (service == null) {
             return;
@@ -163,9 +164,6 @@ public class BleDeviceControl {
 
     }
 
-    public void startModel(int model) {
-        writeBle(BleDataUtils.getCountdownData());
-    }
 
 
     public interface UiConnectCallback {
