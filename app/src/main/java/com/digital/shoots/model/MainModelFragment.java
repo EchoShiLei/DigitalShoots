@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -19,9 +20,9 @@ import com.digital.shoots.utils.ToastUtils;
 
 public class MainModelFragment extends BaseFragment {
 
-    RelativeLayout model1;
-    RelativeLayout model2;
-    RelativeLayout model3;
+    ConstraintLayout model1;
+    ConstraintLayout model2;
+    ConstraintLayout model3;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

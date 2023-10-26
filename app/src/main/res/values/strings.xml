@@ -20,4 +20,6 @@
     <string name="pls_connect">Please connect Bluetooth </string>
     <string name="game_time">GAME TIME </string>
     <string name="score">SCORE </string>
+    <string name="shooter_tutor">SHOOTER TUTOR </string>
+
 </resources>

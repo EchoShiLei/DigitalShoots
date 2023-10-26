@@ -53,13 +53,8 @@ public class BleDeviceControl {
 
     public void connect(BluetoothDevice device) {
         if (bluetoothGatt == null) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                bluetoothGatt = device.connectGatt(DigitalApplication.getContext(),
-                        true, gattCallback, TRANSPORT_LE);
-            } else {
-                bluetoothGatt = device.connectGatt(DigitalApplication.getContext(),
-                        true, gattCallback);
-            }
+            bluetoothGatt = device.connectGatt(DigitalApplication.getContext(),
+                    true, gattCallback, TRANSPORT_LE);
 
             if (bluetoothGatt == null) {
                 Log.d(TAG, "firstGatt is null!");
