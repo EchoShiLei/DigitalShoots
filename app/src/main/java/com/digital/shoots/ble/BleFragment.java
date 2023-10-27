@@ -41,6 +41,13 @@ public class BleFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         deviceList = view.findViewById(R.id.device_list);
+        View btnScan = view.findViewById(R.id.btn_scan_bluetooth);
+        btnScan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         deviceList.setLayoutManager(linearLayoutManager);
