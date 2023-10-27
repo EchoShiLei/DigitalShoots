@@ -8,6 +8,7 @@ import android.os.Bundle;
 
 import com.digital.shoots.R;
 import com.digital.shoots.ble.BleDeviceManager;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.zyq.easypermission.EasyPermission;
@@ -20,6 +21,7 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.ui.NavigationUI;
 
 import android.util.Log;
 import android.view.View;
@@ -49,6 +51,7 @@ public class MainActivity extends AppCompatActivity {
         mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
 
         navController = Navigation.findNavController(findViewById(R.id.nav_host_fragment));
+        NavigationUI.setupWithNavController(((BottomNavigationView)findViewById(R.id.bottom)), navController);
         findViewById(R.id.btn_ble).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

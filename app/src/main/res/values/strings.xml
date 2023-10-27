@@ -22,4 +22,10 @@
     <string name="score">SCORE </string>
     <string name="shooter_tutor">SHOOTER TUTOR </string>
 
+    <string name="bottom_trainers">Trainers</string>
+    <string name="bottom_drills">Drills</string>
+    <string name="bottom_tracking">Tracking</string>
+    <string name="bottom_my_stats">My Stats</string>
+    <string name="bottom_my_account">My Account</string>
+
 </resources>
