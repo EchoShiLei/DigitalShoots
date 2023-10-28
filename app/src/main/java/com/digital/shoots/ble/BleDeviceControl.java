@@ -161,9 +161,6 @@ public class BleDeviceControl {
 
     //处理接收到到数据
     private void handleReceiveData(byte[] bytes) {
-        if (bytes == null || bytes.length != 6) {
-            return;
-        }
         if (dataCallback != null) {
             dataCallback.onData(bytes);
         }

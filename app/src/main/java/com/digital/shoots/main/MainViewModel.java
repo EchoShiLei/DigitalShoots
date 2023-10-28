@@ -64,13 +64,8 @@ public class MainViewModel extends AndroidViewModel {
 
     }
 
-
-    public void deviceConnected(String mac) {
-
-    }
-
     public void startModel(ModelType modelType) {
-        if (deviceControl == null) {
+        if (connectedMacs.size() == 0) {
             ToastUtils.showToast(R.string.pls_connect);
             return;
         }
