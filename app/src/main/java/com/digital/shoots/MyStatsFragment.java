@@ -2,11 +2,16 @@ package com.digital.shoots;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.digital.shoots.stats.StatsFragmentsAdapter;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -53,6 +58,8 @@ public class MyStatsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
@@ -60,5 +67,14 @@ public class MyStatsFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_stats, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ViewPager2 viewPager2 = view.findViewById(R.id.vp_fragment_container);
+        StatsFragmentsAdapter statsFragmentsAdapter = new StatsFragmentsAdapter();
+        statsFragmentsAdapter.initPagerData();
+        viewPager2.setAdapter(statsFragmentsAdapter);
     }
 }

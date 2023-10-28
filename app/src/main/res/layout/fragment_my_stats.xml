@@ -5,11 +5,9 @@
     android:layout_height="match_parent"
     tools:context=".MyStatsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vp_fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:text="My stats" />
-
+        android:orientation="vertical" />
 </FrameLayout>

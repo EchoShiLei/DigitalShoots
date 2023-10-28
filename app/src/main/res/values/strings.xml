@@ -30,5 +30,15 @@
     <string name="bottom_tracking">Tracking</string>
     <string name="bottom_my_stats">My Stats</string>
     <string name="bottom_my_account">My Account</string>
+    <string name="stat_first_title">YOU\'RE IN PROGRESS...</string>
+    <string name="stats_string_1">Excellent</string>
+    <string name="stats_string_2">Avg</string>
+    <string name="stats_string_3">Poor</string>
+    <string name="stats_score">SCORE</string>
+    <string name="stats_speed">SPEED</string>
+    <string name="stats_status_1">PRO</string>
+    <string name="stats_status_2">GOOD</string>
+    <string name="stats_time">Mar.2022</string>
+    <string name="stats_profile">PROFILE</string>
 
 </resources>
