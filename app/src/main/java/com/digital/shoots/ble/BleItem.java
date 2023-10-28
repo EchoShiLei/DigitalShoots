@@ -8,4 +8,5 @@ public class BleItem {
 
     public String mac;
     public String name;
+    public boolean isConnect;
 }

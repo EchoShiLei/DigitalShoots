@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -14,6 +15,7 @@ import com.digital.shoots.ble.BleDeviceManager;
 import com.digital.shoots.ble.BleItem;
 import com.digital.shoots.main.MainViewModel;
 import com.digital.shoots.utils.ToastUtils;
+import com.digital.shoots.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +47,7 @@ public class BleFragment extends BaseFragment {
         btnScan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                scanBluetooth();
             }
         });
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -55,13 +57,18 @@ public class BleFragment extends BaseFragment {
         adapter = new DeviceAdapter(getActivity(), list, mac -> mainViewModel.deviceClick(mac));
         deviceList.setAdapter(adapter);
 
+        scanBluetooth();
+    }
 
+    private void scanBluetooth() {
+        list.clear();
         BleDeviceManager.getInstance().setUiScanCallback((name, address) -> {
             list.add(new BleItem(name, address));
-            adapter.notifyDataSetChanged();
+            if (adapter != null) {
+                adapter.notifyDataSetChanged();
+            }
         });
         BleDeviceManager.getInstance().scan();
-
     }
 
     private class DeviceAdapter extends RecyclerView.Adapter {
@@ -86,6 +93,9 @@ public class BleFragment extends BaseFragment {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             holder.itemView.setOnClickListener(view -> callback.click(list.get(position).mac));
             ((BleViewHolder) holder).name.setText(list.get(position).name);
+            boolean isOpen = position % 2 == 0;
+            ((BleViewHolder) holder).vStatus.setImageDrawable(Utils.getDrawable(getContext(),
+                    isOpen ? R.drawable.bluetooth_open : R.drawable.bluetooth_off));
         }
 
         @Override
@@ -95,10 +105,12 @@ public class BleFragment extends BaseFragment {
 
         private class BleViewHolder extends RecyclerView.ViewHolder {
             public TextView name;
+            public ImageView vStatus;
 
             public BleViewHolder(@NonNull View itemView) {
                 super(itemView);
                 name = itemView.findViewById(R.id.ble_name);
+                vStatus = itemView.findViewById(R.id.iv_bluetooth_status);
             }
         }
 
