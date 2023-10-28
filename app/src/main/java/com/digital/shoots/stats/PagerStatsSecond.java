@@ -30,7 +30,12 @@ public class PagerStatsSecond extends BaseStatsPager {
 
             }
         });
+        mStatsSecondFragmentsHolder.mLlPlayView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
         mStatsSecondFragmentsHolder.mTvScoreNum.setText("112");
         mStatsSecondFragmentsHolder.mLineChart.setData(setData());
     }
