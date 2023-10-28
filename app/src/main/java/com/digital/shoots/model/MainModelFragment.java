@@ -5,15 +5,12 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RelativeLayout;
 
-import com.digital.shoots.FirstFragment;
 import com.digital.shoots.R;
 import com.digital.shoots.base.BaseFragment;
 import com.digital.shoots.utils.ToastUtils;
@@ -38,7 +35,7 @@ public class MainModelFragment extends BaseFragment {
         model3 = view.findViewById(R.id.model3_layout);
 
         model1.setOnClickListener(view1 -> {
-            if (mainViewModel.modelControl == null) {
+            if (mainViewModel.deviceControl == null) {
                 ToastUtils.showToast(R.string.pls_connect);
                 return;
             }

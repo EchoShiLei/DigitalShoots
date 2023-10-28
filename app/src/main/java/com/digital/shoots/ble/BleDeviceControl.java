@@ -98,7 +98,7 @@ public class BleDeviceControl {
                     case BluetoothProfile.STATE_CONNECTED:
                         Log.i(TAG, "gattCallback,STATE_CONNECTED");
                         if (uiConnectCallback != null) {
-                            uiConnectCallback.onSuccess();
+                            uiConnectCallback.onSuccess(gatt.getDevice().getAddress());
                         }
                         gatt.discoverServices();
                         break;
@@ -112,7 +112,7 @@ public class BleDeviceControl {
                 //连接失败
 
                 if (uiConnectCallback != null) {
-                    uiConnectCallback.onFailed();
+                    uiConnectCallback.onFailed(gatt.getDevice().getAddress());
                 }
                 Log.e(TAG, "onConnectionStateChange fail,Status:" + status);
                 ToastUtils.showToastD("onConnectionStateChange fail,Status: " + status);
@@ -161,6 +161,9 @@ public class BleDeviceControl {
 
     //处理接收到到数据
     private void handleReceiveData(byte[] bytes) {
+        if (bytes == null || bytes.length != 6) {
+            return;
+        }
         if (dataCallback != null) {
             dataCallback.onData(bytes);
         }
@@ -169,9 +172,9 @@ public class BleDeviceControl {
 
 
     public interface UiConnectCallback {
-        void onSuccess();
+        void onSuccess(String mac);
 
-        void onFailed();
+        void onFailed(String mac);
     }
 
     public interface DataCallback {

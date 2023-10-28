@@ -17,7 +17,6 @@ public class NoviceModel extends BaseModel {
 
     @Override
     public void ready() {
-        beExecuteList.add(BleDataUtils.openAllLight());
     }
 
     @Override
@@ -31,7 +30,7 @@ public class NoviceModel extends BaseModel {
     }
 
     @Override
-    void onData(byte[] data) {
+    public void onData(byte[] data) {
 
     }
 }

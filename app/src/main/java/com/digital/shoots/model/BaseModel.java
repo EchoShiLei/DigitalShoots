@@ -1,5 +1,6 @@
 package com.digital.shoots.model;
 
+import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.ble.BleDeviceControl.DataCallback;
 
@@ -10,7 +11,6 @@ import java.util.TimerTask;
 public abstract class BaseModel {
     private ModelState state = ModelState.IDLE;
     public static long TIME_PERIOD = 10;
-    public LinkedList<byte[]> beExecuteList = new LinkedList<>();
 
     BleDeviceControl bleDeviceControl;
     ModelCallback callback;
@@ -32,6 +32,7 @@ public abstract class BaseModel {
 
     public void end() {
         timer.cancel();
+        bleDeviceControl.writeBle(BleDataUtils.closeAllLight());
     }
 
 
@@ -49,7 +50,7 @@ public abstract class BaseModel {
 
     abstract void doTime();
 
-    abstract void onData(byte[] data);
+    public abstract void onData(byte[] data);
 
     public interface ModelCallback {
         void countdownTime(long time);

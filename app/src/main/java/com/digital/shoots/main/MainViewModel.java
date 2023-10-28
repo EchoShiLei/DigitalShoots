@@ -11,16 +11,24 @@ import com.digital.shoots.model.BaseModel.ModelType;
 import com.digital.shoots.model.NoviceModel;
 import com.digital.shoots.utils.ToastUtils;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 public class MainViewModel extends AndroidViewModel {
 
-    public BleDeviceControl modelControl;
+    public BleDeviceControl deviceControl;
     BaseModel model;
     private MutableLiveData<Long> livTime = new MutableLiveData<>();
-    private MutableLiveData<Integer>  liveScore= new MutableLiveData<>();
+    private MutableLiveData<Integer> liveScore = new MutableLiveData<>();
+    private MutableLiveData<Set<String>> liveConnectedMacs = new MutableLiveData<>();
+
+    private Set<String> connectedMacs = new HashSet<>();
 
 
     public MainViewModel(@NonNull Application application) {
@@ -29,25 +37,29 @@ public class MainViewModel extends AndroidViewModel {
 
 
     public void deviceClick(String mac) {
-        if (modelControl == null) {
-            modelControl = new BleDeviceControl(this, new BleDeviceControl.UiConnectCallback() {
+        if (deviceControl == null) {
+            deviceControl = new BleDeviceControl(this, new BleDeviceControl.UiConnectCallback() {
                 @Override
-                public void onSuccess() {
-                    modelControl.writeBle(BleDataUtils.appOnlineControl());
+                public void onSuccess(String mac) {
+                    deviceControl.writeBle(BleDataUtils.appOnlineControl());
                     ToastUtils.showToastD("Success");
+                    connectedMacs.add(mac);
+                    liveConnectedMacs.postValue(connectedMacs);
                 }
 
                 @Override
-                public void onFailed() {
+                public void onFailed(String mac) {
                     ToastUtils.showToastD("fail");
+                    connectedMacs.remove(mac);
+                    liveConnectedMacs.postValue(connectedMacs);
                 }
             });
-            modelControl.connect(BleDeviceManager.getInstance().getDevice(mac));
+            deviceControl.connect(BleDeviceManager.getInstance().getDevice(mac));
         } else {
-            modelControl.disConnect();
+            deviceControl.disConnect();
         }
-        modelControl.setDataCallback(data -> {
-            liveScore.postValue(BleDataUtils.bytes2Hex(data));
+        deviceControl.setDataCallback(data -> {
+            model.onData(data);
         });
 
     }
@@ -58,7 +70,7 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void startModel(ModelType modelType) {
-        if (modelControl == null) {
+        if (deviceControl == null) {
             ToastUtils.showToast(R.string.pls_connect);
             return;
         }
@@ -72,7 +84,7 @@ public class MainViewModel extends AndroidViewModel {
 
         switch (modelType) {
             case NOVICE:
-                model = new NoviceModel(modelControl, callback);
+                model = new NoviceModel(deviceControl, callback);
                 break;
             case BATTLE:
                 break;
@@ -94,9 +106,13 @@ public class MainViewModel extends AndroidViewModel {
     public MutableLiveData<Long> getLivTime() {
         return livTime;
     }
+
     public MutableLiveData<Integer> getLiveScore() {
         return liveScore;
     }
 
-
+    // 获取已连接设备数
+    public MutableLiveData<Set<String>> getLiveConnectedMacs() {
+        return liveConnectedMacs;
+    }
 }
