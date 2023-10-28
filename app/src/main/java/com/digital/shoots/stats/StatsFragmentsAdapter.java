@@ -1,5 +1,6 @@
 package com.digital.shoots.stats;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +17,11 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     private static final int PAGER_SECOND = 1;
     private static final int PAGER_THIRD = 2;
     private ArrayList<Integer> arrayList = new ArrayList<>();
+    private Context mContext;
+
+    public StatsFragmentsAdapter(Context context) {
+        mContext = context;
+    }
 
     @NonNull
     @Override
@@ -56,7 +62,7 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     public void onBindViewHolder(@NonNull HolderStatsFragment holder, int position) {
         BaseStatsPager pager = null;
         if (holder instanceof HolderStatsFirstFragment) {
-            pager = new PagerStatsFirst(holder);
+            pager = new PagerStatsFirst(holder, mContext);
         }
         if (holder instanceof HolderStatsSecondFragment) {
             pager = new PagerStatsSecond(holder);

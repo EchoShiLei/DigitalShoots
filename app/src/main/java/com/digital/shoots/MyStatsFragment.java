@@ -73,7 +73,7 @@ public class MyStatsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewPager2 viewPager2 = view.findViewById(R.id.vp_fragment_container);
-        StatsFragmentsAdapter statsFragmentsAdapter = new StatsFragmentsAdapter();
+        StatsFragmentsAdapter statsFragmentsAdapter = new StatsFragmentsAdapter(getContext());
         statsFragmentsAdapter.initPagerData();
         viewPager2.setAdapter(statsFragmentsAdapter);
     }
