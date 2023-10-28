@@ -3,6 +3,7 @@ package com.digital.shoots.main;
 import android.app.Application;
 
 import com.digital.shoots.R;
+import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.ble.BleDeviceManager;
 import com.digital.shoots.model.BaseModel;
@@ -19,6 +20,7 @@ public class MainViewModel extends AndroidViewModel {
     public BleDeviceControl modelControl;
     BaseModel model;
     private MutableLiveData<Long> livTime = new MutableLiveData<>();
+    private MutableLiveData<Integer>  liveScore= new MutableLiveData<>();
 
 
     public MainViewModel(@NonNull Application application) {
@@ -31,6 +33,7 @@ public class MainViewModel extends AndroidViewModel {
             modelControl = new BleDeviceControl(this, new BleDeviceControl.UiConnectCallback() {
                 @Override
                 public void onSuccess() {
+                    modelControl.writeBle(BleDataUtils.appOnlineControl());
                     ToastUtils.showToastD("Success");
                 }
 
@@ -43,6 +46,9 @@ public class MainViewModel extends AndroidViewModel {
         } else {
             modelControl.disConnect();
         }
+        modelControl.setDataCallback(data -> {
+            liveScore.postValue(BleDataUtils.bytes2Hex(data));
+        });
 
     }
 
@@ -87,6 +93,9 @@ public class MainViewModel extends AndroidViewModel {
 
     public MutableLiveData<Long> getLivTime() {
         return livTime;
+    }
+    public MutableLiveData<Integer> getLiveScore() {
+        return liveScore;
     }
 
 

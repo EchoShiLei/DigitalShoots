@@ -11,14 +11,18 @@ public class NoviceModel extends BaseModel {
     }
 
     public void start() {
-        super.start();
         time = 0;
-        callback.countdownTime(time);
-//        bleDeviceControl.writeBle(BleDataUtils.getCountdownData());
-        for (int i = 1; i < 6; i++) {
-            beExecuteList.add(BleDataUtils.OpenRedData(i));
-        }
-        bleDeviceControl.writeBle(beExecuteList.pop());
+        sendMsg(BleDataUtils.openRedData());
+    }
+
+    @Override
+    public void ready() {
+        beExecuteList.add(BleDataUtils.openAllLight());
+    }
+
+    @Override
+    public void run() {
+
     }
 
     @Override
@@ -28,11 +32,6 @@ public class NoviceModel extends BaseModel {
 
     @Override
     void onData(byte[] data) {
-        if (data.length == 6) {
-            if (data[3] == 1) {
-                bleDeviceControl.writeBle(beExecuteList.pop());
-            }
-        }
 
     }
 }

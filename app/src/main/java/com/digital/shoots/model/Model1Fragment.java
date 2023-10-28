@@ -30,14 +30,15 @@ public class Model1Fragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         time = view.findViewById(R.id.game_time);
         score = view.findViewById(R.id.score);
-//        score.setLedFont();
-//        time.setLedFont();
         mainViewModel.getLivTime().observe(getActivity(), liveTime -> {
             double dbTime = liveTime;
             double ss = dbTime / 1000;
             String stTime = df2.format(ss);
 //            Log.d("time",stTime);
             time.setText(stTime);
+        });
+        mainViewModel.getLiveScore().observe(getActivity(), liveScore -> {
+            score.setText(liveScore);
         });
         mainViewModel.startModel(NOVICE);
     }

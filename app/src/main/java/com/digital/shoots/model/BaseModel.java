@@ -8,8 +8,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public abstract class BaseModel {
+    private ModelState state = ModelState.IDLE;
     public static long TIME_PERIOD = 10;
-    public LinkedList<byte[]> beExecuteList= new LinkedList<>();
+    public LinkedList<byte[]> beExecuteList = new LinkedList<>();
 
     BleDeviceControl bleDeviceControl;
     ModelCallback callback;
@@ -23,7 +24,18 @@ public abstract class BaseModel {
         timer = new Timer();
     }
 
-    public void start() {
+    public abstract void start();
+
+    public abstract void ready();
+
+    public abstract void run();
+
+    public void end() {
+        timer.cancel();
+    }
+
+
+    public void startTime() {
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -32,11 +44,7 @@ public abstract class BaseModel {
             }
 
         }, 0, TIME_PERIOD);
-        bleDeviceControl.setDataCallback(BaseModel.this::onData);
-    }
-
-    public void end() {
-        timer.cancel();
+        callback.countdownTime(time);
     }
 
     abstract void doTime();
@@ -49,5 +57,16 @@ public abstract class BaseModel {
 
     public enum ModelType {
         NOVICE, JUNIOR, BATTLE;
+    }
+
+    public void sendMsg(byte[] data) {
+        bleDeviceControl.writeBle(data);
+    }
+
+    enum ModelState {
+        IDLE,
+        READY,
+        RUN,
+        END
     }
 }
