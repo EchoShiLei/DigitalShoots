@@ -40,5 +40,9 @@
     <string name="stats_status_2">GOOD</string>
     <string name="stats_time">Mar.2022</string>
     <string name="stats_profile">PROFILE</string>
+    <string name="stats_score_title">Score</string>
+    <string name="stats_score_today">Today</string>
+    <string name="stats_shoot">Shoot</string>
+    <string name="stats_speed_unit">Km/h</string>
 
 </resources>

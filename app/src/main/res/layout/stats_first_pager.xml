@@ -32,6 +32,7 @@
             android:orientation="vertical">
 
             <ImageView
+                android:id="@+id/iv_user_icon"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:background="@drawable/user_icon" />
@@ -96,7 +97,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
                     android:text="@string/stats_score"
                     android:textColor="#00c371"
                     android:textSize="16sp"
@@ -119,7 +119,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:layout_centerHorizontal="true"
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -146,7 +145,6 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="10dp"
                     android:text="@string/stats_speed"
                     android:textColor="#00c371"
                     android:textSize="16sp"

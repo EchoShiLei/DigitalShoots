@@ -11,7 +11,7 @@ import com.digital.shoots.R;
 
 import java.util.ArrayList;
 
-public class StatsFragmentsAdapter extends RecyclerView.Adapter<StatsFragmentsHolder> {
+public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragment> {
     private static final int PAGER_FIRST = 0;
     private static final int PAGER_SECOND = 1;
     private static final int PAGER_THIRD = 2;
@@ -19,28 +19,28 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<StatsFragmentsHo
 
     @NonNull
     @Override
-    public StatsFragmentsHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public HolderStatsFragment onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         int layoutId = 0;
-        StatsFragmentsHolder holder;
+        HolderStatsFragment holder;
         View rootView;
         switch (viewType) {
             case PAGER_SECOND:
                 layoutId = R.layout.stats_second_pager;
                 rootView = LayoutInflater.from(parent.getContext())
                         .inflate(layoutId, parent, false);
-                holder = new StatsSecondFragmentsHolder(rootView);
+                holder = new HolderStatsSecondFragment(rootView);
                 break;
             case PAGER_THIRD:
                 layoutId = R.layout.stats_third_pager;
                 rootView = LayoutInflater.from(parent.getContext())
                         .inflate(layoutId, parent, false);
-                holder = new StatsThirdFragmentsHolder(rootView);
+                holder = new HolderStatsThirdFragment(rootView);
                 break;
             default:
                 layoutId = R.layout.stats_first_pager;
                 rootView = LayoutInflater.from(parent.getContext())
                         .inflate(layoutId, parent, false);
-                holder = new StatsFirstFragmentsHolder(rootView);
+                holder = new HolderStatsFirstFragment(rootView);
                 break;
         }
 
@@ -53,8 +53,20 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<StatsFragmentsHo
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StatsFragmentsHolder holder, int position) {
-//        holder.nameView.setText(arrayList.get(position));
+    public void onBindViewHolder(@NonNull HolderStatsFragment holder, int position) {
+        BaseStatsPager pager = null;
+        if (holder instanceof HolderStatsFirstFragment) {
+            pager = new PagerStatsFirst(holder);
+        }
+        if (holder instanceof HolderStatsSecondFragment) {
+            pager = new PagerStatsSecond(holder);
+        }
+        if (holder instanceof HolderStatsThirdFragment) {
+            pager = new PagerStatsThird(holder);
+        }
+        if (pager != null) {
+            pager.initView();
+        }
     }
 
     @Override
