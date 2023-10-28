@@ -25,4 +25,10 @@
     <string name="title_bluetooth">BLUETOOTH</string>
     <string name="title_scan">SCAN</string>
 
+    <string name="bottom_trainers">Trainers</string>
+    <string name="bottom_drills">Drills</string>
+    <string name="bottom_tracking">Tracking</string>
+    <string name="bottom_my_stats">My Stats</string>
+    <string name="bottom_my_account">My Account</string>
+
 </resources>
