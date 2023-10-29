@@ -2,6 +2,8 @@ package com.digital.shoots.ble;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,9 +21,12 @@ import com.digital.shoots.utils.Utils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -33,10 +38,7 @@ public class BleFragment extends BaseFragment {
     List<BleItem> list = new ArrayList<>();
 
     @Override
-    public View onCreateView(
-            LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState
-    ) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_ble, container, false);
     }
 
@@ -56,8 +58,22 @@ public class BleFragment extends BaseFragment {
 
         adapter = new DeviceAdapter(getActivity(), list, mac -> mainViewModel.deviceClick(mac));
         deviceList.setAdapter(adapter);
+        mainViewModel.getLiveConnectedMacs().observe(getActivity(), new Observer<Set<String>>() {
+            @Override
+            public void onChanged(Set<String> strings) {
+                for (BleItem item : list) {
+                    if (!TextUtils.isEmpty(item.mac) && strings.contains(item.mac)) {
+                        item.isConnect = true;
+                    } else {
+                        item.isConnect = false;
+                    }
+                }
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         scanBluetooth();
+
     }
 
     private void scanBluetooth() {
@@ -91,11 +107,11 @@ public class BleFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            holder.itemView.setOnClickListener(view -> callback.click(list.get(position).mac));
-            ((BleViewHolder) holder).name.setText(list.get(position).name);
-            boolean isOpen = position % 2 == 0;
+            BleItem bleItem = list.get(position);
+            holder.itemView.setOnClickListener(view -> callback.click(bleItem.mac));
+            ((BleViewHolder) holder).name.setText(bleItem.name);
             ((BleViewHolder) holder).vStatus.setImageDrawable(Utils.getDrawable(getContext(),
-                    isOpen ? R.drawable.bluetooth_open : R.drawable.bluetooth_off));
+                    bleItem.isConnect ? R.drawable.bluetooth_open : R.drawable.bluetooth_off));
         }
 
         @Override
