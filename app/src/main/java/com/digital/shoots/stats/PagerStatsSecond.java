@@ -1,7 +1,13 @@
 package com.digital.shoots.stats;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.view.View;
 
+import com.digital.shoots.utils.Utils;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -12,10 +18,10 @@ import java.util.Random;
 
 public class PagerStatsSecond extends BaseStatsPager {
 
-    private HolderStatsSecondFragment mStatsSecondFragmentsHolder;
+    private HolderStatsSecondFragment mSecondHolder;
 
-    public PagerStatsSecond(HolderStatsFragment holder) {
-        super(holder);
+    public PagerStatsSecond(Context context, HolderStatsFragment holder) {
+        super(context, holder);
     }
 
     @Override
@@ -23,21 +29,35 @@ public class PagerStatsSecond extends BaseStatsPager {
         if (!(mHolder instanceof HolderStatsSecondFragment)) {
             return;
         }
-        mStatsSecondFragmentsHolder = (HolderStatsSecondFragment) mHolder;
-        mStatsSecondFragmentsHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
+        mSecondHolder = (HolderStatsSecondFragment) mHolder;
+        mSecondHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        mStatsSecondFragmentsHolder.mLlPlayView.setOnClickListener(new View.OnClickListener() {
+        mSecondHolder.mLlPlayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        mStatsSecondFragmentsHolder.mTvScoreNum.setText("112");
-        mStatsSecondFragmentsHolder.mLineChart.setData(setData());
+        mSecondHolder.mTvScoreNum.setText("112");
+
+        mSecondHolder.mLineChart.getDescription().setEnabled(false);
+        mSecondHolder.mLineChart.setTouchEnabled(false);
+        mSecondHolder.mLineChart.getLegend().setEnabled(false);
+        //设置X轴
+        XAxis xAxis = mSecondHolder.mLineChart.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        //设置Y轴
+        YAxis yAxis = mSecondHolder.mLineChart.getAxisLeft();
+        YAxis axisRight = mSecondHolder.mLineChart.getAxisRight();
+        axisRight.setEnabled(false);
+        yAxis.setDrawGridLines(false);
+        yAxis.setDrawAxisLine(true);
+        mSecondHolder.mLineChart.setData(setData());
     }
 
     private LineData setData() {
@@ -49,6 +69,12 @@ public class PagerStatsSecond extends BaseStatsPager {
         }
 //        实例化LineDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置
         LineDataSet lineDataSet = new LineDataSet(entries, "线型图测试");
+        lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        lineDataSet.setColor(Color.parseColor("#848283"));
+        lineDataSet.setLineWidth(Utils.dp2px(mContext, 1));
+        lineDataSet.setDrawCircleHole(true);
+        lineDataSet.setCircleColor(Color.parseColor("#848283"));
+        lineDataSet.setCircleHoleColor(Color.parseColor("#ffffff"));
 //        这个就是线型图所需的数据了
         LineData lineData = new LineData(lineDataSet);
         return lineData;

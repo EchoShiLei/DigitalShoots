@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
+import com.digital.shoots.R;
 import com.digital.shoots.utils.Utils;
 
 public class PagerStatsFirst extends BaseStatsPager {
@@ -11,9 +12,8 @@ public class PagerStatsFirst extends BaseStatsPager {
     private HolderStatsFirstFragment mFirstHolder;
     private Context mContext;
 
-    public PagerStatsFirst(HolderStatsFragment holder, Context context) {
-        super(holder);
-        mContext = context;
+    public PagerStatsFirst(Context context, HolderStatsFragment holder) {
+        super(context, holder);
     }
 
     @Override
@@ -41,7 +41,6 @@ public class PagerStatsFirst extends BaseStatsPager {
 
 
     private void initScoreView(int score) {
-        mFirstHolder.mTvScoreNum.setText(String.valueOf(score));
         ViewGroup.LayoutParams layoutParams = mFirstHolder.mScoreIndicator.getLayoutParams();
         if (!(layoutParams instanceof RelativeLayout.LayoutParams)) {
             return;
@@ -53,9 +52,12 @@ public class PagerStatsFirst extends BaseStatsPager {
         int height = mFirstHolder.mIvScoreStatus.getHeight();
         int width = mFirstHolder.mIvScoreStatus.getWidth();
 
-        if (score < 1) {
+        if (score == 1) {
+            mFirstHolder.mTvScoreNum.setText(String.valueOf(20));
+            mFirstHolder.mIvScoreStatus.setImageDrawable(Utils.getDrawable(mContext, R.drawable.stats_score_1));
             mFirstHolder.mScoreIndicator.setRotation(90);
-            layoutParams1.setMargins(Utils.dp2px(mContext, 4.0f), height * 4 / 6, 0, 0);
+            int top = height * 4 / 6;
+            layoutParams1.setMargins(Utils.dp2px(mContext, 4.0f), top, 0, 0);
             mFirstHolder.mScoreIndicator.setLayoutParams(layoutParams1);
         }
     }
@@ -71,8 +73,7 @@ public class PagerStatsFirst extends BaseStatsPager {
             int width = mFirstHolder.mIvStatsProgress.getWidth();
             int preStepWith = width / 4;
             RelativeLayout.LayoutParams layoutParams1 = (RelativeLayout.LayoutParams) layoutParams;
-            layoutParams1.setMargins(step * preStepWith,
-                    layoutParams1.topMargin, layoutParams1.rightMargin, layoutParams1.bottomMargin);
+            layoutParams1.setMargins(step * preStepWith, layoutParams1.topMargin, layoutParams1.rightMargin, layoutParams1.bottomMargin);
             mFirstHolder.mFlStatsIndicator.setLayoutParams(layoutParams1);
         }
     }

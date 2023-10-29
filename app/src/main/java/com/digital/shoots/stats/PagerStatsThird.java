@@ -1,7 +1,10 @@
 package com.digital.shoots.stats;
 
+import android.content.Context;
 import android.view.View;
 
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
@@ -17,8 +20,8 @@ public class PagerStatsThird extends BaseStatsPager {
 
     private HolderStatsThirdFragment mStatsThirdFragmentsHolder;
 
-    public PagerStatsThird(HolderStatsFragment holder) {
-        super(holder);
+    public PagerStatsThird(Context context, HolderStatsFragment holder) {
+        super(context, holder);
     }
 
 
@@ -36,6 +39,20 @@ public class PagerStatsThird extends BaseStatsPager {
         });
 
         mStatsThirdFragmentsHolder.mTvSeepNum.setText("68");
+        mStatsThirdFragmentsHolder.mBarChart.getLegend().setEnabled(false);
+        mStatsThirdFragmentsHolder.mBarChart.getDescription().setEnabled(false);
+        //设置X轴
+        XAxis xAxis = mStatsThirdFragmentsHolder.mBarChart.getXAxis();
+        xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+
+        //设置Y轴
+        YAxis yAxis = mStatsThirdFragmentsHolder.mBarChart.getAxisLeft();
+        YAxis axisRight = mStatsThirdFragmentsHolder.mBarChart.getAxisRight();
+        axisRight.setEnabled(false);
+        yAxis.setDrawGridLines(false);
+        yAxis.setDrawAxisLine(true);
+
         mStatsThirdFragmentsHolder.mBarChart.setData(setData());
     }
 

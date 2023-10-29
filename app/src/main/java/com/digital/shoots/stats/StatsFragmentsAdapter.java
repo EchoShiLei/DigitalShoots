@@ -62,13 +62,13 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     public void onBindViewHolder(@NonNull HolderStatsFragment holder, int position) {
         BaseStatsPager pager = null;
         if (holder instanceof HolderStatsFirstFragment) {
-            pager = new PagerStatsFirst(holder, mContext);
+            pager = new PagerStatsFirst(mContext,holder);
         }
         if (holder instanceof HolderStatsSecondFragment) {
-            pager = new PagerStatsSecond(holder);
+            pager = new PagerStatsSecond(mContext,holder);
         }
         if (holder instanceof HolderStatsThirdFragment) {
-            pager = new PagerStatsThird(holder);
+            pager = new PagerStatsThird(mContext,holder);
         }
         if (pager != null) {
             pager.initView();
