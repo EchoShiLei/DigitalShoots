@@ -19,18 +19,18 @@
             android:id="@+id/model1_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="1"
-            android:background="@drawable/model1_bg">
+            android:background="@drawable/model1_bg"
+            android:paddingStart="30dp">
 
 
             <GridLayout
                 android:layout_width="wrap_content"
                 android:layout_height="0dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:columnCount="2"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toTopOf="@id/guideline"
@@ -42,7 +42,7 @@
                     android:layout_height="wrap_content"
                     android:text="Single"
                     android:textColor="@color/white"
-                    android:textSize="13dp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -50,29 +50,29 @@
                     android:layout_marginStart="5dp"
                     android:text="Play"
                     android:textColor="@color/white"
-                    android:textSize="13dp" />
+                    android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Blue"
-                    android:textColor="@color/theme_blue"
-                    android:textSize="13dp" />
+                    android:textColor="#1654a5"
+                    android:textSize="16dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Target"
                     android:textColor="@color/white"
-                    android:textSize="13dp" />
+                    android:textSize="16dp" />
             </GridLayout>
 
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
                 android:layout_marginStart="47dp"
+                android:layout_marginEnd="30dp"
                 android:text="60 Seconds"
                 android:textColor="@color/red_bg"
                 android:textSize="15dp"
@@ -84,12 +84,10 @@
                 android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:text="Model 1:Novice"
-
                 android:textColor="@color/white"
-                android:textSize="20dp"
+                android:textSize="22dp"
                 android:textStyle="italic"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -98,13 +96,14 @@
                 android:id="@+id/textView6"
                 android:layout_width="120dp"
                 android:layout_height="40dp"
-                android:layout_marginStart="70dp"
+                android:layout_marginStart="40dp"
                 android:background="@drawable/novice_play_bg"
                 android:gravity="center"
                 android:paddingHorizontal="20dp"
                 android:paddingVertical="2dp"
                 android:scaleType="fitXY"
                 android:text="PLAY"
+                android:textColor="#155c11"
                 android:textSize="25dp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -116,17 +115,164 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 app:layout_constraintGuide_percent="0.5" />
+
+            <CheckBox
+                android:id="@+id/cb_novice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#155c11"
+                android:text="Recording"
+                android:textColor="#ffffff"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_model_novice_preview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/preview_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cb_novice" />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/model2_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="1"
-            android:background="@drawable/model2_bg">
+            android:background="@drawable/model2_bg"
+            android:paddingStart="30dp">
 
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:columnCount="3"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@id/model2_guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/model2_textView2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Blue"
+                    android:textColor="#1654a5"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Target"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="16"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Red"
+                    android:textColor="#f00001"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Target"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="16"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+            </GridLayout>
+
+            <TextView
+                android:id="@+id/model2_textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="47dp"
+                android:layout_marginEnd="30dp"
+                android:text="60 Seconds"
+                android:textColor="@color/red_bg"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/model2_textView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/model2_textView2" />
+
+            <TextView
+                android:id="@+id/model2_textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Model 2:Junior"
+                android:textColor="@color/white"
+                android:textSize="22dp"
+                android:textStyle="italic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/model2_textView6"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="40dp"
+                android:background="@drawable/junior_play_bg"
+                android:gravity="center"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="2dp"
+                android:scaleType="fitXY"
+                android:text="PLAY"
+                android:textColor="#b26e04"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/model2_guideline" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/model2_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <CheckBox
+                android:id="@+id/cb_model2_novice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#b26e04"
+                android:text="Recording"
+                android:textColor="#ffffff"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_model2_novice_preview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/preview_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cb_model2_novice" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -134,11 +280,121 @@
             android:id="@+id/model3_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
             android:layout_weight="1"
-            android:background="@drawable/model3_bg">
+            android:background="@drawable/model3_bg"
+            android:paddingStart="30dp">
 
+            <GridLayout
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:columnCount="2"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@id/model3_guideline"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/model3_textView2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guest"
+                    android:textColor="@color/white"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text="Blue"
+                    android:textColor="#1654a5"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Guest"
+                    android:textColor="#1654a5"
+                    android:textSize="16dp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Red"
+                    android:textColor="#930b0b"
+                    android:textSize="16dp" />
+            </GridLayout>
+
+            <TextView
+                android:id="@+id/model3_textView3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="47dp"
+                android:layout_marginEnd="30dp"
+                android:text="60 Seconds"
+                android:textColor="#930b0b"
+                android:textSize="15dp"
+                app:layout_constraintBottom_toBottomOf="@+id/model3_textView2"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/model3_textView2" />
+
+            <TextView
+                android:id="@+id/model3_textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="Model 3:Battle"
+                android:textColor="@color/white"
+                android:textSize="22dp"
+                android:textStyle="italic"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/model3_textView6"
+                android:layout_width="120dp"
+                android:layout_height="40dp"
+                android:layout_marginStart="40dp"
+                android:background="@drawable/battle_play_bg"
+                android:gravity="center"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="2dp"
+                android:scaleType="fitXY"
+                android:text="PLAY"
+                android:textColor="#faa4a4"
+                android:textSize="25dp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/model3_guideline" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/model3_guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <CheckBox
+                android:id="@+id/cb_model3_novice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:buttonTint="#ad0808"
+                android:text="Recording"
+                android:textColor="#ffffff"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/iv_model3_novice_preview"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/preview_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cb_model3_novice" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 
