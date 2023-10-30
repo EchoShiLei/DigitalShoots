@@ -1,5 +1,7 @@
 package com.digital.shoots.model;
 
+import android.util.Log;
+
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.utils.ThreadPoolManager;
@@ -9,6 +11,7 @@ import java.util.Set;
 
 public class NoviceModel extends BaseModel {
 
+    private static final String TAG = "NoviceModel";
     Set<Byte> hitList = new HashSet<>();
     int count = -1;
 
@@ -21,8 +24,10 @@ public class NoviceModel extends BaseModel {
         time = 0;
         count = -1;
         hitList = new HashSet<>();
-//        sendMsg(BleDataUtils.openAllBlueLight());
-        sendMsg(BleDataUtils.openRedData());
+        sendMsg(BleDataUtils.openAllBlueLight());
+//        for (int i = 1; i < 7; i++) {
+//            sendMsg(BleDataUtils.openBlueData(i));
+//        }
     }
 
     @Override
@@ -39,41 +44,26 @@ public class NoviceModel extends BaseModel {
         time += TIME_PERIOD;
     }
 
+
     @Override
-    public void onData(byte[] data) {
-        if (data.length != 5) {
-            return;
+    void ledHit(byte data) {
+        if (count == -1) {
+            count = 0;
+            for (int i = 1; i < 7; i++) {
+                sendMsg(BleDataUtils.openRedData(i));
+            }
+            startTime();
+        } else {
+            hitList.add(data);
+            count = hitList.size();
+            sendMsg(BleDataUtils.closeRedData(data));
         }
-        int cmd = data[3];
-        switch (cmd) {
-            case BLEControlStatuAutoReportBegain:
-                starPlayCountdown();
-                break;
-            case BLEControlStatuCountDownControl:
-                for (int i = 1; i < 7; i++) {
-                    sendMsg(BleDataUtils.openRedData(i));
-                }
 
-                break;
-            case BLEControlStatuAutoReport:
-                if (count == -1) {
-                    count = 0;
-                    sendMsg(BleDataUtils.closeAllBlueLight());
-                    startTime();
-                } else {
-                    hitList.add(data[4]);
-                    count = hitList.size();
-//                    sendMsg(BleDataUtils.closeRedData());
-                }
-                break;
-            default:
-                break;
-        }
+
         if (count == 6) {
+            //end
 
         }
-
-
     }
 
     private void starPlayCountdown() {

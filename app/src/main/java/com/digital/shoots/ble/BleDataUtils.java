@@ -23,12 +23,12 @@ public class BleDataUtils {
 
 
     // 关闭红灯
-    public static byte[] closeRedData() {
+    public static byte[] closeRedData(int i) {
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X01;
-        value[3] = (byte) 0X00;
+        value[3] = (byte) i;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -37,12 +37,18 @@ public class BleDataUtils {
     }
 
     // 改变蓝灯颜色
+    public static byte[] openBlueData() {
+        return openBlueData(random());
+    }
+
+
+    // 改变蓝灯颜色
     public static byte[] openBlueData(int i) {
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X03;
-        value[3] = (byte) random();
+        value[3] = (byte) i;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -56,7 +62,7 @@ public class BleDataUtils {
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X03;
-        value[3] = (byte) 0X00;
+        value[3] = (byte) i;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -227,7 +233,7 @@ public class BleDataUtils {
         return (int) (1 + Math.random() * (6));
     }
 
-    public static int bytes2Hex(byte[] b) {
+    public static int bytes2HexInt(byte[] b) {
         String r = "";
 
         for (int i = 0; i < b.length; i++) {
@@ -240,5 +246,13 @@ public class BleDataUtils {
 
         // 十六进制转10进制
         return Integer.parseInt(r, 16);
+    }
+
+    public static String byte2HexStr(byte b) {
+        String hex = Integer.toHexString(b & 0xFF);
+        if (hex.length() == 1) {
+            hex = '0' + hex;
+        }
+        return hex;
     }
 }

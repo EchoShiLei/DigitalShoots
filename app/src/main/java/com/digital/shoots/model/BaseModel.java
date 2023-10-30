@@ -1,23 +1,21 @@
 package com.digital.shoots.model;
 
+import android.util.Log;
+
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.ble.BleDeviceControl.DataCallback;
+import com.digital.shoots.utils.BaseContents;
 
 import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.digital.shoots.utils.BaseContents.MCU_CMD_LED_HEART;
+import static com.digital.shoots.utils.BaseContents.MCU_CMD_LED_HIT;
+
 public abstract class BaseModel {
-    public static final int BLEControlStatuDefault = 0;
-    public static final int BLEControlStatuRedControl = 2;// 红灯控制
-    public static final int BLEControlStatuBlueControl = 4;// 蓝灯控制确认
-    public static final int BLEControlStatuCountDownControl = 8;// 倒计时控制确认
-    public static final int BLEControlStatuAutoReport = 10;// 目标信息主动上报
-    public static final int BLEControlStatuAutoReportBegain = 12;// 目标信息主动上报；(击中任意标靶开始工作)
-    public static final int BLEControlStatuCountDownResidue = 14;// 倒计时剩余字段 信息主动上报
-    public static final int BLEControlStatuOnPower = 20;// 开关机状态
-    public static final int BLEControlStatuOnLineStatu = 22;// APP上下线
+    private static final String TAG = "BaseModel";
     private ModelState state = ModelState.IDLE;
     public static long TIME_PERIOD = 10;
 
@@ -59,7 +57,36 @@ public abstract class BaseModel {
 
     abstract void doTime();
 
-    public abstract void onData(byte[] data);
+    public void onData(byte[] datas) {
+        StringBuilder msg = new StringBuilder("data size:" + datas.length + " ;data: ");
+        for (byte b : datas) {
+            msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
+        }
+        Log.d(TAG, msg.toString());
+
+        if (datas.length != 5) {
+            return;
+        }
+        String cmd = BleDataUtils.byte2HexStr(datas[2]);
+        byte data = datas[3];
+        onCmdData(cmd, data);
+    }
+
+    public void onCmdData(String cmd, byte data) {
+        switch (cmd) {
+            case MCU_CMD_LED_HEART:
+                // 心跳
+                break;
+            case MCU_CMD_LED_HIT:
+                //
+                ledHit(data);
+                break;
+
+        }
+
+    }
+
+    abstract void ledHit(byte data);
 
     public interface ModelCallback {
         void countdownTime(long time);
