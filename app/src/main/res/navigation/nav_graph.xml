@@ -42,25 +42,5 @@
         android:name="com.digital.shoots.model.Model1Fragment"
         android:label="fragment_model1"
         tools:layout="@layout/fragment_model1" />
-    <fragment
-        android:id="@+id/drillsFragment"
-        android:name="com.digital.shoots.DrillsFragment"
-        android:label="fragment_trainers"
-        tools:layout="@layout/fragment_drills" />
-    <fragment
-        android:id="@+id/trackingFragment"
-        android:name="com.digital.shoots.TrackingFragment"
-        android:label="fragment_tracking"
-        tools:layout="@layout/fragment_tracking" />
-    <fragment
-        android:id="@+id/myStatsFragment"
-        android:name="com.digital.shoots.MyStatsFragment"
-        android:label="fragment_my_stats"
-        tools:layout="@layout/fragment_my_stats" />
-    <fragment
-        android:id="@+id/myAccountFragment"
-        android:name="com.digital.shoots.MyAccountFragment"
-        android:label="fragment_my_account"
-        tools:layout="@layout/fragment_my_account" />
 
 </navigation>

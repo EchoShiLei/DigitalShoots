@@ -1,19 +1,25 @@
-package com.digital.shoots;
+package com.digital.shoots.tab;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.viewpager2.widget.ViewPager2;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.digital.shoots.R;
+import com.digital.shoots.stats.StatsFragmentsAdapter;
+
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link DrillsFragment#newInstance} factory method to
+ * Use the {@link MyStatsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DrillsFragment extends Fragment {
+public class MyStatsFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,7 +30,7 @@ public class DrillsFragment extends Fragment {
     private String mParam1;
     private String mParam2;
 
-    public DrillsFragment() {
+    public MyStatsFragment() {
         // Required empty public constructor
     }
 
@@ -34,15 +40,20 @@ public class DrillsFragment extends Fragment {
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment TrainersFragment.
+     * @return A new instance of fragment MyStatsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static DrillsFragment newInstance(String param1, String param2) {
-        DrillsFragment fragment = new DrillsFragment();
+    public static MyStatsFragment newInstance(String param1, String param2) {
+        MyStatsFragment fragment = new MyStatsFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
+        return fragment;
+    }
+
+    public static MyStatsFragment newInstance() {
+        MyStatsFragment fragment = new MyStatsFragment();
         return fragment;
     }
 
@@ -53,12 +64,23 @@ public class DrillsFragment extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_drills, container, false);
+        return inflater.inflate(R.layout.fragment_my_stats, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        ViewPager2 viewPager2 = view.findViewById(R.id.vp_fragment_container);
+        StatsFragmentsAdapter statsFragmentsAdapter = new StatsFragmentsAdapter(getContext());
+        statsFragmentsAdapter.initPagerData();
+        viewPager2.setAdapter(statsFragmentsAdapter);
     }
 }

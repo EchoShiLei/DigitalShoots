@@ -1,6 +1,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/FirstFragment"
+        android:id="@+id/trainersFragment"
         android:icon="@drawable/bottom_trainers"
         android:title="@string/bottom_trainers"/>
     <item
