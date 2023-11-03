@@ -24,7 +24,7 @@ public class NoviceModel extends BaseModel {
         time = 0;
         count = -1;
         hitList = new HashSet<>();
-        sendMsg(BleDataUtils.openAllBlueLight());
+//        sendMsg(BleDataUtils.openAllBlueLight());
 //        for (int i = 1; i < 7; i++) {
 //            sendMsg(BleDataUtils.openBlueData(i));
 //        }
