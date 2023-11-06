@@ -1,14 +1,20 @@
 package com.digital.shoots.tab;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
+
 import com.digital.shoots.R;
+import com.digital.shoots.db.greendao.GreenDaoManager;
+import com.shuyu.gsyvideoplayer.GSYVideoManager;
+import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -62,10 +68,55 @@ public class MyAccountFragment extends Fragment {
         }
     }
 
+    private StandardGSYVideoPlayer videoPlayer;
+
+    private void init() {
+        videoPlayer = getView().findViewById(R.id.video_player);
+        String source1 = GreenDaoManager.getHighestScores().get(0).getVideoPath();
+        videoPlayer.setUp(source1, true, "测试视频");
+
+        //增加title
+        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+        //设置返回键
+        videoPlayer.getBackButton().setVisibility(View.GONE);
+        //是否可以滑动调整
+        videoPlayer.setIsTouchWiget(true);
+        //不需要屏幕旋转
+        videoPlayer.setNeedOrientationUtils(false);
+
+        videoPlayer.startPlayLogic();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_account, container, false);
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        init();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        videoPlayer.onVideoPause();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        videoPlayer.onVideoResume();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        GSYVideoManager.releaseAllVideos();
+        //释放所有
+        videoPlayer.setVideoAllCallBack(null);
     }
 }

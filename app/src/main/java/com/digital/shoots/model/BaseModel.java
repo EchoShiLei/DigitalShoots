@@ -4,15 +4,12 @@ import android.util.Log;
 
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
-import com.digital.shoots.ble.BleDeviceControl.DataCallback;
-import com.digital.shoots.utils.BaseContents;
 
-import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static com.digital.shoots.utils.BaseContents.MCU_CMD_LED_HEART;
-import static com.digital.shoots.utils.BaseContents.MCU_CMD_LED_HIT;
+import static com.digital.shoots.utils.BaseConstant.MCU_CMD_LED_HEART;
+import static com.digital.shoots.utils.BaseConstant.MCU_CMD_LED_HIT;
 
 public abstract class BaseModel {
     private static final String TAG = "BaseModel";

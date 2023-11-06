@@ -3,15 +3,13 @@ package com.digital.shoots;
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import com.digital.shoots.db.greendao.GreenDaoManager;
-import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.utils.ThreadPoolManager;
+import com.shuyu.gsyvideoplayer.player.PlayerFactory;
+import com.shuyu.gsyvideoplayer.player.SystemPlayerManager;
 import com.zyq.easypermission.EasyPermissionHelper;
 
-import java.util.List;
-import java.util.Random;
 
 public class DigitalApplication extends Application {
 
@@ -26,6 +24,7 @@ public class DigitalApplication extends Application {
         EasyPermissionHelper.getInstance().init(this);
         ThreadPoolManager.getInstance().initThreadPool();
         GreenDaoManager.getDaoSession(this);
+        PlayerFactory.setPlayManager(SystemPlayerManager.class);
     }
 
     public static Context getContext(){
