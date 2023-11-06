@@ -41,7 +41,6 @@ public class MainViewModel extends AndroidViewModel {
             deviceControl = new BleDeviceControl(this, new BleDeviceControl.UiConnectCallback() {
                 @Override
                 public void onSuccess(String mac) {
-                    deviceControl.writeBle(BleDataUtils.appOnlineControl());
                     ToastUtils.showToastD("Success");
                     connectedMacs.add(mac);
                     liveConnectedMacs.postValue(connectedMacs);
@@ -88,6 +87,8 @@ public class MainViewModel extends AndroidViewModel {
             default:
                 break;
         }
+        deviceControl.setNotification();
+        deviceControl.writeBle(BleDataUtils.appOnlineControl());
         model.start();
     }
 
