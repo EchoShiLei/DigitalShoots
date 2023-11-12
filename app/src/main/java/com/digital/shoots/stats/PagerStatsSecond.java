@@ -2,8 +2,11 @@ package com.digital.shoots.stats;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 
+import com.digital.shoots.db.greendao.GreenDaoManager;
+import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.utils.Utils;
 import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
@@ -29,6 +32,7 @@ public class PagerStatsSecond extends BaseStatsPager {
         if (!(mHolder instanceof HolderStatsSecondFragment)) {
             return;
         }
+        initData();
         mSecondHolder = (HolderStatsSecondFragment) mHolder;
         mSecondHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,7 +46,13 @@ public class PagerStatsSecond extends BaseStatsPager {
 
             }
         });
-        mSecondHolder.mTvScoreNum.setText("112");
+
+        //查询最高分
+        List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
+        if (highestScores.size() > 0) {
+            int maxScore = highestScores.get(0).getScore();
+            mSecondHolder.mTvScoreNum.setText( String.valueOf(maxScore));
+        }
 
         mSecondHolder.mLineChart.getDescription().setEnabled(false);
         mSecondHolder.mLineChart.setTouchEnabled(false);
@@ -60,13 +70,28 @@ public class PagerStatsSecond extends BaseStatsPager {
         mSecondHolder.mLineChart.setData(setData());
     }
 
+    private void initData() {
+        //创建假数据
+        Random random = new Random();
+        int score = 0;
+        for (int i = 0; i < 30; i++) {
+            score = 50 + (int) (Math.random() * 99 + 1);
+            GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis() + random.nextInt(1000000),
+                    0, score, 50, "20231021", ""));
+        }
+
+
+    }
+
     private LineData setData() {
 //        创建一个Entry类型的集合，并添加数据
         List<Entry> entries = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
+        List<GameAchievement> top10Scores = GreenDaoManager.getTop10Scores("20231021");
+        for (int i = 0; i < top10Scores.size(); i++) {
 //            添加Entry对象，传入纵轴的索引和纵轴的值
-            entries.add(new Entry(i, new Random().nextInt(100)));
+            entries.add(new Entry(i + 1, top10Scores.get(i).getScore()));
         }
+
 //        实例化LineDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置
         LineDataSet lineDataSet = new LineDataSet(entries, "线型图测试");
         lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
