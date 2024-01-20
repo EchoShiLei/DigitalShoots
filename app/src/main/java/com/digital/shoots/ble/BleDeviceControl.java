@@ -27,6 +27,8 @@ import java.util.UUID;
 import androidx.core.app.ActivityCompat;
 
 import static android.bluetooth.BluetoothDevice.TRANSPORT_LE;
+import static com.digital.shoots.utils.BaseConstant.MCU_CMD_LED_HEART;
+import static com.digital.shoots.utils.BaseConstant.MCU_CMD_LED_HIT;
 
 public class BleDeviceControl {
     private static final String TAG = "BleDeviceControl";
@@ -155,7 +157,7 @@ public class BleDeviceControl {
             byte[] bytes = characteristic.getValue();
 //            int speed = bytes2Hex(bytes);
 //            sendBroadcast(speed + "", INCOMING_MSG);
-            handleReceiveData(bytes);
+            onData(bytes);
         }
 
         @Override
@@ -178,7 +180,7 @@ public class BleDeviceControl {
         for (byte b : value) {
             msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
         }
-        Log.d("BaseModel", msg.toString());
+        Log.d(TAG, msg.toString());
         BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
         if (service == null) {
             return;
@@ -191,13 +193,37 @@ public class BleDeviceControl {
 
 
     //处理接收到到数据
-    private void handleReceiveData(byte[] bytes) {
-        if (dataCallback != null) {
-            dataCallback.onData(bytes);
+    public void onData(byte[] datas) {
+        StringBuilder msg = new StringBuilder("data size:" + datas.length + " ;data: ");
+        for (byte b : datas) {
+            msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
+        }
+        Log.d(TAG, msg.toString());
+
+        if (datas.length < 5) {
+            return;
+        }
+        String cmd = BleDataUtils.byte2HexStr(datas[2]);
+        byte data = datas[3];
+        onCmdData(cmd, data);
+    }
+
+    public void onCmdData(String cmd, byte data) {
+        switch (cmd) {
+            case MCU_CMD_LED_HEART:
+                // 心跳
+                writeBle(BleDataUtils.heartBeatResponseData());
+                break;
+            default:
+                //
+                if (dataCallback != null) {
+                    dataCallback.onData(cmd, data);
+                }
+                break;
+
         }
 
     }
-
 
     public interface UiConnectCallback {
         void onSuccess(String mac);
@@ -206,6 +232,6 @@ public class BleDeviceControl {
     }
 
     public interface DataCallback {
-        void onData(byte[] data);
+        void onData(String cmd, byte data);
     }
 }

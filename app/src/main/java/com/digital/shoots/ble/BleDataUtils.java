@@ -1,6 +1,7 @@
 package com.digital.shoots.ble;
 
 public class BleDataUtils {
+    public static boolean isOnline;
 
     // 改变红灯颜色
     public static byte[] openRedData() {
@@ -231,6 +232,58 @@ public class BleDataUtils {
 
     public static int random() {
         return (int) (1 + Math.random() * (6));
+    }
+
+
+    //心跳查询
+    public static byte[] heartBeatRequesrData(){
+        byte[] data = new byte[5];
+
+        // Start
+        data[0] = (byte) 0XA5;
+
+        //Length
+        data[1] = (byte)0x05;
+
+        //cmd
+        data[2] = (byte)0X30;
+
+
+        //CS
+        data[3] = (byte) (data[0] + data[1] + data[2]);
+        // data[4] = 0xB3;
+
+        //End
+        data[4] = (byte) 0XAA;
+        // NSLog(@"心跳查询--%@",adata);
+
+        return data;
+    }
+
+    //心跳响应
+    public static byte[] heartBeatResponseData(){
+        byte[] data = new byte[5];
+
+        // Start
+        data[0] = (byte)0XA5;
+
+        //Length
+        data[1] = (byte)0x05;
+
+        //cmd
+        data[2] = (byte)0X31;
+
+        //Data
+
+        //CS
+        data[3] = (byte) (data[0] + data[1] + data[2]);
+        // data[4] = 0xB3;
+
+        //End
+        data[4] = (byte)0XAA;
+        // NSLog(@"心跳响应--%@",adata);
+
+        return data;
     }
 
     public static int bytes2HexInt(byte[] b) {

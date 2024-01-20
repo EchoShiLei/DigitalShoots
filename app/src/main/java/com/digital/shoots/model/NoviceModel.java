@@ -1,10 +1,7 @@
 package com.digital.shoots.model;
 
-import android.util.Log;
-
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
-import com.digital.shoots.utils.ThreadPoolManager;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -20,10 +17,16 @@ public class NoviceModel extends BaseModel {
 
     }
 
+    @Override
+    public void init() {
+        super.init();
+        hitList = new HashSet<>();
+    }
+
     public void start() {
         time = 0;
         count = -1;
-        hitList = new HashSet<>();
+        bleDeviceControl.writeBle(BleDataUtils.openAllLight());
 //        sendMsg(BleDataUtils.openAllBlueLight());
 //        for (int i = 1; i < 7; i++) {
 //            sendMsg(BleDataUtils.openBlueData(i));
@@ -46,7 +49,8 @@ public class NoviceModel extends BaseModel {
 
 
     @Override
-    void ledHit(byte data) {
+    public void ledHit(byte data) {
+
         if (count == -1) {
             count = 0;
             for (int i = 1; i < 7; i++) {

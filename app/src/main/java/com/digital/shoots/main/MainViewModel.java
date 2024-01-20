@@ -57,10 +57,23 @@ public class MainViewModel extends AndroidViewModel {
         } else {
             deviceControl.disConnect();
         }
-        deviceControl.setDataCallback(data -> {
-            model.onData(data);
+        deviceControl.setDataCallback((cmd, data) -> {
+            if (model == null) {
+                return;
+            }
+            model.onCmdData(cmd, data);
         });
 
+    }
+
+    public void online() {
+        deviceControl.writeBle(BleDataUtils.appOnlineControl());
+        BleDataUtils.isOnline = true;
+    }
+
+    public void offline() {
+        deviceControl.writeBle(BleDataUtils.appOfflineControl());
+        BleDataUtils.isOnline = false;
     }
 
     public void startModel(ModelType modelType) {
@@ -87,8 +100,6 @@ public class MainViewModel extends AndroidViewModel {
             default:
                 break;
         }
-        deviceControl.writeBle(BleDataUtils.appOnlineControl());
-        model.start();
     }
 
     public void endModel() {

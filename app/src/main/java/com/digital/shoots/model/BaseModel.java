@@ -1,5 +1,7 @@
 package com.digital.shoots.model;
 
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.Log;
 
 import com.digital.shoots.ble.BleDataUtils;
@@ -17,6 +19,8 @@ public abstract class BaseModel {
     public static long TIME_PERIOD = 10;
 
     BleDeviceControl bleDeviceControl;
+    HandlerThread handlerThread = new HandlerThread("BaseModel");
+    Handler handler;
     ModelCallback callback;
     Timer timer;
 
@@ -25,7 +29,40 @@ public abstract class BaseModel {
     public BaseModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         this.bleDeviceControl = bleDeviceControl;
         this.callback = callback;
+        init();
+    }
+
+    public void init() {
+        Log.d("BaseModel", "init");
         timer = new Timer();
+        handlerThread.start();
+        handler = new Handler(handlerThread.getLooper());
+        if (!BleDataUtils.isOnline) {
+            return;
+        }
+        bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+        state = ModelState.READY;
+    }
+
+    //展示3s倒计时
+    public void show3sCountdown() {
+        Log.d("BaseModel", "show3sCountdown");
+        handler.postDelayed(() -> {
+            bleDeviceControl.writeBle(BleDataUtils.showNumber(3));
+
+            handler.postDelayed(() -> {
+                bleDeviceControl.writeBle(BleDataUtils.showNumber(2));
+
+                handler.postDelayed(() -> {
+                    bleDeviceControl.writeBle(BleDataUtils.showNumber(1));
+                    handler.postDelayed(() -> {
+                        Log.d("BaseModel", "start");
+                        start();
+                    }, 1000);
+                }, 1000);
+            }, 1000);
+        }, 1000);
+
     }
 
     public abstract void start();
@@ -36,6 +73,8 @@ public abstract class BaseModel {
 
     public void end() {
         timer.cancel();
+        handler.removeCallbacksAndMessages(null);
+        handlerThread.quitSafely();
         bleDeviceControl.writeBle(BleDataUtils.closeAllLight());
     }
 
@@ -54,28 +93,20 @@ public abstract class BaseModel {
 
     abstract void doTime();
 
-    public void onData(byte[] datas) {
-        StringBuilder msg = new StringBuilder("data size:" + datas.length + " ;data: ");
-        for (byte b : datas) {
-            msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
-        }
-        Log.d(TAG, msg.toString());
-
-        if (datas.length != 5) {
-            return;
-        }
-        String cmd = BleDataUtils.byte2HexStr(datas[2]);
-        byte data = datas[3];
-        onCmdData(cmd, data);
-    }
-
     public void onCmdData(String cmd, byte data) {
         switch (cmd) {
             case MCU_CMD_LED_HEART:
                 // 心跳
+                bleDeviceControl.writeBle(BleDataUtils.heartBeatResponseData());
                 break;
             case MCU_CMD_LED_HIT:
                 //
+                if (state == ModelState.READY) {
+                    state = ModelState.RUN;
+                    show3sCountdown();
+                    return;
+                }
+
                 ledHit(data);
                 break;
 
@@ -83,7 +114,9 @@ public abstract class BaseModel {
 
     }
 
-    abstract void ledHit(byte data);
+    public void ledHit(byte data) {
+
+    }
 
     public interface ModelCallback {
         void countdownTime(long time);
@@ -103,4 +136,5 @@ public abstract class BaseModel {
         RUN,
         END
     }
+
 }

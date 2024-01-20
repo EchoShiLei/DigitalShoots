@@ -49,6 +49,7 @@ public class MainModelFragment extends BaseFragment {
         model2 = view.findViewById(R.id.model2_layout);
         model3 = view.findViewById(R.id.model3_layout);
         mPreview = view.findViewById(R.id.previewView);
+        mainViewModel.online();
 
         model1.setOnClickListener(view1 -> {
             if (mainViewModel.deviceControl == null) {
@@ -85,5 +86,11 @@ public class MainModelFragment extends BaseFragment {
     public void onStop() {
         super.onStop();
         CameraUtil.getInstance().release();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        mainViewModel.offline();
     }
 }
