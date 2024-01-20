@@ -87,7 +87,6 @@ public class MainViewModel extends AndroidViewModel {
             default:
                 break;
         }
-        deviceControl.setNotification();
         deviceControl.writeBle(BleDataUtils.appOnlineControl());
         model.start();
     }

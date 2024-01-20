@@ -110,16 +110,16 @@ public class BleDataUtils {
     // App上线
     public static byte[] appOnlineControl() {
         byte[] value = new byte[7];
-        value[0] = (byte) 0XA5;
-        value[1] = (byte) 0X07;
-        value[2] = (byte) 0X22;
+        value[0] = (byte) 0xA5;
+        value[1] = (byte) 0x07;
+        value[2] = (byte) 0x22;
 
-        value[3] = (byte) 0X01;
-        value[4] = (byte) 0X01;
+        value[3] = (byte) 0x01;
+        value[4] = (byte) 0x01;
         // cs
         value[5] = (byte) (value[0] + value[1] + value[2] + value[3] + value[4]);
 
-        value[6] = (byte) 0XAA;
+        value[6] = (byte) 0xAA;
         return value;
     }
 
