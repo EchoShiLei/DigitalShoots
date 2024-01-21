@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.viewpager2.widget.ViewPager2;
 
 import com.digital.shoots.R;
 
@@ -18,9 +19,11 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     private static final int PAGER_THIRD = 2;
     private ArrayList<Integer> arrayList = new ArrayList<>();
     private Context mContext;
+    private ViewPager2 mViewPager2;
 
-    public StatsFragmentsAdapter(Context context) {
+    public StatsFragmentsAdapter(Context context, ViewPager2 viewPager2) {
         mContext = context;
+        mViewPager2 = viewPager2;
     }
 
     @NonNull
@@ -62,13 +65,13 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     public void onBindViewHolder(@NonNull HolderStatsFragment holder, int position) {
         BaseStatsPager pager = null;
         if (holder instanceof HolderStatsFirstFragment) {
-            pager = new PagerStatsFirst(mContext,holder);
+            pager = new PagerStatsFirst(mContext, holder, mViewPager2);
         }
         if (holder instanceof HolderStatsSecondFragment) {
-            pager = new PagerStatsSecond(mContext,holder);
+            pager = new PagerStatsSecond(mContext, holder);
         }
         if (holder instanceof HolderStatsThirdFragment) {
-            pager = new PagerStatsThird(mContext,holder);
+            pager = new PagerStatsThird(mContext, holder);
         }
         if (pager != null) {
             pager.initView();

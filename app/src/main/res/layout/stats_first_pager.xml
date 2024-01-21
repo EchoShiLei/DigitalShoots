@@ -112,7 +112,8 @@
                     android:text="@string/stats_status_1"
                     android:textColor="#000000"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -125,7 +126,8 @@
                         android:id="@+id/iv_score_emoji"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/emoji_good" />
+                        android:src="@drawable/emoji_pro"
+                        android:visibility="gone" />
 
                     <TextView
                         android:id="@+id/tv_stats_score_num"
@@ -146,7 +148,8 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="100dp"
                     android:rotation="90"
-                    android:src="@drawable/stats_indicator_1" />
+                    android:src="@drawable/stats_indicator_1"
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -183,7 +186,8 @@
                     android:text="@string/stats_status_2"
                     android:textColor="#000000"
                     android:textSize="13sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:visibility="gone" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -219,7 +223,8 @@
                     android:layout_marginStart="6dp"
                     android:layout_marginTop="100dp"
                     android:rotation="90"
-                    android:src="@drawable/stats_indicator_1" />
+                    android:src="@drawable/stats_indicator_1"
+                    android:visibility="gone" />
             </RelativeLayout>
 
 

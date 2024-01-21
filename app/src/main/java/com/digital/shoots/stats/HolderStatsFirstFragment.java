@@ -14,8 +14,8 @@ public class HolderStatsFirstFragment extends HolderStatsFragment {
 
     public ImageView mIvSpeedEmoji;
     public ImageView mIvScoreEmoji;
-    public ImageView mScoreIndicator;
-    public ImageView mSpeedIndicator;
+    //    public ImageView mScoreIndicator;
+//    public ImageView mSpeedIndicator;
     public ImageView mUserIcon;
     public TextView mUserName;
     public TextView mTvTime;
@@ -37,12 +37,12 @@ public class HolderStatsFirstFragment extends HolderStatsFragment {
         mIvScoreStatus = itemView.findViewById(R.id.iv_stats_score_status);
         mTvScoreNum = itemView.findViewById(R.id.tv_stats_score_num);
         mTvScoreStatus = itemView.findViewById(R.id.tv_stats_score_status);
-        mScoreIndicator = itemView.findViewById(R.id.iv_stats_score_indicator);
+//        mScoreIndicator = itemView.findViewById(R.id.iv_stats_score_indicator);
         mIvScoreEmoji = itemView.findViewById(R.id.iv_score_emoji);
         mIvSpeedStatus = itemView.findViewById(R.id.iv_stats_speed_status);
         mTvSpeedNum = itemView.findViewById(R.id.tv_stats_speed_num);
         mTvSpeedStatus = itemView.findViewById(R.id.tv_stats_speed_status);
-        mSpeedIndicator = itemView.findViewById(R.id.iv_stats_speed_indicator);
+//        mSpeedIndicator = itemView.findViewById(R.id.iv_stats_speed_indicator);
         mIvSpeedEmoji = itemView.findViewById(R.id.iv_speed_emoji);
 
         mFlStatsIndicator = itemView.findViewById(R.id.fl_stats_indicator);

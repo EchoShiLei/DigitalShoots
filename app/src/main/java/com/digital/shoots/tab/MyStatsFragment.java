@@ -69,8 +69,7 @@ public class MyStatsFragment extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_my_stats, container, false);
     }
@@ -79,8 +78,9 @@ public class MyStatsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         ViewPager2 viewPager2 = view.findViewById(R.id.vp_fragment_container);
-        StatsFragmentsAdapter statsFragmentsAdapter = new StatsFragmentsAdapter(getContext());
+        StatsFragmentsAdapter statsFragmentsAdapter = new StatsFragmentsAdapter(getContext(), viewPager2);
         statsFragmentsAdapter.initPagerData();
         viewPager2.setAdapter(statsFragmentsAdapter);
+//        viewPager2.setCurrentItem();
     }
 }
