@@ -1,2 +1,2 @@
-include ':app'
+include ':app', ':VideoRecorderCore', ':MultiPartRecorder'
 rootProject.name = "Digital Shoots"

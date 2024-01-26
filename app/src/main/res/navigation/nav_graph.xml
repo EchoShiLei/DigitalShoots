@@ -36,11 +36,19 @@
         <action
             android:id="@+id/action_mainModelFragment_to_model1Fragment"
             app:destination="@id/model1Fragment" />
+        <action
+            android:id="@+id/action_mainModelFragment_to_previewFragment"
+            app:destination="@id/previewFragment" />
     </fragment>
     <fragment
         android:id="@+id/model1Fragment"
         android:name="com.digital.shoots.model.Model1Fragment"
         android:label="fragment_model1"
         tools:layout="@layout/fragment_model1" />
+    <fragment
+        android:id="@+id/previewFragment"
+        android:name="com.digital.shoots.model.PreviewFragment"
+        android:label="PreviewFragment"
+        tools:layout="@layout/fragment_preview"/>
 
 </navigation>
