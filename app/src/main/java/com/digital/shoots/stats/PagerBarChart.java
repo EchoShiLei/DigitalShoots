@@ -8,52 +8,49 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
-import com.github.mikephil.charting.data.Entry;
-import com.github.mikephil.charting.data.LineData;
-import com.github.mikephil.charting.data.LineDataSet;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class PagerStatsThird extends BaseStatsPager {
+public class PagerBarChart extends BaseStatsPager {
 
-    private HolderStatsThirdFragment mStatsThirdFragmentsHolder;
+    private HolderStatsBarChartFragment mBarChartFragmentsHolder;
 
-    public PagerStatsThird(Context context, HolderStatsFragment holder) {
+    public PagerBarChart(Context context, HolderStatsFragment holder) {
         super(context, holder);
     }
 
 
     @Override
     public void initView() {
-        if (!(mHolder instanceof HolderStatsThirdFragment)) {
+        if (!(mHolder instanceof HolderStatsBarChartFragment)) {
             return;
         }
-        mStatsThirdFragmentsHolder = (HolderStatsThirdFragment) mHolder;
-        mStatsThirdFragmentsHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
+        mBarChartFragmentsHolder = (HolderStatsBarChartFragment) mHolder;
+        mBarChartFragmentsHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
 
-        mStatsThirdFragmentsHolder.mTvSeepNum.setText("68");
-        mStatsThirdFragmentsHolder.mBarChart.getLegend().setEnabled(false);
-        mStatsThirdFragmentsHolder.mBarChart.getDescription().setEnabled(false);
+        mBarChartFragmentsHolder.mTvSeepNum.setText("68");
+        mBarChartFragmentsHolder.mBarChart.getLegend().setEnabled(false);
+        mBarChartFragmentsHolder.mBarChart.getDescription().setEnabled(false);
         //设置X轴
-        XAxis xAxis = mStatsThirdFragmentsHolder.mBarChart.getXAxis();
+        XAxis xAxis = mBarChartFragmentsHolder.mBarChart.getXAxis();
         xAxis.setDrawGridLines(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
 
         //设置Y轴
-        YAxis yAxis = mStatsThirdFragmentsHolder.mBarChart.getAxisLeft();
-        YAxis axisRight = mStatsThirdFragmentsHolder.mBarChart.getAxisRight();
+        YAxis yAxis = mBarChartFragmentsHolder.mBarChart.getAxisLeft();
+        YAxis axisRight = mBarChartFragmentsHolder.mBarChart.getAxisRight();
         axisRight.setEnabled(false);
         yAxis.setDrawGridLines(false);
         yAxis.setDrawAxisLine(true);
 
-        mStatsThirdFragmentsHolder.mBarChart.setData(setData());
+        mBarChartFragmentsHolder.mBarChart.setData(setData());
     }
 
     private BarData setData() {

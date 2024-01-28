@@ -1,48 +1,42 @@
 package com.digital.shoots.main;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
-
-import com.digital.shoots.R;
-import com.digital.shoots.ble.BleDeviceManager;
-import com.digital.shoots.tab.TabFragmentAdapter;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.navigation.NavigationBarView;
-import com.google.android.material.snackbar.Snackbar;
-import com.zyq.easypermission.EasyPermission;
-import com.zyq.easypermission.EasyPermissionHelper;
-import com.zyq.easypermission.EasyPermissionResult;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentActivity;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.NavigationUI;
-import androidx.viewpager2.widget.ViewPager2;
-
-import android.util.Log;
-import android.view.View;
-
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import java.util.List;
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
+
+import com.digital.shoots.R;
+import com.digital.shoots.tab.ChangePagerListener;
+import com.digital.shoots.tab.TabFragmentAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 public class MainActivity extends AppCompatActivity {
 
+    @IntDef({R.id.trainersFragment, R.id.drillsFragment, R.id.trackingFragment,
+            R.id.myStatsFragment, R.id.myAccountFragment})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface MenuId {
+    }
 
     private BottomNavigationView mTab;
     private ViewPager2 mViewPager;
     private TabFragmentAdapter mAdapter;
-
+    private ChangePagerListener mChangePagerListener = new ChangePagerListener() {
+        @Override
+        public void onChangerPager(int id) {
+            if (mTab != null) {
+                mTab.setSelectedItemId(id);
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void initContainer() {
         mTab = findViewById(R.id.bottom);
         mViewPager = findViewById(R.id.container);
-        mAdapter = new TabFragmentAdapter(this);
+        mAdapter = new TabFragmentAdapter(this, mChangePagerListener);
         mViewPager.setAdapter(mAdapter);
         mViewPager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
@@ -109,10 +103,8 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
     }
-
-
-
 
 
     @Override
@@ -124,12 +116,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(mViewPager.getCurrentItem() == 0) {
-            if(!mAdapter.getTrainersFragment().onBackPressed()) {
+        if (mViewPager.getCurrentItem() == 0) {
+            if (!mAdapter.getTrainersFragment().onBackPressed()) {
                 super.onBackPressed();
             }
         } else {
             super.onBackPressed();
         }
     }
+
 }

@@ -14,9 +14,8 @@ import com.digital.shoots.R;
 import java.util.ArrayList;
 
 public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragment> {
-    private static final int PAGER_FIRST = 0;
-    private static final int PAGER_SECOND = 1;
-    private static final int PAGER_THIRD = 2;
+    private static final int PAGER_LINE_CHART = 0;
+    private static final int PAGER_BAR_CHART = 1;
     private ArrayList<Integer> arrayList = new ArrayList<>();
     private Context mContext;
     private ViewPager2 mViewPager2;
@@ -32,25 +31,16 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
         int layoutId = 0;
         HolderStatsFragment holder;
         View rootView;
-        switch (viewType) {
-            case PAGER_SECOND:
-                layoutId = R.layout.stats_second_pager;
-                rootView = LayoutInflater.from(parent.getContext())
-                        .inflate(layoutId, parent, false);
-                holder = new HolderStatsSecondFragment(rootView);
-                break;
-            case PAGER_THIRD:
-                layoutId = R.layout.stats_third_pager;
-                rootView = LayoutInflater.from(parent.getContext())
-                        .inflate(layoutId, parent, false);
-                holder = new HolderStatsThirdFragment(rootView);
-                break;
-            default:
-                layoutId = R.layout.stats_first_pager;
-                rootView = LayoutInflater.from(parent.getContext())
-                        .inflate(layoutId, parent, false);
-                holder = new HolderStatsFirstFragment(rootView);
-                break;
+        if (viewType == PAGER_BAR_CHART) {
+            //条形
+            layoutId = R.layout.stats_bar_chart_pager;
+            rootView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+            holder = new HolderStatsBarChartFragment(rootView);
+        } else {
+            //折线
+            layoutId = R.layout.stats_line_chart_pager;
+            rootView = LayoutInflater.from(parent.getContext()).inflate(layoutId, parent, false);
+            holder = new HolderStatsLineChartFragment(rootView);
         }
 
         return holder;
@@ -64,14 +54,11 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     @Override
     public void onBindViewHolder(@NonNull HolderStatsFragment holder, int position) {
         BaseStatsPager pager = null;
-        if (holder instanceof HolderStatsFirstFragment) {
-            pager = new PagerStatsFirst(mContext, holder, mViewPager2);
+        if (holder instanceof HolderStatsLineChartFragment) {
+            pager = new PagerLineChart(mContext, holder);
         }
-        if (holder instanceof HolderStatsSecondFragment) {
-            pager = new PagerStatsSecond(mContext, holder);
-        }
-        if (holder instanceof HolderStatsThirdFragment) {
-            pager = new PagerStatsThird(mContext, holder);
+        if (holder instanceof HolderStatsBarChartFragment) {
+            pager = new PagerBarChart(mContext, holder);
         }
         if (pager != null) {
             pager.initView();
@@ -84,9 +71,8 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     }
 
     public void initPagerData() {
-        arrayList.add(PAGER_FIRST);
-        arrayList.add(PAGER_SECOND);
-        arrayList.add(PAGER_THIRD);
+        arrayList.add(PAGER_LINE_CHART);
+        arrayList.add(PAGER_BAR_CHART);
         notifyDataSetChanged();
     }
 }

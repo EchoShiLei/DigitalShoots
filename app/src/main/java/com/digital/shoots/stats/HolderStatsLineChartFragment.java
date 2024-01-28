@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import com.digital.shoots.R;
 import com.github.mikephil.charting.charts.LineChart;
 
-public class HolderStatsSecondFragment extends HolderStatsFragment {
+public class HolderStatsLineChartFragment extends HolderStatsFragment {
 
 
     public final ImageView mIvUserIcon;
@@ -19,7 +19,7 @@ public class HolderStatsSecondFragment extends HolderStatsFragment {
     public final LinearLayout mLlPlayView;
     public final LineChart mLineChart;
 
-    public HolderStatsSecondFragment(@NonNull View itemView) {
+    public HolderStatsLineChartFragment(@NonNull View itemView) {
         super(itemView);
         mIvUserIcon = itemView.findViewById(R.id.iv_user_icon);
         mTvScoreNum = itemView.findViewById(R.id.tv_stats_second_pager_score_num);

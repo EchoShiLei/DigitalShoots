@@ -2,13 +2,11 @@ package com.digital.shoots.stats;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.util.Log;
 import android.view.View;
 
 import com.digital.shoots.db.greendao.GreenDaoManager;
 import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.utils.Utils;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -19,28 +17,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class PagerStatsSecond extends BaseStatsPager {
+public class PagerLineChart extends BaseStatsPager {
 
-    private HolderStatsSecondFragment mSecondHolder;
+    private HolderStatsLineChartFragment mLineChartHolder;
 
-    public PagerStatsSecond(Context context, HolderStatsFragment holder) {
+    public PagerLineChart(Context context, HolderStatsFragment holder) {
         super(context, holder);
     }
 
     @Override
     public void initView() {
-        if (!(mHolder instanceof HolderStatsSecondFragment)) {
+        if (!(mHolder instanceof HolderStatsLineChartFragment)) {
             return;
         }
         initData();
-        mSecondHolder = (HolderStatsSecondFragment) mHolder;
-        mSecondHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
+        mLineChartHolder = (HolderStatsLineChartFragment) mHolder;
+        mLineChartHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
             }
         });
-        mSecondHolder.mLlPlayView.setOnClickListener(new View.OnClickListener() {
+        mLineChartHolder.mLlPlayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
@@ -51,23 +49,23 @@ public class PagerStatsSecond extends BaseStatsPager {
         List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
         if (highestScores.size() > 0) {
             int maxScore = highestScores.get(0).getScore();
-            mSecondHolder.mTvScoreNum.setText( String.valueOf(maxScore));
+            mLineChartHolder.mTvScoreNum.setText( String.valueOf(maxScore));
         }
 
-        mSecondHolder.mLineChart.getDescription().setEnabled(false);
-        mSecondHolder.mLineChart.setTouchEnabled(false);
-        mSecondHolder.mLineChart.getLegend().setEnabled(false);
+        mLineChartHolder.mLineChart.getDescription().setEnabled(false);
+        mLineChartHolder.mLineChart.setTouchEnabled(false);
+        mLineChartHolder.mLineChart.getLegend().setEnabled(false);
         //设置X轴
-        XAxis xAxis = mSecondHolder.mLineChart.getXAxis();
+        XAxis xAxis = mLineChartHolder.mLineChart.getXAxis();
         xAxis.setDrawGridLines(false);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         //设置Y轴
-        YAxis yAxis = mSecondHolder.mLineChart.getAxisLeft();
-        YAxis axisRight = mSecondHolder.mLineChart.getAxisRight();
+        YAxis yAxis = mLineChartHolder.mLineChart.getAxisLeft();
+        YAxis axisRight = mLineChartHolder.mLineChart.getAxisRight();
         axisRight.setEnabled(false);
         yAxis.setDrawGridLines(false);
         yAxis.setDrawAxisLine(true);
-        mSecondHolder.mLineChart.setData(setData());
+        mLineChartHolder.mLineChart.setData(setData());
     }
 
     private void initData() {

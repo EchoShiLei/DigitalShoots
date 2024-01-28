@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
+import com.digital.shoots.main.MainActivity;
+
 import java.util.ArrayList;
 
 public class TabFragmentAdapter extends FragmentStateAdapter {
@@ -26,10 +28,14 @@ public class TabFragmentAdapter extends FragmentStateAdapter {
     private ArrayList<Fragment> fragments = new ArrayList<>();
 
 
-    public TabFragmentAdapter(@NonNull FragmentActivity fragmentActivity) {
+    public TabFragmentAdapter(@NonNull FragmentActivity fragmentActivity,
+                              ChangePagerListener changePagerListener) {
         super(fragmentActivity);
         trainersFragment = TrainersFragment.newInstance();
+
         drillsFragment = DrillsFragment.newInstance();
+        ((DrillsFragment) drillsFragment).setChangePagerListener(changePagerListener);
+
         trackingFragment = TrackingFragment.newInstance();
         myStatsFragment = MyStatsFragment.newInstance();
         myAccountFragment = MyAccountFragment.newInstance();

@@ -81,6 +81,5 @@ public class MyStatsFragment extends Fragment {
         StatsFragmentsAdapter statsFragmentsAdapter = new StatsFragmentsAdapter(getContext(), viewPager2);
         statsFragmentsAdapter.initPagerData();
         viewPager2.setAdapter(statsFragmentsAdapter);
-//        viewPager2.setCurrentItem();
     }
 }
