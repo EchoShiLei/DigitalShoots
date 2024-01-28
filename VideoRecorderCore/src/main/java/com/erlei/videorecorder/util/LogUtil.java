@@ -4,7 +4,7 @@ import android.util.Log;
 
 public class LogUtil {
     public static String TAG = Config.TAG;
-    public static final boolean LOG_ENABLE = Config.DEBUG;
+    public static final boolean LOG_ENABLE = false;
 
     public static void logd(String msg) {
         if (LOG_ENABLE) Log.d(TAG, msg);

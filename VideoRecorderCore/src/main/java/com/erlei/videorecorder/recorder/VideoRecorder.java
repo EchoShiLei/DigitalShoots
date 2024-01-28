@@ -293,7 +293,7 @@ public class VideoRecorder implements RenderThread.RenderCallBack, IVideoRecorde
             renderer.onDrawFrame();
             swapBuffers = windowSurface.swapBuffers();
         }
-        LogUtil.logv("onDrawFrame ----> " + (System.currentTimeMillis() - startTime) + "ms");
+//        LogUtil.logv("onDrawFrame ----> " + (System.currentTimeMillis() - startTime) + "ms");
 
         if (mByteBuffer != null && mTakePicture) {
             mByteBuffer.rewind();

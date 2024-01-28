@@ -243,7 +243,7 @@ public class MultiPartRecorder extends VideoRecorderHandler implements IVideoRec
     @Override
     protected void handleMediaCaptureStopped(String output) {
         super.handleMediaCaptureStopped(output);
-        LogUtil.logd("handleMediaCaptureStopped : " + output);
+        LogUtil.logi("handleMediaCaptureStopped : " + output);
     }
 
     @Override

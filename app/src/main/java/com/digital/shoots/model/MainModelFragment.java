@@ -86,7 +86,6 @@ public class MainModelFragment extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        CameraUtil.getInstance().release();
     }
 
     @Override
