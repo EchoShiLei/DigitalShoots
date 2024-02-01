@@ -2,6 +2,7 @@ package com.digital.shoots.stats;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 
 import com.digital.shoots.db.greendao.GreenDaoManager;
@@ -12,6 +13,8 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.shuyu.gsyvideoplayer.listener.GSYStateUiListener;
+import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +44,8 @@ public class PagerLineChart extends BaseStatsPager {
         mLineChartHolder.mLlPlayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Log.i("zyw", "mLlPlayView onClick2");
+                play();
             }
         });
 
@@ -74,8 +78,8 @@ public class PagerLineChart extends BaseStatsPager {
         int score = 0;
         for (int i = 0; i < 30; i++) {
             score = 50 + (int) (Math.random() * 99 + 1);
-            GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis() + random.nextInt(1000000),
-                    0, score, 50, "20231021", ""));
+//            GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis() + random.nextInt(1000000),
+//                    0, score, 50, "20231021", ""));
         }
 
 
@@ -101,5 +105,50 @@ public class PagerLineChart extends BaseStatsPager {
 //        这个就是线型图所需的数据了
         LineData lineData = new LineData(lineDataSet);
         return lineData;
+    }
+
+
+    private void play() {
+        mLineChartHolder.videoPlayer.setVisibility(View.VISIBLE);
+        List<GameAchievement> test = GreenDaoManager.queryAll();
+        for (GameAchievement achievement:
+             test) {
+            Log.i("zyw", "achievement source1 = " + achievement.toString());
+        }
+        String source1 = test.get(test.size() - 1).getVideoPath();
+        Log.i("zyw", "play source1 = " + source1);
+        mLineChartHolder.videoPlayer.setUp(source1, true, "测试视频");
+
+        //增加title
+        mLineChartHolder.videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+        //设置返回键
+        mLineChartHolder.videoPlayer.getBackButton().setVisibility(View.VISIBLE);
+        mLineChartHolder.videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mLineChartHolder.videoPlayer.setVisibility(View.GONE);
+            }
+        });
+        //是否可以滑动调整
+        mLineChartHolder.videoPlayer.setIsTouchWiget(true);
+        //不需要屏幕旋转
+        mLineChartHolder.videoPlayer.setNeedOrientationUtils(false);
+
+        mLineChartHolder.videoPlayer.startPlayLogic();
+        mLineChartHolder.videoPlayer.setGSYVideoProgressListener(new GSYVideoProgressListener() {
+            @Override
+            public void onProgress(long progress, long secProgress, long currentPosition, long duration) {
+                Log.i("zyw", "progress = " + progress);
+                Log.i("zyw", "secProgress = " + secProgress);
+                Log.i("zyw", "currentPosition = " + currentPosition);
+                Log.i("zyw", "duration = " + duration);
+            }
+        });
+        mLineChartHolder.videoPlayer.setGSYStateUiListener(new GSYStateUiListener() {
+            @Override
+            public void onStateChanged(int state) {
+                Log.i("zyw", "state = " + state);
+            }
+        });
     }
 }

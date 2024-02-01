@@ -12,11 +12,6 @@
         android:gravity="center"
         android:text="my account" />
 
-    <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
-        android:id="@+id/video_player"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_gravity="center_horizontal"
-        />
+
 
 </FrameLayout>

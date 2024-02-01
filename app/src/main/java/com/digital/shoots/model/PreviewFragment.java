@@ -37,6 +37,8 @@ import com.digital.shoots.BuildConfig;
 import com.digital.shoots.R;
 import com.digital.shoots.base.BaseFragment;
 import com.digital.shoots.camera.CameraUtil;
+import com.digital.shoots.db.greendao.GreenDaoManager;
+import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.utils.BaseConstant;
 import com.digital.shoots.utils.Utils;
 import com.digital.shoots.views.LedTextView;
@@ -55,7 +57,9 @@ import com.erlei.videorecorder.util.LogUtil;
 
 import java.io.File;
 import java.text.DecimalFormat;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.Random;
 
 import javax.security.auth.callback.CallbackHandler;
 
@@ -67,7 +71,6 @@ public class PreviewFragment extends BaseFragment {
     private Button start;
     private Button score;
     private Button speed;
-
 
 
     @Override
@@ -106,6 +109,10 @@ public class PreviewFragment extends BaseFragment {
                     public void onRecorderSuccess(String outputFile) {
                         Log.i("zyw", "onRecorderSuccess outputFile = " + outputFile);
                         Toast.makeText(getContext(), "recordSuccess", Toast.LENGTH_SHORT).show();
+                        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis(),
+                                0, new Random().nextInt(100), new Random().nextInt(100),
+                                String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + (Calendar.getInstance().get(Calendar.MONTH) + 1) + Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
+                                outputFile));
                     }
 
                     @Override

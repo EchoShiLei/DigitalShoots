@@ -172,22 +172,22 @@ public class GreenDaoManager {
 
         GreenDaoManager.deleteAll();
         Random random = new Random();
-        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis() + random.nextInt(1000000),
-                0, 81, 99, "20231021", ""));
-        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
-                0, 80, 98, "20231021", ""));
-        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
-                0, 82, 98, "20231022", ""));
-        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
-                0, 81, 92, "20231022", ""));
-        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
-                0, 83, 97, "20231023", ""));
-        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
-                0, 81, 91, "20231023", ""));
-        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
-                0, 84, 96, "20231024", ""));
-        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
-                0, 80, 90, "20231024", ""));
+//        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis() + random.nextInt(1000000),
+//                0, 81, 99, "20231021", ""));
+//        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
+//                0, 80, 98, "20231021", ""));
+//        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
+//                0, 82, 98, "20231022", ""));
+//        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
+//                0, 81, 92, "20231022", ""));
+//        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
+//                0, 83, 97, "20231023", ""));
+//        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
+//                0, 81, 91, "20231023", ""));
+//        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
+//                0, 84, 96, "20231024", ""));
+//        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis()+ random.nextInt(1000000),
+//                0, 80, 90, "20231024", ""));
 
         Log.i("zyw", "highScore in 20231021= " + GreenDaoManager.getHighestScore("20231021"));
         Log.i("zyw", "highScore in 20231022= " + GreenDaoManager.getHighestScore("20231022"));

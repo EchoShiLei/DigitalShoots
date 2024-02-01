@@ -68,23 +68,9 @@ public class MyAccountFragment extends Fragment {
         }
     }
 
-    private StandardGSYVideoPlayer videoPlayer;
 
     private void init() {
-        videoPlayer = getView().findViewById(R.id.video_player);
-        String source1 = GreenDaoManager.getHighestScores().get(0).getVideoPath();
-        videoPlayer.setUp(source1, true, "测试视频");
 
-        //增加title
-        videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
-        //设置返回键
-        videoPlayer.getBackButton().setVisibility(View.GONE);
-        //是否可以滑动调整
-        videoPlayer.setIsTouchWiget(true);
-        //不需要屏幕旋转
-        videoPlayer.setNeedOrientationUtils(false);
-
-        videoPlayer.startPlayLogic();
     }
 
     @Override
@@ -103,20 +89,15 @@ public class MyAccountFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
-        videoPlayer.onVideoPause();
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        videoPlayer.onVideoResume();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        GSYVideoManager.releaseAllVideos();
-        //释放所有
-        videoPlayer.setVideoAllCallBack(null);
     }
 }
