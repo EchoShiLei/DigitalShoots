@@ -34,10 +34,10 @@ public class TabFragmentAdapter extends FragmentStateAdapter {
         trainersFragment = TrainersFragment.newInstance();
 
         drillsFragment = DrillsFragment.newInstance();
-        ((DrillsFragment) drillsFragment).setChangePagerListener(changePagerListener);
 
         trackingFragment = TrackingFragment.newInstance();
         myStatsFragment = MyStatsFragment.newInstance();
+        ((MyStatsFragment) myStatsFragment).setChangePagerListener(changePagerListener);
         myAccountFragment = MyAccountFragment.newInstance();
 
         fragments.add(trainersFragment);
