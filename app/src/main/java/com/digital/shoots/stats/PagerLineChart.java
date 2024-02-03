@@ -35,6 +35,9 @@ public class PagerLineChart extends BaseStatsPager {
         }
         initData();
         mLineChartHolder = (HolderStatsLineChartFragment) mHolder;
+        mLineChartHolder.mLineChart.setRenderer(new LineCharTextRenderer(mLineChartHolder.mLineChart,
+                mLineChartHolder.mLineChart.getAnimator(),
+                mLineChartHolder.mLineChart.getViewPortHandler()));
         mLineChartHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,7 +56,7 @@ public class PagerLineChart extends BaseStatsPager {
         List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
         if (highestScores.size() > 0) {
             int maxScore = highestScores.get(0).getScore();
-            mLineChartHolder.mTvScoreNum.setText( String.valueOf(maxScore));
+            mLineChartHolder.mTvScoreNum.setText(String.valueOf(maxScore));
         }
 
         mLineChartHolder.mLineChart.getDescription().setEnabled(false);
@@ -62,6 +65,11 @@ public class PagerLineChart extends BaseStatsPager {
         //设置X轴
         XAxis xAxis = mLineChartHolder.mLineChart.getXAxis();
         xAxis.setDrawGridLines(false);
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setLabelCount(10, true);
+        xAxis.setAxisMinimum(0f);
+        xAxis.setAxisMaximum(10);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         //设置Y轴
         YAxis yAxis = mLineChartHolder.mLineChart.getAxisLeft();
@@ -111,8 +119,8 @@ public class PagerLineChart extends BaseStatsPager {
     private void play() {
         mLineChartHolder.videoPlayer.setVisibility(View.VISIBLE);
         List<GameAchievement> test = GreenDaoManager.queryAll();
-        for (GameAchievement achievement:
-             test) {
+        for (GameAchievement achievement :
+                test) {
             Log.i("zyw", "achievement source1 = " + achievement.toString());
         }
         String source1 = test.get(test.size() - 1).getVideoPath();
