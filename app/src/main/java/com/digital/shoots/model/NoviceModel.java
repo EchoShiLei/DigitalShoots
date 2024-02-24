@@ -26,11 +26,7 @@ public class NoviceModel extends BaseModel {
     public void start() {
         time = 0;
         count = -1;
-        bleDeviceControl.writeBle(BleDataUtils.openAllLight());
-//        sendMsg(BleDataUtils.openAllBlueLight());
-//        for (int i = 1; i < 7; i++) {
-//            sendMsg(BleDataUtils.openBlueData(i));
-//        }
+        bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
     }
 
     @Override
@@ -51,31 +47,21 @@ public class NoviceModel extends BaseModel {
     @Override
     public void ledHit(byte data) {
 
-        if (count == -1) {
-            count = 0;
-            for (int i = 1; i < 7; i++) {
-                sendMsg(BleDataUtils.openRedData(i));
-            }
-            startTime();
-        } else {
-            hitList.add(data);
-            count = hitList.size();
-            sendMsg(BleDataUtils.closeRedData(data));
+        if (!hitList.add(data)) {
+            return;
         }
-
+        count = hitList.size();
+        sendMsg(BleDataUtils.closeRedData(data));
+        callback.updateScore(count,0);
 
         if (count == 6) {
             //end
-
+            end();
         }
     }
 
-    private void starPlayCountdown() {
-        int time = 4;
-        while (time == 0) {
-            time--;
-
-        }
-
+    @Override
+    public void end() {
+        super.end();
     }
 }

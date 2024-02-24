@@ -6,6 +6,7 @@ import android.util.Log;
 
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
+import com.digital.shoots.utils.ToastUtils;
 
 import java.util.Timer;
 import java.util.TimerTask;
@@ -57,6 +58,7 @@ public abstract class BaseModel {
                     bleDeviceControl.writeBle(BleDataUtils.showNumber(1));
                     handler.postDelayed(() -> {
                         Log.d("BaseModel", "start");
+                        startTime();
                         start();
                     }, 1000);
                 }, 1000);
@@ -76,6 +78,7 @@ public abstract class BaseModel {
         handler.removeCallbacksAndMessages(null);
         handlerThread.quitSafely();
         bleDeviceControl.writeBle(BleDataUtils.closeAllLight());
+        ToastUtils.showToast("end!");
     }
 
 
@@ -103,11 +106,14 @@ public abstract class BaseModel {
                 //
                 if (state == ModelState.READY) {
                     state = ModelState.RUN;
+                    bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
                     show3sCountdown();
                     return;
                 }
 
-                ledHit(data);
+                if (state == ModelState.RUN) {
+                    ledHit(data);
+                }
                 break;
 
         }
@@ -120,6 +126,8 @@ public abstract class BaseModel {
 
     public interface ModelCallback {
         void countdownTime(long time);
+        void updateScore(int score,int speed);
+        void endGame();
     }
 
     public enum ModelType {

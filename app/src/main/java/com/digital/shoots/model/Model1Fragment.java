@@ -38,7 +38,7 @@ public class Model1Fragment extends BaseFragment {
             time.setText(stTime);
         });
         mainViewModel.getLiveScore().observe(getActivity(), liveScore -> {
-            score.setText(liveScore);
+            score.setText(liveScore.toString());
         });
         mainViewModel.startModel(NOVICE);
     }

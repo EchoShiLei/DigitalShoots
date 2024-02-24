@@ -87,6 +87,16 @@ public class MainViewModel extends AndroidViewModel {
             public void countdownTime(long time) {
                 livTime.postValue(time);
             }
+
+            @Override
+            public void updateScore(int score, int speed) {
+                liveScore.postValue(score);
+            }
+
+            @Override
+            public void endGame() {
+
+            }
         };
 
         switch (modelType) {
