@@ -99,7 +99,7 @@ public class PagerLineChart extends BaseStatsPager {
         List<GameAchievement> top10Scores = GreenDaoManager.getTop10Scores("20231021");
         for (int i = 0; i < top10Scores.size(); i++) {
 //            添加Entry对象，传入纵轴的索引和纵轴的值
-            entries.add(new Entry(i + 1, top10Scores.get(i).getScore()));
+//            entries.add(new Entry(i + 1, top10Scores.get(i).getScore()));
         }
 
 //        实例化LineDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置

@@ -29,8 +29,11 @@ public class LineCharTextRenderer extends LineChartRenderer {
         super.drawDataSet(c, dataSet);
         float yMax = dataSet.getYMax();
         int boundsRangeCount = mXBounds.range + mXBounds.min;
+//        if (boundsRangeCount < 1) {
+//            return;
+//        }
         mDataSet = dataSet;
-        for (int j = mXBounds.min; j <= boundsRangeCount; j++) {
+        for (int j = mXBounds.min; j < boundsRangeCount; j++) {
             Entry entry = dataSet.getEntryForIndex(j);
             if (entry.getY() == yMax) {
                 mMaxEntry = entry;
@@ -42,6 +45,9 @@ public class LineCharTextRenderer extends LineChartRenderer {
     @Override
     public void drawExtras(Canvas c) {
         super.drawExtras(c);
+        if (mAnimator == null || mMaxEntry == null || mDataSet == null) {
+            return;
+        }
         float phaseY = mAnimator.getPhaseY();
         float[] mCirclesBuffer = new float[2];
         mCirclesBuffer[0] = mMaxEntry.getX();
