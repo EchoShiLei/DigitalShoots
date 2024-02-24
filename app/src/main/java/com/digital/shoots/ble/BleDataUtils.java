@@ -221,11 +221,20 @@ public class BleDataUtils {
         value[1] = (byte) 0X08;
         value[2] = (byte) 0X09;
 
-        value[3] = (byte) 0X80;
-        // cs
-        value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
+        int three = number % 10 + 48;
+        int two = ((int) (number / 10)) % 10 + 48;
+        int one = ((int) (number / 100)) % 10 + 48;
+        //Data
+        value[3] = (byte) one;
+        value[4] = (byte) two;
+        value[5] = (byte) three;
 
-        value[5] = (byte) 0XAA;
+        //CS
+        value[6] = (byte) (value[0] + value[1] + value[2] + value[3] + value[4] + value[5]);
+        // data[4] = 0xB3;
+
+        //End
+        value[7] = (byte) 0XAA;
         return value;
     }
 
@@ -236,17 +245,17 @@ public class BleDataUtils {
 
 
     //心跳查询
-    public static byte[] heartBeatRequesrData(){
+    public static byte[] heartBeatRequesrData() {
         byte[] data = new byte[5];
 
         // Start
         data[0] = (byte) 0XA5;
 
         //Length
-        data[1] = (byte)0x05;
+        data[1] = (byte) 0x05;
 
         //cmd
-        data[2] = (byte)0X30;
+        data[2] = (byte) 0X30;
 
 
         //CS
@@ -261,17 +270,17 @@ public class BleDataUtils {
     }
 
     //心跳响应
-    public static byte[] heartBeatResponseData(){
+    public static byte[] heartBeatResponseData() {
         byte[] data = new byte[5];
 
         // Start
-        data[0] = (byte)0XA5;
+        data[0] = (byte) 0XA5;
 
         //Length
-        data[1] = (byte)0x05;
+        data[1] = (byte) 0x05;
 
         //cmd
-        data[2] = (byte)0X31;
+        data[2] = (byte) 0X31;
 
         //Data
 
@@ -280,7 +289,7 @@ public class BleDataUtils {
         // data[4] = 0xB3;
 
         //End
-        data[4] = (byte)0XAA;
+        data[4] = (byte) 0XAA;
         // NSLog(@"心跳响应--%@",adata);
 
         return data;

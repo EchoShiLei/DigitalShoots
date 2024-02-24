@@ -90,6 +90,7 @@ public class MainViewModel extends AndroidViewModel {
 
             @Override
             public void updateScore(int score, int speed) {
+                deviceControl.writeBle(BleDataUtils.showNumber(score));
                 liveScore.postValue(score);
             }
 

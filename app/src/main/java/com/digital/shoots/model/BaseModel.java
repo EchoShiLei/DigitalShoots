@@ -58,6 +58,7 @@ public abstract class BaseModel {
                     bleDeviceControl.writeBle(BleDataUtils.showNumber(1));
                     handler.postDelayed(() -> {
                         Log.d("BaseModel", "start");
+                        bleDeviceControl.writeBle(BleDataUtils.showNumber(0));
                         startTime();
                         start();
                     }, 1000);
