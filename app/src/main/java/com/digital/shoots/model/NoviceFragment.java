@@ -1,7 +1,6 @@
 package com.digital.shoots.model;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import static com.digital.shoots.model.BaseModel.ModelType.NOVICE;
 
-public class Model1Fragment extends BaseFragment {
+public class NoviceFragment extends BaseFragment {
     LedTextView time;
     LedTextView score;
 
@@ -37,7 +36,7 @@ public class Model1Fragment extends BaseFragment {
 //            Log.d("time",stTime);
             time.setText(stTime);
         });
-        mainViewModel.getLiveScore().observe(getActivity(), liveScore -> {
+        mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             score.setText(liveScore.toString());
         });
         mainViewModel.startModel(NOVICE);

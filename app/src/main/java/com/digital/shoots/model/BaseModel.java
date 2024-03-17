@@ -8,6 +8,7 @@ import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.utils.ToastUtils;
 
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -18,6 +19,7 @@ public abstract class BaseModel {
     private static final String TAG = "BaseModel";
     private ModelState state = ModelState.IDLE;
     public static long TIME_PERIOD = 10;
+    public static long OUT_TIME = 4500;
 
     BleDeviceControl bleDeviceControl;
     HandlerThread handlerThread = new HandlerThread("BaseModel");
@@ -127,7 +129,7 @@ public abstract class BaseModel {
 
     public interface ModelCallback {
         void countdownTime(long time);
-        void updateScore(int score,int speed);
+        void updateScore(int blueScore,int redScore,int speed);
         void endGame();
     }
 
@@ -144,6 +146,10 @@ public abstract class BaseModel {
         READY,
         RUN,
         END
+    }
+
+    protected int getRandomNum(){
+        return new Random().nextInt(6) + 1;
     }
 
 }

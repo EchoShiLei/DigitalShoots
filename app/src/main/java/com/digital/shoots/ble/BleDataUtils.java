@@ -47,8 +47,8 @@ public class BleDataUtils {
     public static byte[] openBlueData(int i) {
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
-        value[1] = (byte) 0X06;
-        value[2] = (byte) 0X03;
+        value[1] = (byte) 0x06;
+        value[2] = (byte) 0X01;
         value[3] = (byte) i;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);

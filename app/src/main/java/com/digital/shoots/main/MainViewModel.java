@@ -8,12 +8,12 @@ import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.ble.BleDeviceManager;
 import com.digital.shoots.model.BaseModel;
 import com.digital.shoots.model.BaseModel.ModelType;
+import com.digital.shoots.model.BattleModel;
+import com.digital.shoots.model.JuniorModel;
 import com.digital.shoots.model.NoviceModel;
 import com.digital.shoots.utils.ToastUtils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import androidx.annotation.NonNull;
@@ -25,7 +25,8 @@ public class MainViewModel extends AndroidViewModel {
     public BleDeviceControl deviceControl;
     BaseModel model;
     private MutableLiveData<Long> livTime = new MutableLiveData<>();
-    private MutableLiveData<Integer> liveScore = new MutableLiveData<>();
+    private MutableLiveData<Integer> liveBlueScore = new MutableLiveData<>();
+    private MutableLiveData<Integer> liveRedScore = new MutableLiveData<>();
     private MutableLiveData<Set<String>> liveConnectedMacs = new MutableLiveData<>();
 
     private Set<String> connectedMacs = new HashSet<>();
@@ -89,9 +90,10 @@ public class MainViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void updateScore(int score, int speed) {
-                deviceControl.writeBle(BleDataUtils.showNumber(score));
-                liveScore.postValue(score);
+            public void updateScore(int blueScore, int redScore, int speed) {
+                deviceControl.writeBle(BleDataUtils.showNumber(blueScore));
+                liveBlueScore.postValue(blueScore);
+                liveRedScore.postValue(redScore);
             }
 
             @Override
@@ -104,9 +106,11 @@ public class MainViewModel extends AndroidViewModel {
             case NOVICE:
                 model = new NoviceModel(deviceControl, callback);
                 break;
-            case BATTLE:
-                break;
             case JUNIOR:
+                model = new JuniorModel(deviceControl, callback);
+                break;
+            case BATTLE:
+                model = new BattleModel(deviceControl, callback);
                 break;
             default:
                 break;
@@ -124,8 +128,12 @@ public class MainViewModel extends AndroidViewModel {
         return livTime;
     }
 
-    public MutableLiveData<Integer> getLiveScore() {
-        return liveScore;
+    public MutableLiveData<Integer> getLiveBlueScore() {
+        return liveBlueScore;
+    }
+
+    public MutableLiveData<Integer> getLiveRedScore() {
+        return liveRedScore;
     }
 
     // 获取已连接设备数

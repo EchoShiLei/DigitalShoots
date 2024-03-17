@@ -1,5 +1,6 @@
 package com.digital.shoots.model;
 
+import static com.digital.shoots.model.BaseModel.ModelType.BATTLE;
 import static com.digital.shoots.model.BaseModel.ModelType.JUNIOR;
 
 import android.os.Bundle;
@@ -16,7 +17,7 @@ import com.digital.shoots.views.LedTextView;
 
 public class BattleFragment extends BaseFragment {
     LedTextView time;
-    LedTextView score;
+    LedTextView blueScore, redScore;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,7 +29,8 @@ public class BattleFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         time = view.findViewById(R.id.game_time);
-        score = view.findViewById(R.id.score);
+        blueScore = view.findViewById(R.id.blue_score);
+        redScore = view.findViewById(R.id.red_score);
         mainViewModel.getLivTime().observe(getActivity(), liveTime -> {
             double dbTime = liveTime;
             double ss = dbTime / 1000;
@@ -36,10 +38,13 @@ public class BattleFragment extends BaseFragment {
 //            Log.d("time",stTime);
             time.setText(stTime);
         });
-        mainViewModel.getLiveScore().observe(getActivity(), liveScore -> {
-            score.setText(liveScore.toString());
+        mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
+            blueScore.setText(liveScore.toString());
         });
-        mainViewModel.startModel(JUNIOR);
+        mainViewModel.getLiveRedScore().observe(getActivity(), liveScore -> {
+            redScore.setText(liveScore.toString());
+        });
+        mainViewModel.startModel(BATTLE);
     }
 
     @Override

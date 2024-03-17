@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/model1Fragment"
-        android:name="com.digital.shoots.model.Model1Fragment"
+        android:name="com.digital.shoots.model.NoviceFragment"
         android:label="fragment_model1"
         tools:layout="@layout/fragment_model1" />
 

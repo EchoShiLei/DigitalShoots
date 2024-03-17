@@ -1,7 +1,6 @@
 package com.digital.shoots.model;
 
 import static com.digital.shoots.model.BaseModel.ModelType.JUNIOR;
-import static com.digital.shoots.model.BaseModel.ModelType.NOVICE;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -37,7 +36,7 @@ public class JuniorFragment extends BaseFragment {
 //            Log.d("time",stTime);
             time.setText(stTime);
         });
-        mainViewModel.getLiveScore().observe(getActivity(), liveScore -> {
+        mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             score.setText(liveScore.toString());
         });
         mainViewModel.startModel(JUNIOR);

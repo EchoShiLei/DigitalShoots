@@ -6,13 +6,14 @@ import com.digital.shoots.ble.BleDeviceControl;
 import java.util.HashSet;
 import java.util.Set;
 
-public class NoviceModel extends BaseModel {
+public class JuniorModel extends BaseModel {
 
-    private static final String TAG = "NoviceModel";
+    private static final String TAG = "JuniorModel";
     Set<Byte> hitList = new HashSet<>();
+    int blueLed,redLed;
     int count = -1;
 
-    public NoviceModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
+    public JuniorModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
 
     }
@@ -24,7 +25,7 @@ public class NoviceModel extends BaseModel {
     }
 
     public void start() {
-        time = 0;
+        time = 7500;
         count = -1;
         bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
     }
@@ -40,7 +41,7 @@ public class NoviceModel extends BaseModel {
 
     @Override
     void doTime() {
-        time += TIME_PERIOD;
+        time -= TIME_PERIOD;
     }
 
 
@@ -52,12 +53,19 @@ public class NoviceModel extends BaseModel {
         }
         count = hitList.size();
         sendMsg(BleDataUtils.closeRedData(data));
-        callback.updateScore(count, 0, 0);
+        callback.updateScore(count,0,0);
 
         if (count == 6) {
             //end
             end();
         }
+    }
+
+    private void openBlueLed(){
+
+    }
+    private void openRedLed(){
+
     }
 
     @Override
