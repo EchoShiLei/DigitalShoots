@@ -1,20 +1,19 @@
 package com.digital.shoots.tab;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.digital.shoots.R;
-import com.digital.shoots.db.greendao.GreenDaoManager;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.utils.OrientationUtils;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+
+import org.w3c.dom.Text;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -69,8 +68,24 @@ public class MyAccountFragment extends Fragment {
     }
 
 
-    private void init() {
-
+    private void init(View view) {
+        if (view == null) {
+            return;
+        }
+        ImageView ivUseIcon = view.findViewById(R.id.iv_user_icon);
+        TextView tvUseName = view.findViewById(R.id.tv_use_name);
+        TextView tvTeamName = view.findViewById(R.id.tv_team_name);
+        TextView tvBirthDate = view.findViewById(R.id.tv_birth_date);
+        ImageView ivStarA = view.findViewById(R.id.tv_star_a);
+        ImageView ivStarB = view.findViewById(R.id.tv_star_b);
+        ImageView ivStarC = view.findViewById(R.id.tv_star_c);
+        ImageView ivStarD = view.findViewById(R.id.tv_star_d);
+        ImageView ivStarE = view.findViewById(R.id.tv_star_e);
+        TextView tvHeightScores = view.findViewById(R.id.btn_height_scores);
+        TextView tvDataDate = view.findViewById(R.id.tv_data_date);
+        TextView tvDataScore = view.findViewById(R.id.tv_data_score);
+        TextView tvDataSpeed = view.findViewById(R.id.tv_data_speed);
+        ImageView tvDataVideo = view.findViewById(R.id.iv_data_video);
     }
 
     @Override
@@ -83,7 +98,7 @@ public class MyAccountFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        init();
+        init(view);
     }
 
     @Override
