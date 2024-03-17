@@ -33,6 +33,8 @@ public class MainModelFragment extends BaseFragment {
     ConstraintLayout model2;
     ConstraintLayout model3;
 
+    private boolean JuniorChecked = false;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,28 +59,33 @@ public class MainModelFragment extends BaseFragment {
                     .navigate(R.id.action_mainModelFragment_to_model1Fragment);
 
         });
+
+        model3.setOnClickListener(view1 -> {
+            if (mainViewModel.deviceControl == null) {
+                ToastUtils.showToast(R.string.pls_connect);
+                return;
+            }
+            NavHostFragment.findNavController(MainModelFragment.this)
+                    .navigate(R.id.action_mainModelFragment_to_battleFragment);
+
+        });
+
         view.findViewById(R.id.model2_textView6).setOnClickListener(view12 -> {
             ToastUtils.showToast("start");
 //            CameraUtil.getInstance().startPreview(MainModelFragment.this, mPreview);
-            // TODO 进入预览页面
-            NavHostFragment.findNavController(MainModelFragment.this)
-                    .navigate(R.id.action_mainModelFragment_to_previewFragment);
+            if(JuniorChecked) {
+                NavHostFragment.findNavController(MainModelFragment.this)
+                        .navigate(R.id.action_mainModelFragment_to_previewFragment);
+            } else {
+                NavHostFragment.findNavController(MainModelFragment.this)
+                        .navigate(R.id.action_mainModelFragment_to_juniorFragment);
+            }
         });
 
         ((CheckBox) view.findViewById(R.id.cb_model2_novice)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                // TODO 是否录制
-//                if (b) {
-//                    long currentTime = System.currentTimeMillis();
-//                    CameraUtil.getInstance().startRecord(MainModelFragment.this, mPreview, currentTime + ".mp4");
-//                    GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis(),
-//                            0, new Random().nextInt(100), new Random().nextInt(100),
-//                            String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + Calendar.getInstance().get(Calendar.MONTH) + Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
-//                            Environment.getExternalStorageDirectory() + "/" + BaseConstant.VIDEO_PATH + "/" + currentTime + ".mp4"));
-//                } else {
-//                    CameraUtil.getInstance().stopRecordVideo();
-//                }
+                JuniorChecked = b;
             }
         });
     }

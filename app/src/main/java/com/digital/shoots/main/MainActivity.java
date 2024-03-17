@@ -49,6 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initContainer() {
         mTab = findViewById(R.id.bottom);
+        mTab.setItemIconTintList(null);
         mViewPager = findViewById(R.id.container);
         mAdapter = new TabFragmentAdapter(this, mChangePagerListener);
         mViewPager.setAdapter(mAdapter);

@@ -39,16 +39,33 @@
         <action
             android:id="@+id/action_mainModelFragment_to_previewFragment"
             app:destination="@id/previewFragment" />
+        <action
+            android:id="@+id/action_mainModelFragment_to_juniorFragment"
+            app:destination="@id/juniorFragment" />
+        <action
+            android:id="@+id/action_mainModelFragment_to_battleFragment"
+            app:destination="@id/battleFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/model1Fragment"
         android:name="com.digital.shoots.model.Model1Fragment"
         android:label="fragment_model1"
         tools:layout="@layout/fragment_model1" />
+
     <fragment
         android:id="@+id/previewFragment"
         android:name="com.digital.shoots.model.PreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview"/>
+    <fragment
+        android:id="@+id/juniorFragment"
+        android:name="com.digital.shoots.model.JuniorFragment"
+        android:label="JuniorFragment" />
+    <fragment
+        android:id="@+id/battleFragment"
+        android:name="com.digital.shoots.model.BattleFragment"
+        android:label="BattleFragment" />
+
 
 </navigation>
