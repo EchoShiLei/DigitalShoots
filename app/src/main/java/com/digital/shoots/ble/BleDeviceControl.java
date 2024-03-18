@@ -11,6 +11,8 @@ import android.bluetooth.BluetoothProfile;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Looper;
 import android.util.Log;
 
 import com.digital.shoots.DigitalApplication;
@@ -54,10 +56,16 @@ public class BleDeviceControl {
     private DataCallback dataCallback;
     private MainViewModel mainViewModel;
 
+    HandlerThread thread;
+    Handler handler;
+
 
     public BleDeviceControl(MainViewModel viewModel, UiConnectCallback connectCallback) {
         this.uiConnectCallback = connectCallback;
         mainViewModel = viewModel;
+        thread = new HandlerThread("BleDeviceControl");
+        thread.start();
+        handler = new Handler(thread.getLooper());
     }
 
     public void setDataCallback(DataCallback callback) {
@@ -176,19 +184,21 @@ public class BleDeviceControl {
     };
 
     public void writeBle(byte[] value) {
-        StringBuilder msg = new StringBuilder(" writeBle data size:" + value.length + " ;data: ");
-        for (byte b : value) {
-            msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
-        }
-        Log.d(TAG, msg.toString());
-        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
-        if (service == null) {
-            return;
-        }
-        BluetoothGattCharacteristic writeChar = service.getCharacteristic(UUID.fromString(WRITE_DATA_UUID));
+//        handler.postDelayed(() -> {
+            StringBuilder msg = new StringBuilder(" writeBle data size:" + value.length + " ;data: ");
+            for (byte b : value) {
+                msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
+            }
+            Log.d(TAG, msg.toString());
+            BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
+            if (service == null) {
+                return;
+            }
+            BluetoothGattCharacteristic writeChar = service.getCharacteristic(UUID.fromString(WRITE_DATA_UUID));
 
-        writeChar.setValue(value);
-        bluetoothGatt.writeCharacteristic(writeChar);
+            writeChar.setValue(value);
+            bluetoothGatt.writeCharacteristic(writeChar);
+//        }, 200);
     }
 
 

@@ -9,12 +9,21 @@ public class BleDataUtils {
     }
 
     // 改变红灯颜色
-    public static byte[] openRedData(int i) {
+    public static byte[] openRedData(int index) {
+        StringBuilder cmd = new StringBuilder("01");
+        for (int i = 1; i < 7; i++) {
+            if (i == index) {
+                cmd.append("1");
+            } else {
+                cmd.append("0");
+            }
+        }
+        byte decimal = bit2byte(cmd.toString());
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X01;
-        value[3] = (byte) i;
+        value[3] = (byte) decimal;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -24,12 +33,13 @@ public class BleDataUtils {
 
 
     // 关闭红灯
-    public static byte[] closeRedData(int i) {
+    public static byte[] closeRedData() {
+        byte decimal = bit2byte("01000000");
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X01;
-        value[3] = (byte) i;
+        value[3] = (byte) decimal;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -44,12 +54,21 @@ public class BleDataUtils {
 
 
     // 改变蓝灯颜色
-    public static byte[] openBlueData(int i) {
+    public static byte[] openBlueData(int index) {
+        StringBuilder cmd = new StringBuilder("10");
+        for (int i = 1; i < 7; i++) {
+            if (i == index) {
+                cmd.append("1");
+            } else {
+                cmd.append("0");
+            }
+        }
+        byte decimal = bit2byte(cmd.toString());
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0x06;
         value[2] = (byte) 0X01;
-        value[3] = (byte) i;
+        value[3] = (byte) decimal;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -58,12 +77,13 @@ public class BleDataUtils {
     }
 
     // 改变红灯颜色
-    public static byte[] closeBlueData(int i) {
+    public static byte[] closeBlueData() {
+        byte decimal = bit2byte("10000000");
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X03;
-        value[3] = (byte) i;
+        value[3] = (byte) decimal;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -316,5 +336,34 @@ public class BleDataUtils {
             hex = '0' + hex;
         }
         return hex;
+    }
+
+
+    public static byte bit2byte(String bString) {
+        byte result = 0;
+        for (int i = bString.length() - 1, j = 0; i >= 0; i--, j++) {
+            result += (Byte.parseByte(bString.charAt(i) + "") * Math.pow(2, j));
+        }
+        return result;
+    }
+
+
+    public static int getScore(int index) {
+        switch (index) {
+            case 1:
+                return 11;
+            case 2:
+                return 25;
+            case 3:
+                return 9;
+            case 4:
+                return 13;
+            case 5:
+                return 23;
+            case 6:
+                return 9;
+        }
+        return -1;
+
     }
 }

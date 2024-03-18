@@ -12,8 +12,8 @@ public class BattleModel extends BaseModel {
     Set<Byte> hitList = new HashSet<>();
     int blueLed, redLed;
     long blueLedTime, redLedTime;
-    int redScore = -1;
-    int blueScore = -1;
+    int redScore = 0;
+    int blueScore = 0;
 
     public BattleModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
@@ -28,8 +28,8 @@ public class BattleModel extends BaseModel {
 
     public void start() {
         time = 75000;
-        redScore = -1;
-        blueLed = -1;
+        redScore = 0;
+        blueScore = 0;
         openBlueLed();
         openRedLed();
     }
@@ -54,10 +54,10 @@ public class BattleModel extends BaseModel {
     }
 
     private void checkTime() {
-        if (blueLed - time >= OUT_TIME) {
+        if (blueLedTime - time >= OUT_TIME) {
             closeBlueLed(blueLed, false);
         }
-        if (redLed - time >= OUT_TIME) {
+        if (redLedTime - time >= OUT_TIME) {
             closeRedLed(redLed, false);
         }
     }
@@ -65,10 +65,6 @@ public class BattleModel extends BaseModel {
 
     @Override
     public void ledHit(byte data) {
-
-        if (!hitList.add(data)) {
-            return;
-        }
         closeBlueLed(data, true);
         closeRedLed(data, true);
     }
@@ -100,9 +96,8 @@ public class BattleModel extends BaseModel {
             return;
         }
         if (isHit) {
-            blueScore++;
+            blueScore += BleDataUtils.getScore(index);
         }
-        bleDeviceControl.writeBle(BleDataUtils.closeBlueData(blueLed));
         openBlueLed();
 
         callback.updateScore(blueScore, redScore, 0);
@@ -114,9 +109,8 @@ public class BattleModel extends BaseModel {
             return;
         }
         if (isHit) {
-            redScore++;
+            redScore += BleDataUtils.getScore(index);
         }
-        bleDeviceControl.writeBle(BleDataUtils.closeRedData(redLed));
         openRedLed();
         callback.updateScore(blueScore, redScore, 0);
     }

@@ -52,7 +52,7 @@ public class JuniorModel extends BaseModel {
             return;
         }
         count = hitList.size();
-        sendMsg(BleDataUtils.closeRedData(data));
+        sendMsg(BleDataUtils.closeRedData());
         callback.updateScore(count,0,0);
 
         if (count == 6) {
