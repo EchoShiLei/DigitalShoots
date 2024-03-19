@@ -12,11 +12,10 @@ public class BattleModel extends BaseModel {
     private static final String TAG = "BattleModel";
     int blueLed, redLed;
     long blueLedTime, redLedTime;
-    int redScore = 0;
-    int blueScore = 0;
 
     public BattleModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
+        type= ModelType.BATTLE;
 
     }
 

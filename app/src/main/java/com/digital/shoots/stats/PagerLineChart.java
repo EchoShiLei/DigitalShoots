@@ -55,7 +55,7 @@ public class PagerLineChart extends BaseStatsPager {
         //查询最高分
         List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
         if (highestScores.size() > 0) {
-            int maxScore = highestScores.get(0).getScore();
+            int maxScore = highestScores.get(0).getBlueScore();
             mLineChartHolder.mTvScoreNum.setText(String.valueOf(maxScore));
         }
 

@@ -14,10 +14,10 @@ public class JuniorModel extends BaseModel {
     int[] redBase = {2, 3, 5};
     int blueLed, redLed;
     long ledTime;
-    int score = 0;
 
     public JuniorModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
+        type= ModelType.JUNIOR;
 
     }
 
@@ -29,7 +29,7 @@ public class JuniorModel extends BaseModel {
     @Override
     public void start() {
         time = 75000;
-        score = 0;
+        blueScore = 0;
         openLed();
     }
 
@@ -89,8 +89,8 @@ public class JuniorModel extends BaseModel {
             if (index != blueLed && index != redLed) {
                 return;
             }
-            score += BleDataUtils.getScore(index);
-            callback.updateScore(score, 0, 0);
+            blueScore += BleDataUtils.getScore(index);
+            callback.updateScore(blueScore, 0, 0);
         }
 
         // 关灯

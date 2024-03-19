@@ -10,11 +10,11 @@ public class NoviceModel extends BaseModel {
 
     private static final String TAG = "NoviceModel";
     Set<Integer> hitList = new HashSet<>();
-    int score;
     int count = -1;
 
     public NoviceModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
+        type= ModelType.NOVICE;
 
     }
 
@@ -26,7 +26,7 @@ public class NoviceModel extends BaseModel {
 
     public void start() {
         time = 0;
-        score = 0;
+        blueScore = 0;
         count = -1;
         bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
     }
@@ -51,10 +51,10 @@ public class NoviceModel extends BaseModel {
         if (!hitList.add((int) data)) {
             return;
         }
-        score+= BleDataUtils.getScore(data);
+        blueScore+= BleDataUtils.getScore(data);
         count = hitList.size();
         sendMsg(BleDataUtils.closeBlueData(hitList));
-        callback.updateScore(score, 0, 0);
+        callback.updateScore(blueScore, 0, 0);
 
         if (count == 6) {
             //end

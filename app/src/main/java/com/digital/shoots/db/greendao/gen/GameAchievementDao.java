@@ -26,10 +26,11 @@ public class GameAchievementDao extends AbstractDao<GameAchievement, Long> {
     public static class Properties {
         public final static Property CurrentTime = new Property(0, long.class, "currentTime", true, "_id");
         public final static Property Type = new Property(1, int.class, "type", false, "type");
-        public final static Property Score = new Property(2, int.class, "score", false, "score");
-        public final static Property Speed = new Property(3, int.class, "speed", false, "speed");
-        public final static Property Day = new Property(4, String.class, "day", false, "day");
-        public final static Property VideoPath = new Property(5, String.class, "videoPath", false, "VideoPath");
+        public final static Property BlueScore = new Property(2, int.class, "blueScore", false, "blueScore");
+        public final static Property RedScore = new Property(3, int.class, "redScore", false, "redScore");
+        public final static Property Speed = new Property(4, int.class, "speed", false, "speed");
+        public final static Property Day = new Property(5, String.class, "day", false, "day");
+        public final static Property VideoPath = new Property(6, String.class, "videoPath", false, "VideoPath");
     }
 
 
@@ -47,10 +48,11 @@ public class GameAchievementDao extends AbstractDao<GameAchievement, Long> {
         db.execSQL("CREATE TABLE " + constraint + "\"GAME_ACHIEVEMENT\" (" + //
                 "\"_id\" INTEGER PRIMARY KEY NOT NULL ," + // 0: currentTime
                 "\"type\" INTEGER NOT NULL ," + // 1: type
-                "\"score\" INTEGER NOT NULL ," + // 2: score
-                "\"speed\" INTEGER NOT NULL ," + // 3: speed
-                "\"day\" TEXT," + // 4: day
-                "\"VideoPath\" TEXT);"); // 5: videoPath
+                "\"blueScore\" INTEGER NOT NULL ," + // 2: blueScore
+                "\"redScore\" INTEGER NOT NULL ," + // 3: redScore
+                "\"speed\" INTEGER NOT NULL ," + // 4: speed
+                "\"day\" TEXT," + // 5: day
+                "\"VideoPath\" TEXT);"); // 6: videoPath
     }
 
     /** Drops the underlying database table. */
@@ -64,17 +66,18 @@ public class GameAchievementDao extends AbstractDao<GameAchievement, Long> {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getCurrentTime());
         stmt.bindLong(2, entity.getType());
-        stmt.bindLong(3, entity.getScore());
-        stmt.bindLong(4, entity.getSpeed());
+        stmt.bindLong(3, entity.getBlueScore());
+        stmt.bindLong(4, entity.getRedScore());
+        stmt.bindLong(5, entity.getSpeed());
  
         String day = entity.getDay();
         if (day != null) {
-            stmt.bindString(5, day);
+            stmt.bindString(6, day);
         }
  
         String videoPath = entity.getVideoPath();
         if (videoPath != null) {
-            stmt.bindString(6, videoPath);
+            stmt.bindString(7, videoPath);
         }
     }
 
@@ -83,17 +86,18 @@ public class GameAchievementDao extends AbstractDao<GameAchievement, Long> {
         stmt.clearBindings();
         stmt.bindLong(1, entity.getCurrentTime());
         stmt.bindLong(2, entity.getType());
-        stmt.bindLong(3, entity.getScore());
-        stmt.bindLong(4, entity.getSpeed());
+        stmt.bindLong(3, entity.getBlueScore());
+        stmt.bindLong(4, entity.getRedScore());
+        stmt.bindLong(5, entity.getSpeed());
  
         String day = entity.getDay();
         if (day != null) {
-            stmt.bindString(5, day);
+            stmt.bindString(6, day);
         }
  
         String videoPath = entity.getVideoPath();
         if (videoPath != null) {
-            stmt.bindString(6, videoPath);
+            stmt.bindString(7, videoPath);
         }
     }
 
@@ -107,10 +111,11 @@ public class GameAchievementDao extends AbstractDao<GameAchievement, Long> {
         GameAchievement entity = new GameAchievement( //
             cursor.getLong(offset + 0), // currentTime
             cursor.getInt(offset + 1), // type
-            cursor.getInt(offset + 2), // score
-            cursor.getInt(offset + 3), // speed
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // day
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // videoPath
+            cursor.getInt(offset + 2), // blueScore
+            cursor.getInt(offset + 3), // redScore
+            cursor.getInt(offset + 4), // speed
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // day
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // videoPath
         );
         return entity;
     }
@@ -119,10 +124,11 @@ public class GameAchievementDao extends AbstractDao<GameAchievement, Long> {
     public void readEntity(Cursor cursor, GameAchievement entity, int offset) {
         entity.setCurrentTime(cursor.getLong(offset + 0));
         entity.setType(cursor.getInt(offset + 1));
-        entity.setScore(cursor.getInt(offset + 2));
-        entity.setSpeed(cursor.getInt(offset + 3));
-        entity.setDay(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setVideoPath(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setBlueScore(cursor.getInt(offset + 2));
+        entity.setRedScore(cursor.getInt(offset + 3));
+        entity.setSpeed(cursor.getInt(offset + 4));
+        entity.setDay(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setVideoPath(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
      }
     
     @Override

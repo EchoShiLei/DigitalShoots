@@ -75,9 +75,9 @@ public class GreenDaoManager {
     public static int getHighestScore(String day) {
         QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
         return qb.where(GameAchievementDao.Properties.Day.eq(day))
-                .orderDesc(GameAchievementDao.Properties.Score)
+                .orderDesc(GameAchievementDao.Properties.BlueScore)
                 .limit(1)
-                .unique().getScore();
+                .unique().getBlueScore();
     }
 
     public static List<GameAchievement> getHighestScores() {
@@ -96,7 +96,7 @@ public class GreenDaoManager {
                 GameAchievement gameAchievement = new GameAchievement();
                 gameAchievement.setCurrentTime(mCurrentTimeIndex);
                 gameAchievement.setType(cursor.getInt(mTypeIndex));
-                gameAchievement.setScore(cursor.getInt(mScoreIndex));
+                gameAchievement.setBlueScore(cursor.getInt(mScoreIndex));
                 gameAchievement.setSpeed(cursor.getInt(mSpeedIndex));
                 gameAchievement.setDay(cursor.getString(mDayIndex));
                 gameAchievement.setVideoPath(cursor.getString(mVideoPathIndex));
@@ -115,7 +115,7 @@ public class GreenDaoManager {
     public static List<GameAchievement> getTop10Scores(String day) {
         QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
         return qb.where(GameAchievementDao.Properties.Day.eq(day))
-                .orderDesc(GameAchievementDao.Properties.Score)
+                .orderDesc(GameAchievementDao.Properties.BlueScore)
                 .limit(10)
                 .list();
     }
@@ -136,7 +136,7 @@ public class GreenDaoManager {
             cursor = daoSession.getGameAchievementDao().getDatabase().rawQuery(sql, null);
             int mCurrentTimeIndex = cursor.getColumnIndex(GameAchievementDao.Properties.CurrentTime.columnName);
             int mTypeIndex = cursor.getColumnIndex(GameAchievementDao.Properties.Type.columnName);
-            int mScoreIndex = cursor.getColumnIndex(GameAchievementDao.Properties.Score.columnName);
+            int mScoreIndex = cursor.getColumnIndex(GameAchievementDao.Properties.BlueScore.columnName);
             int mSpeedIndex = cursor.getColumnIndex("MAX(speed)");
             int mDayIndex = cursor.getColumnIndex(GameAchievementDao.Properties.Day.columnName);
             int mVideoPathIndex = cursor.getColumnIndex(GameAchievementDao.Properties.VideoPath.columnName);
@@ -144,7 +144,7 @@ public class GreenDaoManager {
                 GameAchievement gameAchievement = new GameAchievement();
                 gameAchievement.setCurrentTime(mCurrentTimeIndex);
                 gameAchievement.setType(cursor.getInt(mTypeIndex));
-                gameAchievement.setScore(cursor.getInt(mScoreIndex));
+                gameAchievement.setBlueScore(cursor.getInt(mScoreIndex));
                 gameAchievement.setSpeed(cursor.getInt(mSpeedIndex));
                 gameAchievement.setDay(cursor.getString(mDayIndex));
                 gameAchievement.setVideoPath(cursor.getString(mVideoPathIndex));
@@ -198,7 +198,7 @@ public class GreenDaoManager {
         List<GameAchievement> highScoreList = GreenDaoManager.getHighestScores();
         for (GameAchievement ga: highScoreList
         ) {
-            Log.i("zyw", "getHighestScores day = " + ga.getDay() + " |score = " + ga.getScore());
+            Log.i("zyw", "getHighestScores day = " + ga.getDay() + " |score = " + ga.getBlueScore());
         }
         List<GameAchievement> highSpeedList = GreenDaoManager.getHighestSpeeds();
         for (GameAchievement ga: highSpeedList
@@ -209,7 +209,7 @@ public class GreenDaoManager {
         List<GameAchievement> topScores = GreenDaoManager.getTop10Scores("20231022");
         for (GameAchievement ga: topScores
         ) {
-            Log.i("zyw", "getTop10Scores day = " + ga.getDay() + " |score = " + ga.getScore());
+            Log.i("zyw", "getTop10Scores day = " + ga.getDay() + " |score = " + ga.getBlueScore());
         }
 
         List<GameAchievement> topSpeeds = GreenDaoManager.getTop10Speeds("20231022");

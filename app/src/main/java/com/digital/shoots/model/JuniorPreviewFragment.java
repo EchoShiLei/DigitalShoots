@@ -108,7 +108,7 @@ public class JuniorPreviewFragment extends JuniorFragment {
                         Log.i("zyw", "onRecorderSuccess outputFile = " + outputFile);
                         Toast.makeText(getContext(), "recordSuccess", Toast.LENGTH_SHORT).show();
                         GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis(),
-                                0, new Random().nextInt(100), new Random().nextInt(100),
+                                0, new Random().nextInt(100), new Random().nextInt(100), new Random().nextInt(100),
                                 String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + (Calendar.getInstance().get(Calendar.MONTH) + 1) + Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
                                 outputFile));
                     }

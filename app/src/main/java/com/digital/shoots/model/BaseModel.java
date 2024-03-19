@@ -6,12 +6,17 @@ import android.util.Log;
 
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
+import com.digital.shoots.db.greendao.GreenDaoManager;
+import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.utils.ToastUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static com.digital.shoots.model.BaseModel.ModelType.BATTLE;
 import static com.digital.shoots.utils.BaseConstant.MCU_CMD_LED_HEART;
 import static com.digital.shoots.utils.BaseConstant.MCU_CMD_LED_HIT;
 
@@ -28,6 +33,11 @@ public abstract class BaseModel {
     Timer timer;
 
     long time = 0;
+
+    int redScore = 0;
+    int blueScore = 0;
+    int speed = 0;
+    ModelType type;
 
     public BaseModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         this.bleDeviceControl = bleDeviceControl;
@@ -102,6 +112,19 @@ public abstract class BaseModel {
 
 
         ToastUtils.showToast("end!");
+
+        // 记数据库
+        GameAchievement gameAchievement = new GameAchievement();
+        gameAchievement.setType(type.ordinal());
+        gameAchievement.setBlueScore(blueScore);
+        gameAchievement.setRedScore(redScore);
+        gameAchievement.setRedScore(speed);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String currentDate = sdf.format(date);
+        gameAchievement.setDay(currentDate);
+        gameAchievement.setCurrentTime(System.currentTimeMillis());
+        GreenDaoManager.insert(gameAchievement);
     }
 
 

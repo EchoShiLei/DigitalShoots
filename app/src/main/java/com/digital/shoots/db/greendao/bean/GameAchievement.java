@@ -12,8 +12,10 @@ public class GameAchievement {
     long currentTime;
     @Property(nameInDb = "type")
     int type;
-    @Property(nameInDb = "score")
-    int score;
+    @Property(nameInDb = "blueScore")
+    int blueScore;
+    @Property(nameInDb = "redScore")
+    int redScore;
     @Property(nameInDb = "speed")
     int speed;
     @Property(nameInDb = "day")
@@ -25,12 +27,13 @@ public class GameAchievement {
     public GameAchievement() {
     }
 
-    @Generated(hash = 1186304547)
-    public GameAchievement(long currentTime, int type, int score, int speed, String day,
+    @Generated(hash = 1801595076)
+    public GameAchievement(long currentTime, int type, int blueScore, int redScore, int speed, String day,
             String videoPath) {
         this.currentTime = currentTime;
         this.type = type;
-        this.score = score;
+        this.blueScore = blueScore;
+        this.redScore = redScore;
         this.speed = speed;
         this.day = day;
         this.videoPath = videoPath;
@@ -52,12 +55,20 @@ public class GameAchievement {
         this.type = type;
     }
 
-    public int getScore() {
-        return score;
+    public int getBlueScore() {
+        return blueScore;
     }
 
-    public void setScore(int score) {
-        this.score = score;
+    public void setBlueScore(int score) {
+        this.blueScore = score;
+    }
+
+    public int getRedScore() {
+        return redScore;
+    }
+
+    public void setRedScore(int redScore) {
+        this.redScore = redScore;
     }
 
     public int getSpeed() {
@@ -89,7 +100,8 @@ public class GameAchievement {
         return "GameAchievement{" +
                 "id=" + currentTime +
                 ", type=" + type +
-                ", score=" + score +
+                ", blueScore=" + blueScore +
+                ", redScore=" + redScore +
                 ", speed=" + speed +
                 ", day='" + day + '\'' +
                 ", videoPath='" + videoPath + '\'' +

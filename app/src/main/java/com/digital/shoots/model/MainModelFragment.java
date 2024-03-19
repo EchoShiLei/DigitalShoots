@@ -97,7 +97,7 @@ public class MainModelFragment extends BaseFragment {
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         mainViewModel.offline();
+        super.onDestroy();
     }
 }

@@ -7,6 +7,8 @@ import com.digital.shoots.base.SpUtil;
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.ble.BleDeviceManager;
+import com.digital.shoots.db.greendao.GreenDaoManager;
+import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.model.BaseModel;
 import com.digital.shoots.model.BaseModel.ModelType;
 import com.digital.shoots.model.BattleModel;
@@ -14,6 +16,8 @@ import com.digital.shoots.model.JuniorModel;
 import com.digital.shoots.model.NoviceModel;
 import com.digital.shoots.utils.ToastUtils;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
