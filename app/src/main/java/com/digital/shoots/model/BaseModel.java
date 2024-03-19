@@ -2,6 +2,7 @@ package com.digital.shoots.model;
 
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.digital.shoots.ble.BleDataUtils;
@@ -37,6 +38,9 @@ public abstract class BaseModel {
     int redScore = 0;
     int blueScore = 0;
     int speed = 0;
+
+    String videoPath = "";
+
     ModelType type;
 
     public BaseModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
@@ -120,10 +124,13 @@ public abstract class BaseModel {
         gameAchievement.setRedScore(redScore);
         gameAchievement.setRedScore(speed);
         Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String currentDate = sdf.format(date);
         gameAchievement.setDay(currentDate);
         gameAchievement.setCurrentTime(System.currentTimeMillis());
+        if(TextUtils.isEmpty(videoPath)) {
+            gameAchievement.setVideoPath(videoPath);
+        }
         GreenDaoManager.insert(gameAchievement);
     }
 

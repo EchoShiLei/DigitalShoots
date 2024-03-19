@@ -30,7 +30,7 @@ import static com.digital.shoots.base.SpUtil.KEY_LAST_BLE_MAC;
 public class MainViewModel extends AndroidViewModel {
 
     public BleDeviceControl deviceControl;
-    BaseModel model;
+    public BaseModel model;
     private MutableLiveData<Long> livTime = new MutableLiveData<>();
     private MutableLiveData<Integer> liveBlueScore = new MutableLiveData<>();
     private MutableLiveData<Integer> liveRedScore = new MutableLiveData<>();

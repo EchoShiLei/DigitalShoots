@@ -15,6 +15,8 @@ public class JuniorModel extends BaseModel {
     int blueLed, redLed;
     long ledTime;
 
+
+
     public JuniorModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
         type= ModelType.JUNIOR;
@@ -31,6 +33,9 @@ public class JuniorModel extends BaseModel {
         time = 75000;
         blueScore = 0;
         openLed();
+        if(mGameCallback != null) {
+            mGameCallback.start();
+        }
     }
 
     @Override
@@ -101,6 +106,9 @@ public class JuniorModel extends BaseModel {
     @Override
     public void end() {
         super.end();
+        if(mGameCallback != null) {
+            mGameCallback.end();
+        }
     }
 
 
@@ -108,4 +116,17 @@ public class JuniorModel extends BaseModel {
     protected int getRandomNum() {
         return new Random().nextInt(3);
     }
+
+    private GameCallback mGameCallback;
+
+    public void setGameCallback(GameCallback mGameCallback) {
+        this.mGameCallback = mGameCallback;
+    }
+
+    public interface GameCallback {
+        void start();
+        void end();
+    }
+
+
 }

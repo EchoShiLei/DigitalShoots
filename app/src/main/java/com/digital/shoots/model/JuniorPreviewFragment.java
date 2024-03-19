@@ -66,12 +66,14 @@ import javax.security.auth.callback.CallbackHandler;
 
 public class JuniorPreviewFragment extends JuniorFragment {
 
+    public static final String TAG = "JuniorPreviewFragment";
+
     private TextureView mTextureView;
 
     // test
-    private Button start;
-    private Button score;
-    private Button speed;
+//    private Button start;
+//    private Button score;
+//    private Button speed;
 
 
     @Override
@@ -82,60 +84,58 @@ public class JuniorPreviewFragment extends JuniorFragment {
 
     @Override
     protected void initView(View view) {
-        super.initView(view);
+//        super.initView(view);
         mTextureView = view.findViewById(R.id.textureView);
-        start = view.findViewById(R.id.start);
-        score = view.findViewById(R.id.score);
-        speed = view.findViewById(R.id.speed);
+//        start = view.findViewById(R.id.start);
+//        score = view.findViewById(R.id.score);
+//        speed = view.findViewById(R.id.speed);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void initData() {
-        super.initData();
-        //DEMO
-        start.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CameraUtil.getInstance().startRecord(10, new CameraUtil.OnRecorderStateListener() {
-                    @Override
-                    public void onRecorderStart() {
-                        Log.i("zyw", "onRecorderStart");
-                    }
+//        super.initData();
 
-                    @Override
-                    public void onRecorderSuccess(String outputFile) {
-                        Log.i("zyw", "onRecorderSuccess outputFile = " + outputFile);
-                        Toast.makeText(getContext(), "recordSuccess", Toast.LENGTH_SHORT).show();
-                        GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis(),
-                                0, new Random().nextInt(100), new Random().nextInt(100), new Random().nextInt(100),
-                                String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + (Calendar.getInstance().get(Calendar.MONTH) + 1) + Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
-                                outputFile));
-                    }
-
-                    @Override
-                    public void onRecorderFailure() {
-                        Log.i("zyw", "onRecorderFailure");
-                    }
-                });
-            }
-        });
-
-        speed.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CameraUtil.getInstance().setSpeed(CameraUtil.getInstance().getSpeed() + 1);
-            }
-        });
-        score.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                CameraUtil.getInstance().setScore(CameraUtil.getInstance().getScore() + 1);
-            }
-        });
+//        speed.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CameraUtil.getInstance().setSpeed(CameraUtil.getInstance().getSpeed() + 1);
+//            }
+//        });
+//        score.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                CameraUtil.getInstance().setScore(CameraUtil.getInstance().getScore() + 1);
+//            }
+//        });
 
         CameraUtil.getInstance().setTextureView(getContext(), mTextureView);
 
+        mainViewModel.getLivTime().observe(getActivity(), liveTime -> {
+            double dbTime = liveTime;
+            double ss = dbTime / 1000;
+            String stTime = df2.format(ss);
+//            Log.d("time",stTime);
+//            time.setText(stTime);
+            CameraUtil.getInstance().setTime(stTime);
+        });
+        mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
+            CameraUtil.getInstance().setScore(liveScore);
+        });
+
+        if(mainViewModel.model instanceof JuniorModel) {
+            ((JuniorModel)(mainViewModel.model)).setGameCallback(new JuniorModel.GameCallback() {
+                @Override
+                public void start() {
+                    startRecord();
+                }
+
+                @Override
+                public void end() {
+                    CameraUtil.getInstance().endRecord();
+                }
+            });
+        }
 
         mainViewModel.startModel(JUNIOR);
     }
@@ -161,5 +161,32 @@ public class JuniorPreviewFragment extends JuniorFragment {
         super.onDestroy();
         CameraUtil.getInstance().destroy();
         mainViewModel.endModel();
+    }
+
+    private void startRecord() {
+        CameraUtil.getInstance().startRecord(75, new CameraUtil.OnRecorderStateListener() {
+            @Override
+            public void onRecorderStart() {
+                Log.i(TAG, "onRecorderStart");
+            }
+
+            @Override
+            public void onRecorderSuccess(String outputFile) {
+                Log.i(TAG, "onRecorderSuccess outputFile = " + outputFile);
+                Toast.makeText(getContext(), "recordSuccess", Toast.LENGTH_SHORT).show();
+
+                mainViewModel.model.videoPath = outputFile;
+
+//                GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis(),
+//                        0, new Random().nextInt(100), new Random().nextInt(100), new Random().nextInt(100),
+//                        String.valueOf(Calendar.getInstance().get(Calendar.YEAR)) + (Calendar.getInstance().get(Calendar.MONTH) + 1) + Calendar.getInstance().get(Calendar.DAY_OF_MONTH),
+//                        outputFile));
+            }
+
+            @Override
+            public void onRecorderFailure() {
+                Log.w(TAG, "onRecorderFailure");
+            }
+        });
     }
 }

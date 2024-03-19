@@ -399,12 +399,12 @@ public class CameraUtil {
                     }
                 }
                 if (mCountDown > 0) {
-                    time = "  " + mCountDown;
+//                    time = "  " + mCountDown;
                     mCountDown--;
                     return;
                 }
                 if (mCountDown == 0) {
-                    time = "  GO";
+//                    time = "  GO";
                     mCountDown--;
                     return;
                 }
@@ -415,8 +415,8 @@ public class CameraUtil {
                     mRecorderTimer.cancel();
                     return;
                 }
-                String millionsFormatter = String.format("%02d:%02d", recordTime / 60, recordTime % 60);
-                setTime(millionsFormatter);
+//                String millionsFormatter = String.format("%02d:%02d", recordTime / 60, recordTime % 60);
+//                setTime(millionsFormatter);
                 recordTime--;
             }
         }, 0, 1000);
@@ -425,6 +425,12 @@ public class CameraUtil {
     public void cancelRecord() {
         if(mRecorderTimer != null) {
             mRecorderTimer.cancel();
+        }
+    }
+
+    public void endRecord() {
+        if (mRecorder != null && mRecorder.isRecordEnable()) {
+            recordTime = -1;
         }
     }
 

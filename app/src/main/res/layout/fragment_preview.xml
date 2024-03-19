@@ -20,25 +20,25 @@
             android:layout_height="match_parent"
             android:layout_margin="15dp"/>
 
-        <Button
-            android:id="@+id/start"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:text="开始"/>
-        <Button
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/start"
-            android:text="分数"/>
-        <Button
-            android:id="@+id/speed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@id/score"
-            android:text="速度"/>
+<!--        <Button-->
+<!--            android:id="@+id/start"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            android:text="开始"/>-->
+<!--        <Button-->
+<!--            android:id="@+id/score"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintLeft_toRightOf="@id/start"-->
+<!--            android:text="分数"/>-->
+<!--        <Button-->
+<!--            android:id="@+id/speed"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintLeft_toRightOf="@id/score"-->
+<!--            android:text="速度"/>-->
     </androidx.constraintlayout.widget.ConstraintLayout>
 </FrameLayout>
