@@ -191,7 +191,7 @@ public class BleDeviceControl {
         doList.add(value);
     }
 
-    private void realWriteBle(byte[] value) {
+    public void realWriteBle(byte[] value) {
         StringBuilder msg = new StringBuilder(" writeBle data size:" + value.length + " ;data: ");
         for (byte b : value) {
             msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
@@ -228,7 +228,7 @@ public class BleDeviceControl {
         switch (cmd) {
             case MCU_CMD_LED_HEART:
                 // 心跳
-                writeBle(BleDataUtils.heartBeatResponseData());
+                realWriteBle(BleDataUtils.heartBeatResponseData());
                 break;
             default:
                 //

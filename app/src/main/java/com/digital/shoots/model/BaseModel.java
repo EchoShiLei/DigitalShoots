@@ -146,7 +146,7 @@ public abstract class BaseModel {
         switch (cmd) {
             case MCU_CMD_LED_HEART:
                 // 心跳
-                bleDeviceControl.writeBle(BleDataUtils.heartBeatResponseData());
+                bleDeviceControl.realWriteBle(BleDataUtils.heartBeatResponseData());
                 break;
             case MCU_CMD_LED_HIT:
                 //

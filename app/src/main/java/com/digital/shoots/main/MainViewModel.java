@@ -76,12 +76,12 @@ public class MainViewModel extends AndroidViewModel {
     }
 
     public void online() {
-        deviceControl.writeBle(BleDataUtils.appOnlineControl());
+        deviceControl.realWriteBle(BleDataUtils.appOnlineControl());
         BleDataUtils.isOnline = true;
     }
 
     public void offline() {
-        deviceControl.writeBle(BleDataUtils.appOfflineControl());
+        deviceControl.realWriteBle(BleDataUtils.appOfflineControl());
         BleDataUtils.isOnline = false;
     }
 
