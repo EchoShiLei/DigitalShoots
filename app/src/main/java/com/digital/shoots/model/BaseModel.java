@@ -79,8 +79,28 @@ public abstract class BaseModel {
     public void end() {
         timer.cancel();
         handler.removeCallbacksAndMessages(null);
-        handlerThread.quitSafely();
-        bleDeviceControl.writeBle(BleDataUtils.closeAllLight());
+        // 蓝灯闪烁三次
+        handler.postDelayed(() -> {
+            bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+            handler.postDelayed(() -> {
+                bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
+                handler.postDelayed(() -> {
+                    bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+                    handler.postDelayed(() -> {
+                        bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
+                        handler.postDelayed(() -> {
+                            bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+                            handler.postDelayed(() -> {
+                                bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
+                                handlerThread.quitSafely();
+                            }, 100);
+                        }, 100);
+                    }, 100);
+                }, 100);
+            }, 100);
+        }, 100);
+
+
         ToastUtils.showToast("end!");
     }
 
@@ -129,7 +149,9 @@ public abstract class BaseModel {
 
     public interface ModelCallback {
         void countdownTime(long time);
-        void updateScore(int blueScore,int redScore,int speed);
+
+        void updateScore(int blueScore, int redScore, int speed);
+
         void endGame();
     }
 
@@ -148,7 +170,7 @@ public abstract class BaseModel {
         END
     }
 
-    protected int getRandomNum(){
+    protected int getRandomNum() {
         return new Random().nextInt(6) + 1;
     }
 

@@ -23,6 +23,7 @@ import com.digital.shoots.utils.ThreadPoolManager;
 import com.digital.shoots.utils.ToastUtils;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,6 +60,8 @@ public class BleDeviceControl {
     HandlerThread thread;
     Handler handler;
 
+    LinkedList<byte[]> doList = new LinkedList<>();
+
 
     public BleDeviceControl(MainViewModel viewModel, UiConnectCallback connectCallback) {
         this.uiConnectCallback = connectCallback;
@@ -66,6 +69,7 @@ public class BleDeviceControl {
         thread = new HandlerThread("BleDeviceControl");
         thread.start();
         handler = new Handler(thread.getLooper());
+        doWrite();
     }
 
     public void setDataCallback(DataCallback callback) {
@@ -184,21 +188,23 @@ public class BleDeviceControl {
     };
 
     public void writeBle(byte[] value) {
-//        handler.postDelayed(() -> {
-            StringBuilder msg = new StringBuilder(" writeBle data size:" + value.length + " ;data: ");
-            for (byte b : value) {
-                msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
-            }
-            Log.d(TAG, msg.toString());
-            BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
-            if (service == null) {
-                return;
-            }
-            BluetoothGattCharacteristic writeChar = service.getCharacteristic(UUID.fromString(WRITE_DATA_UUID));
+        doList.add(value);
+    }
 
-            writeChar.setValue(value);
-            bluetoothGatt.writeCharacteristic(writeChar);
-//        }, 200);
+    private void realWriteBle(byte[] value) {
+        StringBuilder msg = new StringBuilder(" writeBle data size:" + value.length + " ;data: ");
+        for (byte b : value) {
+            msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
+        }
+        Log.d(TAG, msg.toString());
+        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
+        if (service == null) {
+            return;
+        }
+        BluetoothGattCharacteristic writeChar = service.getCharacteristic(UUID.fromString(WRITE_DATA_UUID));
+
+        writeChar.setValue(value);
+        bluetoothGatt.writeCharacteristic(writeChar);
     }
 
 
@@ -243,5 +249,21 @@ public class BleDeviceControl {
 
     public interface DataCallback {
         void onData(String cmd, byte data);
+    }
+
+    private void doWrite() {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                // 在这里执行你想要每隔100毫秒执行的代码
+                if (doList.size() != 0) {
+                    realWriteBle(doList.pop());
+                }
+
+                // 再次调度此Runnable，实现每隔100毫秒执行
+                handler.postDelayed(this, 100);
+            }
+        };
+        handler.postDelayed(runnable, 100);
     }
 }

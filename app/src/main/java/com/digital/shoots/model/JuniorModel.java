@@ -4,14 +4,17 @@ import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class JuniorModel extends BaseModel {
 
     private static final String TAG = "JuniorModel";
-    Set<Byte> hitList = new HashSet<>();
-    int blueLed,redLed;
-    int count = -1;
+    int[] blueBase = {1, 4, 6};
+    int[] redBase = {2, 3, 5};
+    int blueLed, redLed;
+    long ledTime;
+    int score = 0;
 
     public JuniorModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
@@ -21,13 +24,13 @@ public class JuniorModel extends BaseModel {
     @Override
     public void init() {
         super.init();
-        hitList = new HashSet<>();
     }
 
+    @Override
     public void start() {
-        time = 7500;
-        count = -1;
-        bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+        time = 75000;
+        score = 0;
+        openLed();
     }
 
     @Override
@@ -41,35 +44,68 @@ public class JuniorModel extends BaseModel {
 
     @Override
     void doTime() {
+        if (time == 0) {
+            end();
+            return;
+        }
         time -= TIME_PERIOD;
+        checkTime();
+    }
+
+    private void checkTime() {
+        if (ledTime - time >= OUT_TIME) {
+            closeAllLed(blueLed, false);
+        }
     }
 
 
     @Override
     public void ledHit(byte data) {
-
-        if (!hitList.add(data)) {
-            return;
-        }
-        count = hitList.size();
-        sendMsg(BleDataUtils.closeRedData());
-        callback.updateScore(count,0,0);
-
-        if (count == 6) {
-            //end
-            end();
-        }
+        closeAllLed(data, true);
     }
 
-    private void openBlueLed(){
+    private void openLed() {
+        ledTime = time;
 
+        //开蓝灯
+        int index1 = blueBase[getRandomNum()];
+        while (index1 == blueLed) {
+            index1 = blueBase[getRandomNum()];
+        }
+        blueLed = index1;
+        bleDeviceControl.writeBle(BleDataUtils.openBlueData(blueLed));
+
+        //开红灯
+        int index2 = redBase[getRandomNum()];
+        while (index2 == redLed) {
+            index2 = redBase[getRandomNum()];
+        }
+        redLed = index2;
+        bleDeviceControl.writeBle(BleDataUtils.openRedData(redLed));
     }
-    private void openRedLed(){
 
+    private void closeAllLed(int index, boolean isHit) {
+        if (isHit) {
+            if (index != blueLed && index != redLed) {
+                return;
+            }
+            score += BleDataUtils.getScore(index);
+            callback.updateScore(score, 0, 0);
+        }
+
+        // 关灯
+        bleDeviceControl.writeBle(BleDataUtils.closeAllLight());
+        openLed();
     }
 
     @Override
     public void end() {
         super.end();
+    }
+
+
+    @Override
+    protected int getRandomNum() {
+        return new Random().nextInt(3);
     }
 }

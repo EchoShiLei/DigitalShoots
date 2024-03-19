@@ -1,5 +1,6 @@
 package com.digital.shoots.model;
 
+import static com.digital.shoots.model.BaseModel.ModelType.JUNIOR;
 import static com.digital.shoots.model.BaseModel.ModelType.NOVICE;
 
 import android.annotation.SuppressLint;
@@ -63,7 +64,7 @@ import java.util.Random;
 
 import javax.security.auth.callback.CallbackHandler;
 
-public class PreviewFragment extends BaseFragment {
+public class JuniorPreviewFragment extends JuniorFragment {
 
     private TextureView mTextureView;
 
@@ -80,13 +81,8 @@ public class PreviewFragment extends BaseFragment {
     }
 
     @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        initView(view);
-        initData();
-    }
-
-    private void initView(View view) {
+    protected void initView(View view) {
+        super.initView(view);
         mTextureView = view.findViewById(R.id.textureView);
         start = view.findViewById(R.id.start);
         score = view.findViewById(R.id.score);
@@ -94,7 +90,9 @@ public class PreviewFragment extends BaseFragment {
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void initData() {
+    @Override
+    protected void initData() {
+        super.initData();
         //DEMO
         start.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,6 +135,9 @@ public class PreviewFragment extends BaseFragment {
         });
 
         CameraUtil.getInstance().setTextureView(getContext(), mTextureView);
+
+
+        mainViewModel.startModel(JUNIOR);
     }
 
     @Override

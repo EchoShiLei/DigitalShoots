@@ -9,7 +9,8 @@ import java.util.Set;
 public class NoviceModel extends BaseModel {
 
     private static final String TAG = "NoviceModel";
-    Set<Byte> hitList = new HashSet<>();
+    Set<Integer> hitList = new HashSet<>();
+    int score;
     int count = -1;
 
     public NoviceModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
@@ -25,6 +26,7 @@ public class NoviceModel extends BaseModel {
 
     public void start() {
         time = 0;
+        score = 0;
         count = -1;
         bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
     }
@@ -46,13 +48,13 @@ public class NoviceModel extends BaseModel {
 
     @Override
     public void ledHit(byte data) {
-
-        if (!hitList.add(data)) {
+        if (!hitList.add((int) data)) {
             return;
         }
+        score+= BleDataUtils.getScore(data);
         count = hitList.size();
-        sendMsg(BleDataUtils.closeRedData());
-        callback.updateScore(count, 0, 0);
+        sendMsg(BleDataUtils.closeBlueData(hitList));
+        callback.updateScore(score, 0, 0);
 
         if (count == 6) {
             //end

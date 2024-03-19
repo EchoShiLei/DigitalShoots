@@ -4,12 +4,12 @@ import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 
 import java.util.HashSet;
+import java.util.Random;
 import java.util.Set;
 
 public class BattleModel extends BaseModel {
 
-    private static final String TAG = "JuniorModel";
-    Set<Byte> hitList = new HashSet<>();
+    private static final String TAG = "BattleModel";
     int blueLed, redLed;
     long blueLedTime, redLedTime;
     int redScore = 0;
@@ -23,7 +23,6 @@ public class BattleModel extends BaseModel {
     @Override
     public void init() {
         super.init();
-        hitList = new HashSet<>();
     }
 
     public void start() {

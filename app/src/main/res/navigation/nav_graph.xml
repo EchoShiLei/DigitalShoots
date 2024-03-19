@@ -55,7 +55,7 @@
 
     <fragment
         android:id="@+id/previewFragment"
-        android:name="com.digital.shoots.model.PreviewFragment"
+        android:name="com.digital.shoots.model.JuniorPreviewFragment"
         android:label="PreviewFragment"
         tools:layout="@layout/fragment_preview"/>
     <fragment

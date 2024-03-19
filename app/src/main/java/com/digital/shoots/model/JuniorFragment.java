@@ -2,6 +2,7 @@ package com.digital.shoots.model;
 
 import static com.digital.shoots.model.BaseModel.ModelType.JUNIOR;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +28,17 @@ public class JuniorFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        initView(view);
+        initData();
+    }
+
+    protected void initView(View view) {
         time = view.findViewById(R.id.game_time);
         score = view.findViewById(R.id.score);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    protected void initData() {
         mainViewModel.getLivTime().observe(getActivity(), liveTime -> {
             double dbTime = liveTime;
             double ss = dbTime / 1000;

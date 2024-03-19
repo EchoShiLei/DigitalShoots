@@ -1,5 +1,7 @@
 package com.digital.shoots.ble;
 
+import java.util.Set;
+
 public class BleDataUtils {
     public static boolean isOnline;
 
@@ -33,7 +35,7 @@ public class BleDataUtils {
 
 
     // 关闭红灯
-    public static byte[] closeRedData() {
+    public static byte[] closeAllRedData() {
         byte decimal = bit2byte("01000000");
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
@@ -45,11 +47,6 @@ public class BleDataUtils {
 
         value[5] = (byte) 0XAA;
         return value;
-    }
-
-    // 改变蓝灯颜色
-    public static byte[] openBlueData() {
-        return openBlueData(random());
     }
 
 
@@ -76,13 +73,21 @@ public class BleDataUtils {
         return value;
     }
 
-    // 改变红灯颜色
-    public static byte[] closeBlueData() {
-        byte decimal = bit2byte("10000000");
+    // 关闭所有蓝灯
+    public static byte[] closeBlueData( Set<Integer> hitList) {
+        StringBuilder cmd = new StringBuilder("10");
+        for (int i = 1; i < 7; i++) {
+            if (hitList.contains(i)) {
+                cmd.append("0");
+            } else {
+                cmd.append("1");
+            }
+        }
+        byte decimal = bit2byte(cmd.toString());
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
-        value[2] = (byte) 0X03;
+        value[2] = (byte) 0X01;
         value[3] = (byte) decimal;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
@@ -90,6 +95,7 @@ public class BleDataUtils {
         value[5] = (byte) 0XAA;
         return value;
     }
+
 
     //倒计时
     public static byte[] getCountdownData() {
@@ -161,12 +167,13 @@ public class BleDataUtils {
 
     // 关闭所有灯
     public static byte[] closeAllLight() {
+        byte decimal = bit2byte("11000000");
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X01;
 
-        value[3] = (byte) 0XC0;
+        value[3] = (byte) decimal;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -191,12 +198,13 @@ public class BleDataUtils {
 
     // 关闭所有灯
     public static byte[] closeAllBlueLight() {
+        byte decimal = bit2byte("10000000");
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X01;
 
-        value[3] = (byte) 0X80;
+        value[3] = (byte) decimal;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
@@ -206,27 +214,13 @@ public class BleDataUtils {
 
     // 打开所有蓝灯
     public static byte[] openAllBlueLight() {
+        byte decimal = bit2byte("10111111");
         byte[] value = new byte[6];
         value[0] = (byte) 0XA5;
         value[1] = (byte) 0X06;
         value[2] = (byte) 0X01;
 
-        value[3] = (byte) 0XBF;
-        // cs
-        value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
-
-        value[5] = (byte) 0XAA;
-        return value;
-    }
-
-    // 关闭所有灯
-    public static byte[] closeAllRedLight() {
-        byte[] value = new byte[6];
-        value[0] = (byte) 0XA5;
-        value[1] = (byte) 0X06;
-        value[2] = (byte) 0X01;
-
-        value[3] = (byte) 0X80;
+        value[3] = (byte) decimal;
         // cs
         value[4] = (byte) (value[0] + value[1] + value[2] + value[3]);
 
