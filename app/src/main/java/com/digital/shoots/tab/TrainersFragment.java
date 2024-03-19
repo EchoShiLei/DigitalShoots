@@ -19,7 +19,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.digital.shoots.R;
+import com.digital.shoots.base.SpUtil;
 import com.digital.shoots.main.MainViewModel;
+import com.digital.shoots.utils.Utils;
 import com.zyq.easypermission.EasyPermission;
 import com.zyq.easypermission.EasyPermissionHelper;
 import com.zyq.easypermission.EasyPermissionResult;
@@ -95,11 +97,12 @@ public class TrainersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_trainers, container, false);
         initView(view);
+        initData();
         return view;
     }
 
     private void initView(View view) {
-        mainViewModel = new ViewModelProvider(this).get(MainViewModel.class);
+        mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
 
         navController = Navigation.findNavController(view.findViewById(R.id.nav_host_fragment));
         view.findViewById(R.id.btn_ble).setOnClickListener(new View.OnClickListener() {
@@ -135,6 +138,13 @@ public class TrainersFragment extends Fragment {
                         }).requestPermission();
             }
         });
+    }
+
+    private void initData() {
+        String lastMac = SpUtil.getInstance(getContext()).getString(SpUtil.KEY_LAST_BLE_MAC);
+        if (lastMac != null && !lastMac.equals("")) {
+            mainViewModel.deviceClick(lastMac);
+        }
     }
 
     private void gotoDevice() {

@@ -3,6 +3,7 @@ package com.digital.shoots.main;
 import android.app.Application;
 
 import com.digital.shoots.R;
+import com.digital.shoots.base.SpUtil;
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
 import com.digital.shoots.ble.BleDeviceManager;
@@ -19,6 +20,8 @@ import java.util.Set;
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
+
+import static com.digital.shoots.base.SpUtil.KEY_LAST_BLE_MAC;
 
 public class MainViewModel extends AndroidViewModel {
 
@@ -43,6 +46,7 @@ public class MainViewModel extends AndroidViewModel {
                 @Override
                 public void onSuccess(String mac) {
                     ToastUtils.showToastD("Success");
+                    SpUtil.getInstance(getApplication()).putString(KEY_LAST_BLE_MAC,mac);
                     connectedMacs.add(mac);
                     liveConnectedMacs.postValue(connectedMacs);
                 }
