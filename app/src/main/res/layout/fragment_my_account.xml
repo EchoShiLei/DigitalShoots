@@ -38,10 +38,10 @@
                     android:background="@drawable/user_icon" />
 
                 <TextView
+                    android:padding="10dp"
                     android:id="@+id/tv_use_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
                     android:text="OWEN"
                     android:textColor="#060606"
                     android:textSize="16sp"
@@ -54,6 +54,7 @@
                     android:background="#060606" />
 
                 <LinearLayout
+                    android:id="@+id/ll_team_name_layout"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 
@@ -88,6 +89,7 @@
                     android:background="#060606" />
 
                 <LinearLayout
+                    android:id="@+id/ll_birth_date_layout"
                     android:layout_width="match_parent"
                     android:layout_height="50dp">
 

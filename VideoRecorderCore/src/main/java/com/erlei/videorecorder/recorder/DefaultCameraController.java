@@ -1,15 +1,14 @@
 package com.erlei.videorecorder.recorder;
 
+import static android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT;
+
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.SurfaceTexture;
-import android.text.TextUtils;
-import android.util.SparseArray;
 import android.view.MotionEvent;
 
 import com.erlei.videorecorder.camera.Camera;
@@ -17,11 +16,7 @@ import com.erlei.videorecorder.camera.FpsRange;
 import com.erlei.videorecorder.camera.Size;
 import com.erlei.videorecorder.util.LogUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-
-import static android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT;
 
 public class DefaultCameraController implements CameraController {
 
@@ -466,7 +461,7 @@ public class DefaultCameraController implements CameraController {
     @Override
     public void setMode(String key, String value) {
         checkCameraState();
-        mCamera.setMode(key,value);
+        mCamera.setMode(key, value);
     }
 
 

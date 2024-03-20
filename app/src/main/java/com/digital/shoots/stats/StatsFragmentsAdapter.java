@@ -65,6 +65,7 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
         }
     }
 
+
     @Override
     public int getItemCount() {
         return arrayList.size();

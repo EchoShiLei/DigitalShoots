@@ -29,6 +29,8 @@ public class TrackingFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private StatsFragmentsAdapter mStatsFragmentsAdapter;
+    private ViewPager2 mViewPager2;
 
     public TrackingFragment() {
         // Required empty public constructor
@@ -72,12 +74,18 @@ public class TrackingFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_tracking, container, false);
     }
+
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ViewPager2 viewPager2 = view.findViewById(R.id.vp_fragment_container);
-        StatsFragmentsAdapter statsFragmentsAdapter = new StatsFragmentsAdapter(getContext(), viewPager2);
-        statsFragmentsAdapter.initPagerData();
-        viewPager2.setAdapter(statsFragmentsAdapter);
+        mViewPager2 = view.findViewById(R.id.vp_fragment_container);
+        mStatsFragmentsAdapter = new StatsFragmentsAdapter(getContext(), mViewPager2);
+        mStatsFragmentsAdapter.initPagerData();
+        mViewPager2.setAdapter(mStatsFragmentsAdapter);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
     }
 }

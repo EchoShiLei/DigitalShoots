@@ -1,6 +1,5 @@
 package com.digital.shoots.stats;
 
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -9,11 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 
 import com.digital.shoots.R;
-import com.digital.shoots.db.greendao.GreenDaoManager;
 import com.github.mikephil.charting.charts.LineChart;
-import com.shuyu.gsyvideoplayer.GSYVideoManager;
-import com.shuyu.gsyvideoplayer.listener.GSYStateUiListener;
-import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 
 public class HolderStatsLineChartFragment extends HolderStatsFragment {

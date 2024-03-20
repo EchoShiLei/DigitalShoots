@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +19,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.digital.shoots.R;
+import com.digital.shoots.db.greendao.UserDataManager;
+import com.digital.shoots.db.greendao.bean.User;
 import com.digital.shoots.stats.StatsFragmentsAdapter;
+import com.digital.shoots.utils.ImageUtils;
 import com.digital.shoots.utils.Utils;
 
 import java.util.Calendar;
@@ -108,6 +112,7 @@ public class MyStatsFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mUserIcon = view.findViewById(R.id.iv_user_icon);
+        ImageUtils.createCircleImage(getActivity(), mUserIcon);
         mTracking = view.findViewById(R.id.tv_tracking);
         mTvTime = view.findViewById(R.id.tv_time);
 
@@ -124,6 +129,15 @@ public class MyStatsFragment extends Fragment {
         mIvProgressIndicator = view.findViewById(R.id.iv_progress_indicator);
         mIvStatsProgress = view.findViewById(R.id.iv_stats_progress);
         initView();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        User user = UserDataManager.getInstance().getUser();
+        if (!TextUtils.isEmpty(user.iconPath)) {
+            ImageUtils.loadLocalPic(getActivity(), mUserIcon, user.iconPath);
+        }
     }
 
     private void initView() {

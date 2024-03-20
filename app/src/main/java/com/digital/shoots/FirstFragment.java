@@ -1,31 +1,25 @@
 package com.digital.shoots;
 
 
-import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Outline;
-import android.graphics.Paint;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.RectShape;
-import android.graphics.drawable.shapes.RoundRectShape;
-import android.graphics.drawable.shapes.Shape;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
-
-import com.digital.shoots.base.BaseFragment;
-import com.digital.shoots.ble.BleDataUtils;
-import com.digital.shoots.ble.BleDeviceManager;
-import com.digital.shoots.utils.ToastUtils;
-import com.digital.shoots.views.MySurfaceView;
-import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
+
+import com.digital.shoots.base.BaseFragment;
+import com.digital.shoots.db.greendao.UserDataManager;
+import com.digital.shoots.db.greendao.bean.User;
+import com.digital.shoots.utils.ImageUtils;
+import com.digital.shoots.utils.ToastUtils;
+import com.digital.shoots.views.MySurfaceView;
 
 import java.io.IOException;
 
@@ -33,6 +27,7 @@ public class FirstFragment extends BaseFragment {
     public static final String TAG = "FirstFragment";
 
     private MySurfaceView player;
+    private ImageView mUserIcon;
 
     @Override
     public View onCreateView(
@@ -48,6 +43,8 @@ public class FirstFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         player = view.findViewById(R.id.surfaceView);
+        mUserIcon = view.findViewById(R.id.iv_user_icon);
+        ImageUtils.createCircleImage(getActivity(), mUserIcon);
         player.getHolder().setFixedSize(100, 100);
         player.setClipToOutline(true);
         player.setOutlineProvider(new ViewOutlineProvider() {
@@ -92,6 +89,16 @@ public class FirstFragment extends BaseFragment {
 
             }
         });
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        User user = UserDataManager.getInstance().getUser();
+        if (!TextUtils.isEmpty(user.iconPath)) {
+            ImageUtils.loadLocalPic(getActivity(), mUserIcon, user.iconPath);
+        }
     }
 
     @Override

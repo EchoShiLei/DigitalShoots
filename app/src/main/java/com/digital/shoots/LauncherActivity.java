@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.digital.shoots.db.greendao.UserDataManager;
 import com.digital.shoots.main.MainActivity;
 import com.zyq.easypermission.EasyPermission;
 import com.zyq.easypermission.EasyPermissionHelper;
@@ -41,42 +42,43 @@ public class LauncherActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lungcher);
+        UserDataManager.getInstance().fullUser(this);
         EasyPermissionHelper.getInstance().setDialogStyle(new EasyAppSettingDialogStyle(EasyAppSettingDialogStyle.DialogStyle.STYLE_CUSTOM)
-        .setCancelText(LauncherActivity.this.getString(R.string.per_cancel) )
-        .setConfirmText(LauncherActivity.this.getString(R.string.per_sure) ));
+                .setCancelText(LauncherActivity.this.getString(R.string.per_cancel))
+                .setConfirmText(LauncherActivity.this.getString(R.string.per_sure)));
         EasyPermission.build()
                 .mRequestCode(MY_REQUEST_CODE)//请求code，自己定义
                 .mPerms(permissions)//权限，可支持多个
-                .mAlertInfo(new PermissionAlertInfo(LauncherActivity.this.getString(R.string.per_title) ,
-                        LauncherActivity.this.getString(R.string.per_message) ))
+                .mAlertInfo(new PermissionAlertInfo(LauncherActivity.this.getString(R.string.per_title),
+                        LauncherActivity.this.getString(R.string.per_message)))
                 .mResult(new EasyPermissionResult() {//回调
-            @Override
-            public void onPermissionsAccess(int requestCode) {
-                //权限已通过
-                super.onPermissionsAccess(requestCode);
-                gotoMain();
-            }
+                    @Override
+                    public void onPermissionsAccess(int requestCode) {
+                        //权限已通过
+                        super.onPermissionsAccess(requestCode);
+                        gotoMain();
+                    }
 
-            @Override
-            public void onPermissionsDismiss(int requestCode, @NonNull List<String> permissions) {
-                super.onPermissionsDismiss(requestCode, permissions);
-                Log.e("onPermissionsDismiss", permissions.toString());
-                //权限被拒绝
-                StringBuilder stringBuilder = new StringBuilder();
-                for (String s : permissions) {
-                    stringBuilder.append(s);
-                }
-                Toast.makeText(LauncherActivity.this, stringBuilder, Toast.LENGTH_LONG).show();
-                finish();
-            }
+                    @Override
+                    public void onPermissionsDismiss(int requestCode, @NonNull List<String> permissions) {
+                        super.onPermissionsDismiss(requestCode, permissions);
+                        Log.e("onPermissionsDismiss", permissions.toString());
+                        //权限被拒绝
+                        StringBuilder stringBuilder = new StringBuilder();
+                        for (String s : permissions) {
+                            stringBuilder.append(s);
+                        }
+                        Toast.makeText(LauncherActivity.this, stringBuilder, Toast.LENGTH_LONG).show();
+                        finish();
+                    }
 
-            @Override
-            public boolean onDismissAsk(int requestCode, @NonNull List<String> permissions) {
-                //权限被拒绝并禁止再次询问
-                return super.onDismissAsk(requestCode, permissions);
-            }
+                    @Override
+                    public boolean onDismissAsk(int requestCode, @NonNull List<String> permissions) {
+                        //权限被拒绝并禁止再次询问
+                        return super.onDismissAsk(requestCode, permissions);
+                    }
 
-        }).requestPermission();
+                }).requestPermission();
 
 
     }

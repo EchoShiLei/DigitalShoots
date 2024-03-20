@@ -1,8 +1,13 @@
 package com.digital.shoots.stats;
 
+import android.app.Activity;
 import android.content.Context;
+import android.text.TextUtils;
 import android.view.View;
 
+import com.digital.shoots.db.greendao.UserDataManager;
+import com.digital.shoots.db.greendao.bean.User;
+import com.digital.shoots.utils.ImageUtils;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
@@ -34,7 +39,8 @@ public class PagerBarChart extends BaseStatsPager {
 
             }
         });
-
+        ImageUtils.createCircleImage((Activity) mContext, mBarChartFragmentsHolder.mIvUserIcon);
+        initIcon();
         mBarChartFragmentsHolder.mTvSeepNum.setText("68");
         mBarChartFragmentsHolder.mBarChart.getLegend().setEnabled(false);
         mBarChartFragmentsHolder.mBarChart.getDescription().setEnabled(false);
@@ -51,6 +57,13 @@ public class PagerBarChart extends BaseStatsPager {
         yAxis.setDrawAxisLine(true);
 
         mBarChartFragmentsHolder.mBarChart.setData(setData());
+    }
+
+    public void initIcon() {
+        User user = UserDataManager.getInstance().getUser();
+        if (!TextUtils.isEmpty(user.iconPath)) {
+            ImageUtils.loadLocalPic((Activity) mContext, mBarChartFragmentsHolder.mIvUserIcon, user.iconPath);
+        }
     }
 
     private BarData setData() {

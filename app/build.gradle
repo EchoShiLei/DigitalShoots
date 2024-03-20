@@ -53,8 +53,11 @@ dependencies {
     implementation("androidx.camera:camera-view:1.2.1")
     implementation("androidx.camera:camera-extensions:1.2.1")
 
-
+    implementation 'io.github.lucksiege:pictureselector:v3.11.2'
+    implementation 'io.github.lucksiege:ucrop:v3.11.2'
+    implementation 'io.github.lucksiege:camerax:v3.11.2'
+    implementation 'com.github.bumptech.glide:glide:4.13.0'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.13.0'
     implementation 'com.github.CarGuo.GSYVideoPlayer:gsyVideoPlayer-java:v8.4.0-release-jitpack'
-
     implementation project(':MultiPartRecorder')
 }

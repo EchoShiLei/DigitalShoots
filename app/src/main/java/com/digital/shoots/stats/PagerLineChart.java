@@ -1,12 +1,17 @@
 package com.digital.shoots.stats;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
 import com.digital.shoots.db.greendao.GreenDaoManager;
+import com.digital.shoots.db.greendao.UserDataManager;
 import com.digital.shoots.db.greendao.bean.GameAchievement;
+import com.digital.shoots.db.greendao.bean.User;
+import com.digital.shoots.utils.ImageUtils;
 import com.digital.shoots.utils.Utils;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -36,6 +41,9 @@ public class PagerLineChart extends BaseStatsPager {
             return;
         }
         mLineChartHolder = (HolderStatsLineChartFragment) mHolder;
+
+        ImageUtils.createCircleImage((Activity) mContext, mLineChartHolder.mIvUserIcon);
+        initIcon();
         mLineChartHolder.mLineChart.setRenderer(new LineCharTextRenderer(mLineChartHolder.mLineChart,
                 mLineChartHolder.mLineChart.getAnimator(),
                 mLineChartHolder.mLineChart.getViewPortHandler()));
@@ -79,6 +87,14 @@ public class PagerLineChart extends BaseStatsPager {
         yAxis.setDrawGridLines(false);
         yAxis.setDrawAxisLine(true);
         mLineChartHolder.mLineChart.setData(setData());
+    }
+
+
+    public void initIcon() {
+        User user = UserDataManager.getInstance().getUser();
+        if (!TextUtils.isEmpty(user.iconPath)) {
+            ImageUtils.loadLocalPic((Activity) mContext, mLineChartHolder.mIvUserIcon, user.iconPath);
+        }
     }
 
 

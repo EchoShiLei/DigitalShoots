@@ -10,10 +10,10 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="15dp"
         android:layout_marginStart="5dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="5dp"
+        android:layout_marginBottom="15dp"
         android:background="@drawable/white_radius_bg"
         android:orientation="vertical">
 
@@ -32,8 +32,8 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="5dp"
-            android:layout_marginEnd="5dp"
             android:layout_marginTop="25dp"
+            android:layout_marginEnd="5dp"
             android:layout_marginBottom="15dp"
             android:clickable="false"
             app:layout_constraintBottom_toTopOf="@+id/guideline4"
@@ -61,12 +61,22 @@
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/red_bg" />
 
+
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:text="@string/shooter_tutor" />
+
+            <ImageView
+                android:id="@+id/iv_user_icon"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_above="@+id/textView"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="20dp"
+                android:background="@drawable/user_icon" />
         </RelativeLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
