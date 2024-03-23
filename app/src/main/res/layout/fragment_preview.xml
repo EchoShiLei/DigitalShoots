@@ -18,7 +18,7 @@
             android:id="@+id/textureView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="15dp"/>
+            android:layout_margin="15dp" />
 
 <!--        <Button-->
 <!--            android:id="@+id/start"-->
@@ -34,7 +34,7 @@
 <!--            app:layout_constraintLeft_toRightOf="@id/start"-->
 <!--            android:text="分数"/>-->
 <!--        <Button-->
-<!--            android:id="@+id/speed"-->
+<!--            , android:id="@+id/speed"-->
 <!--            android:layout_width="wrap_content"-->
 <!--            android:layout_height="wrap_content"-->
 <!--            app:layout_constraintBottom_toBottomOf="parent"-->

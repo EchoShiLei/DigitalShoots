@@ -21,12 +21,18 @@ import com.digital.shoots.db.greendao.bean.User;
 import com.digital.shoots.events.UserInfoRefreshManger;
 import com.digital.shoots.utils.GlideEngine;
 import com.digital.shoots.utils.ImageUtils;
+import com.digital.shoots.views.ImageFileCropEngine;
+import com.digital.shoots.views.MeOnMediaEditInterceptListener;
 import com.digital.shoots.views.UseInputDialog;
 import com.luck.picture.lib.basic.PictureSelector;
 import com.luck.picture.lib.config.SelectMimeType;
+import com.luck.picture.lib.engine.CropEngine;
 import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.interfaces.OnMediaEditInterceptListener;
 import com.luck.picture.lib.interfaces.OnResultCallbackListener;
+import com.yalantis.ucrop.UCrop;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Calendar;
 
@@ -102,6 +108,8 @@ public class MyAccountFragment extends Fragment {
                         .openGallery(SelectMimeType.ofImage())
                         .setMaxSelectNum(1)
                         .setImageEngine(GlideEngine.createGlideEngine())
+                        .setCropEngine(new ImageFileCropEngine(getSandboxPath(), buildOptions()))
+                        .setEditMediaInterceptListener(new MeOnMediaEditInterceptListener(getSandboxPath(), buildOptions()))
                         .forResult(new OnResultCallbackListener<LocalMedia>() {
                             @Override
                             public void onResult(ArrayList<LocalMedia> result) {
@@ -119,6 +127,8 @@ public class MyAccountFragment extends Fragment {
                             }
                         });
             }
+
+
         });
         mTvUseName = view.findViewById(R.id.tv_use_name);
         mTvUseName.setOnClickListener(new View.OnClickListener() {
@@ -157,6 +167,31 @@ public class MyAccountFragment extends Fragment {
         fullInfo();
     }
 
+    private CropEngine getCropFileEngine() {
+        return null;
+    }
+
+    private UCrop.Options buildOptions() {
+        UCrop.Options options = new UCrop.Options();
+        options.setCircleDimmedLayer(true);
+        options.setHideBottomControls(true);
+        options.setFreeStyleCropEnabled(false);
+        options.withAspectRatio(1, 1);
+        options.setMaxScaleMultiplier(100);
+        options.setShowCropFrame(false);
+        options.setShowCropGrid(false);
+        options.setCropOutputPathDir(getSandboxPath());
+        return options;
+    }
+
+    private String getSandboxPath() {
+        File externalFilesDir = getContext().getExternalFilesDir("");
+        File customFile = new File(externalFilesDir.getAbsolutePath(), "Sandbox");
+        if (!customFile.exists()) {
+            customFile.mkdirs();
+        }
+        return customFile.getAbsolutePath() + File.separator;
+    }
 
     private void showDialog(TextView textView) {
         Activity activity = getActivity();
