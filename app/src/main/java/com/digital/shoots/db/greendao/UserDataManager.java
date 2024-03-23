@@ -6,7 +6,6 @@ import com.digital.shoots.base.SpUtil;
 import com.digital.shoots.db.greendao.bean.User;
 
 public class UserDataManager {
-    private boolean mIsChangeUserInfo = false;
     private User mUser = new User();
     private static volatile UserDataManager mHelper;
 
@@ -35,27 +34,23 @@ public class UserDataManager {
     }
 
     public void setUserIconPath(Activity activity, String userIconPath) {
-        mIsChangeUserInfo = true;
         mUser.iconPath = userIconPath;
         SpUtil.getInstance(activity).putString(User.KEY_ICON_PATH, userIconPath);
     }
 
     public void setUserName(Activity activity, String useName) {
-        mIsChangeUserInfo = true;
         mUser.name = useName;
         SpUtil.getInstance(activity).putString(User.KEY_USER_NAME, useName);
     }
 
 
     public void setUserTeamName(Activity activity, String teamName) {
-        mIsChangeUserInfo = true;
         mUser.teamName = teamName;
         SpUtil.getInstance(activity).putString(User.KEY_TEAM_NAME, teamName);
     }
 
 
     public void setUserBirthdate(Activity activity, String birthdate) {
-        mIsChangeUserInfo = true;
         mUser.birthdate = birthdate;
         SpUtil.getInstance(activity).putString(User.KEY_USER_BIRTHDATE, birthdate);
     }

@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
 import com.digital.shoots.R;
+import com.digital.shoots.tab.ChangePagerListener;
 
 import java.util.ArrayList;
 
@@ -19,10 +20,13 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     private ArrayList<Integer> arrayList = new ArrayList<>();
     private Context mContext;
     private ViewPager2 mViewPager2;
+    private ChangePagerListener mChangePagerListener;
 
-    public StatsFragmentsAdapter(Context context, ViewPager2 viewPager2) {
+
+    public StatsFragmentsAdapter(Context context, ViewPager2 viewPager2, ChangePagerListener changePagerListener) {
         mContext = context;
         mViewPager2 = viewPager2;
+        mChangePagerListener = changePagerListener;
     }
 
     @NonNull
@@ -55,10 +59,10 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     public void onBindViewHolder(@NonNull HolderStatsFragment holder, int position) {
         BaseStatsPager pager = null;
         if (holder instanceof HolderStatsLineChartFragment) {
-            pager = new PagerLineChart(mContext, holder);
+            pager = new PagerLineChart(mContext, holder, mChangePagerListener);
         }
         if (holder instanceof HolderStatsBarChartFragment) {
-            pager = new PagerBarChart(mContext, holder);
+            pager = new PagerBarChart(mContext, holder, mChangePagerListener);
         }
         if (pager != null) {
             pager.initView();

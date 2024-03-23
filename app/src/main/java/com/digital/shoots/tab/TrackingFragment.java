@@ -31,6 +31,7 @@ public class TrackingFragment extends Fragment {
     private String mParam2;
     private StatsFragmentsAdapter mStatsFragmentsAdapter;
     private ViewPager2 mViewPager2;
+    private ChangePagerListener mChangePagerListener;
 
     public TrackingFragment() {
         // Required empty public constructor
@@ -79,13 +80,13 @@ public class TrackingFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         mViewPager2 = view.findViewById(R.id.vp_fragment_container);
-        mStatsFragmentsAdapter = new StatsFragmentsAdapter(getContext(), mViewPager2);
+        mStatsFragmentsAdapter = new StatsFragmentsAdapter(getContext(), mViewPager2, mChangePagerListener);
         mStatsFragmentsAdapter.initPagerData();
         mViewPager2.setAdapter(mStatsFragmentsAdapter);
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    public void setChangePagerListener(ChangePagerListener changePagerListener) {
+        mChangePagerListener = changePagerListener;
     }
+
 }

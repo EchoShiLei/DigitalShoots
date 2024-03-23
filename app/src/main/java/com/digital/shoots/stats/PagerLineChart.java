@@ -7,10 +7,14 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 
+import com.digital.shoots.R;
 import com.digital.shoots.db.greendao.GreenDaoManager;
 import com.digital.shoots.db.greendao.UserDataManager;
 import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.db.greendao.bean.User;
+import com.digital.shoots.events.IUserInfoRefreshEvent;
+import com.digital.shoots.events.UserInfoRefreshManger;
+import com.digital.shoots.tab.ChangePagerListener;
 import com.digital.shoots.utils.ImageUtils;
 import com.digital.shoots.utils.Utils;
 import com.github.mikephil.charting.components.XAxis;
@@ -25,14 +29,30 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 
 public class PagerLineChart extends BaseStatsPager {
     private int maxScore = 0;
     private HolderStatsLineChartFragment mLineChartHolder;
+    private ChangePagerListener mChangePagerListener;
+    private IUserInfoRefreshEvent mIUserInfoRefreshEvent = new IUserInfoRefreshEvent() {
+        @Override
+        public void onUserInfoRefresh() {
+            User user = UserDataManager.getInstance().getUser();
+            if (!TextUtils.isEmpty(user.iconPath)) {
+                ImageUtils.loadLocalPic((Activity) mContext, mLineChartHolder.mIvUserIcon, user.iconPath);
+            }
+        }
 
-    public PagerLineChart(Context context, HolderStatsFragment holder) {
+        @Override
+        public void playDataRefresh() {
+            setData();
+        }
+    };
+
+    public PagerLineChart(Context context, HolderStatsFragment holder, ChangePagerListener changePagerListener) {
         super(context, holder);
+        mChangePagerListener = changePagerListener;
+        UserInfoRefreshManger.getInstance().addInfoRefreshEvents(mIUserInfoRefreshEvent);
     }
 
     @Override
@@ -41,7 +61,6 @@ public class PagerLineChart extends BaseStatsPager {
             return;
         }
         mLineChartHolder = (HolderStatsLineChartFragment) mHolder;
-
         ImageUtils.createCircleImage((Activity) mContext, mLineChartHolder.mIvUserIcon);
         initIcon();
         mLineChartHolder.mLineChart.setRenderer(new LineCharTextRenderer(mLineChartHolder.mLineChart,
@@ -50,7 +69,9 @@ public class PagerLineChart extends BaseStatsPager {
         mLineChartHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (mChangePagerListener != null) {
+                    mChangePagerListener.onChangerPager(R.id.myStatsFragment);
+                }
             }
         });
         mLineChartHolder.mLlPlayView.setOnClickListener(new View.OnClickListener() {
@@ -132,6 +153,9 @@ public class PagerLineChart extends BaseStatsPager {
     private void play() {
         mLineChartHolder.videoPlayer.setVisibility(View.VISIBLE);
         List<GameAchievement> test = GreenDaoManager.queryAll();
+        if (test == null || test.size() < 1) {
+            return;
+        }
         for (GameAchievement achievement :
                 test) {
             Log.i("zyw", "achievement source1 = " + achievement.toString());

@@ -5,8 +5,12 @@ import android.content.Context;
 import android.text.TextUtils;
 import android.view.View;
 
+import com.digital.shoots.R;
 import com.digital.shoots.db.greendao.UserDataManager;
 import com.digital.shoots.db.greendao.bean.User;
+import com.digital.shoots.events.IUserInfoRefreshEvent;
+import com.digital.shoots.events.UserInfoRefreshManger;
+import com.digital.shoots.tab.ChangePagerListener;
 import com.digital.shoots.utils.ImageUtils;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.components.YAxis;
@@ -21,9 +25,21 @@ import java.util.Random;
 public class PagerBarChart extends BaseStatsPager {
 
     private HolderStatsBarChartFragment mBarChartFragmentsHolder;
+    private ChangePagerListener mChangePagerListener;
+    private IUserInfoRefreshEvent mIUserInfoRefreshEvent = new IUserInfoRefreshEvent() {
+        @Override
+        public void onUserInfoRefresh() {
+            User user = UserDataManager.getInstance().getUser();
+            if (!TextUtils.isEmpty(user.iconPath)) {
+                ImageUtils.loadLocalPic((Activity) mContext, mBarChartFragmentsHolder.mIvUserIcon, user.iconPath);
+            }
+        }
+    };
 
-    public PagerBarChart(Context context, HolderStatsFragment holder) {
+    public PagerBarChart(Context context, HolderStatsFragment holder, ChangePagerListener changePagerListener) {
         super(context, holder);
+        mChangePagerListener = changePagerListener;
+        UserInfoRefreshManger.getInstance().addInfoRefreshEvents(mIUserInfoRefreshEvent);
     }
 
 
@@ -36,7 +52,9 @@ public class PagerBarChart extends BaseStatsPager {
         mBarChartFragmentsHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if (mChangePagerListener != null) {
+                    mChangePagerListener.onChangerPager(R.id.myStatsFragment);
+                }
             }
         });
         ImageUtils.createCircleImage((Activity) mContext, mBarChartFragmentsHolder.mIvUserIcon);

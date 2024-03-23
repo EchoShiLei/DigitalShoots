@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment;
 import com.digital.shoots.R;
 import com.digital.shoots.db.greendao.UserDataManager;
 import com.digital.shoots.db.greendao.bean.User;
+import com.digital.shoots.events.UserInfoRefreshManger;
 import com.digital.shoots.utils.GlideEngine;
 import com.digital.shoots.utils.ImageUtils;
 import com.digital.shoots.views.UseInputDialog;
@@ -108,6 +109,7 @@ public class MyAccountFragment extends Fragment {
                                     String availablePath = result.get(0).getAvailablePath();
                                     UserDataManager.getInstance().setUserIconPath(getActivity(), availablePath);
                                     ImageUtils.loadLocalPic(getActivity(), mIvUseIcon, availablePath);
+                                    UserInfoRefreshManger.getInstance().notifyUserInfoRefresh();
                                 }
                             }
 

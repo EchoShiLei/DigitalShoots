@@ -21,6 +21,8 @@ import android.widget.TextView;
 import com.digital.shoots.R;
 import com.digital.shoots.db.greendao.UserDataManager;
 import com.digital.shoots.db.greendao.bean.User;
+import com.digital.shoots.events.IUserInfoRefreshEvent;
+import com.digital.shoots.events.UserInfoRefreshManger;
 import com.digital.shoots.stats.StatsFragmentsAdapter;
 import com.digital.shoots.utils.ImageUtils;
 import com.digital.shoots.utils.Utils;
@@ -60,6 +62,17 @@ public class MyStatsFragment extends Fragment {
     public FrameLayout mFlStatsIndicator;
     public ImageView mIvProgressIndicator;
     public ImageView mIvStatsProgress;
+    IUserInfoRefreshEvent mIUserInfoRefreshEvent = new IUserInfoRefreshEvent() {
+        @Override
+        public void onUserInfoRefresh() {
+            fullUser();
+        }
+
+        @Override
+        public void playDataRefresh() {
+
+        }
+    };
 
 
     public MyStatsFragment() {
@@ -111,6 +124,7 @@ public class MyStatsFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        UserInfoRefreshManger.getInstance().addInfoRefreshEvents(mIUserInfoRefreshEvent);
         mUserIcon = view.findViewById(R.id.iv_user_icon);
         ImageUtils.createCircleImage(getActivity(), mUserIcon);
         mTracking = view.findViewById(R.id.tv_tracking);
@@ -129,11 +143,11 @@ public class MyStatsFragment extends Fragment {
         mIvProgressIndicator = view.findViewById(R.id.iv_progress_indicator);
         mIvStatsProgress = view.findViewById(R.id.iv_stats_progress);
         initView();
+        fullUser();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+
+    private void fullUser() {
         User user = UserDataManager.getInstance().getUser();
         if (!TextUtils.isEmpty(user.iconPath)) {
             ImageUtils.loadLocalPic(getActivity(), mUserIcon, user.iconPath);
@@ -194,6 +208,12 @@ public class MyStatsFragment extends Fragment {
         mIvSpeedStatus.setImageDrawable(Utils.getDrawable(getContext(), getSpeedIvId(speed)));
         mIvSpeedEmoji.setImageDrawable(Utils.getDrawable(getContext(),
                 speed >= 50 ? R.drawable.emoji_good : R.drawable.emoji_pro));
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        UserInfoRefreshManger.getInstance().destroyInfoRefreshEvents(mIUserInfoRefreshEvent);
     }
 
     private @DrawableRes int getScoreIvId(int score) {

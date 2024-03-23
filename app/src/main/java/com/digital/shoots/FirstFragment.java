@@ -17,6 +17,8 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.digital.shoots.base.BaseFragment;
 import com.digital.shoots.db.greendao.UserDataManager;
 import com.digital.shoots.db.greendao.bean.User;
+import com.digital.shoots.events.IUserInfoRefreshEvent;
+import com.digital.shoots.events.UserInfoRefreshManger;
 import com.digital.shoots.utils.ImageUtils;
 import com.digital.shoots.utils.ToastUtils;
 import com.digital.shoots.views.MySurfaceView;
@@ -28,6 +30,12 @@ public class FirstFragment extends BaseFragment {
 
     private MySurfaceView player;
     private ImageView mUserIcon;
+    IUserInfoRefreshEvent mIUserInfoRefreshEvent = new IUserInfoRefreshEvent() {
+        @Override
+        public void onUserInfoRefresh() {
+            fullUser();
+        }
+    };
 
     @Override
     public View onCreateView(
@@ -89,17 +97,17 @@ public class FirstFragment extends BaseFragment {
 
             }
         });
-
+        UserInfoRefreshManger.getInstance().addInfoRefreshEvents(mIUserInfoRefreshEvent);
+        fullUser();
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    private void fullUser() {
         User user = UserDataManager.getInstance().getUser();
         if (!TextUtils.isEmpty(user.iconPath)) {
             ImageUtils.loadLocalPic(getActivity(), mUserIcon, user.iconPath);
         }
     }
+
 
     @Override
     public void onDestroy() {
@@ -107,5 +115,6 @@ public class FirstFragment extends BaseFragment {
         if (player != null) {
             player.release();
         }
+        UserInfoRefreshManger.getInstance().destroyInfoRefreshEvents(mIUserInfoRefreshEvent);
     }
 }
