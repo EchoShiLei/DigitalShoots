@@ -128,7 +128,7 @@ public abstract class BaseModel {
         String currentDate = sdf.format(date);
         gameAchievement.setDay(currentDate);
         gameAchievement.setCurrentTime(System.currentTimeMillis());
-        if(TextUtils.isEmpty(videoPath)) {
+        if(!TextUtils.isEmpty(videoPath)) {
             gameAchievement.setVideoPath(videoPath);
         }
         GreenDaoManager.insert(gameAchievement);

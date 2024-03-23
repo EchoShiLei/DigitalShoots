@@ -6,6 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -21,12 +23,14 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     private Context mContext;
     private ViewPager2 mViewPager2;
     private ChangePagerListener mChangePagerListener;
+    private Fragment fragment;
 
 
-    public StatsFragmentsAdapter(Context context, ViewPager2 viewPager2, ChangePagerListener changePagerListener) {
+    public StatsFragmentsAdapter(Context context, ViewPager2 viewPager2, ChangePagerListener changePagerListener, Fragment fragment) {
         mContext = context;
         mViewPager2 = viewPager2;
         mChangePagerListener = changePagerListener;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -59,7 +63,7 @@ public class StatsFragmentsAdapter extends RecyclerView.Adapter<HolderStatsFragm
     public void onBindViewHolder(@NonNull HolderStatsFragment holder, int position) {
         BaseStatsPager pager = null;
         if (holder instanceof HolderStatsLineChartFragment) {
-            pager = new PagerLineChart(mContext, holder, mChangePagerListener);
+            pager = new PagerLineChart(mContext, holder, mChangePagerListener, fragment);
         }
         if (holder instanceof HolderStatsBarChartFragment) {
             pager = new PagerBarChart(mContext, holder, mChangePagerListener);

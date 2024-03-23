@@ -53,7 +53,6 @@ public class FirstFragment extends BaseFragment {
         player = view.findViewById(R.id.surfaceView);
         mUserIcon = view.findViewById(R.id.iv_user_icon);
         ImageUtils.createCircleImage(getActivity(), mUserIcon);
-        player.getHolder().setFixedSize(100, 100);
         player.setClipToOutline(true);
         player.setOutlineProvider(new ViewOutlineProvider() {
             @Override

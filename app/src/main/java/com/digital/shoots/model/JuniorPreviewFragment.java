@@ -123,8 +123,8 @@ public class JuniorPreviewFragment extends JuniorFragment {
             CameraUtil.getInstance().setScore(liveScore);
         });
 
-        if(mainViewModel.model instanceof JuniorModel) {
-            ((JuniorModel)(mainViewModel.model)).setGameCallback(new JuniorModel.GameCallback() {
+        if (mainViewModel.model instanceof JuniorModel) {
+            ((JuniorModel) (mainViewModel.model)).setGameCallback(new JuniorModel.GameCallback() {
                 @Override
                 public void start() {
                     startRecord();
@@ -175,7 +175,12 @@ public class JuniorPreviewFragment extends JuniorFragment {
                 Log.i(TAG, "onRecorderSuccess outputFile = " + outputFile);
                 Toast.makeText(getContext(), "recordSuccess", Toast.LENGTH_SHORT).show();
 
-                mainViewModel.model.videoPath = outputFile;
+                if (mainViewModel.model != null) {
+                    mainViewModel.model.videoPath = outputFile;
+                } else {
+                    Log.w(TAG, "not connect to bluetooth, model is null");
+                }
+
 
 //                GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis(),
 //                        0, new Random().nextInt(100), new Random().nextInt(100), new Random().nextInt(100),

@@ -3,9 +3,14 @@ package com.digital.shoots.stats;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Outline;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewOutlineProvider;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.fragment.app.Fragment;
 
 import com.digital.shoots.R;
 import com.digital.shoots.db.greendao.GreenDaoManager;
@@ -22,8 +27,6 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.shuyu.gsyvideoplayer.listener.GSYStateUiListener;
-import com.shuyu.gsyvideoplayer.listener.GSYVideoProgressListener;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,6 +37,7 @@ public class PagerLineChart extends BaseStatsPager {
     private int maxScore = 0;
     private HolderStatsLineChartFragment mLineChartHolder;
     private ChangePagerListener mChangePagerListener;
+    private Fragment fragment;
     private IUserInfoRefreshEvent mIUserInfoRefreshEvent = new IUserInfoRefreshEvent() {
         @Override
         public void onUserInfoRefresh() {
@@ -49,10 +53,11 @@ public class PagerLineChart extends BaseStatsPager {
         }
     };
 
-    public PagerLineChart(Context context, HolderStatsFragment holder, ChangePagerListener changePagerListener) {
+    public PagerLineChart(Context context, HolderStatsFragment holder, ChangePagerListener changePagerListener, Fragment fragment) {
         super(context, holder);
         mChangePagerListener = changePagerListener;
         UserInfoRefreshManger.getInstance().addInfoRefreshEvents(mIUserInfoRefreshEvent);
+        this.fragment = fragment;
     }
 
     @Override
@@ -72,6 +77,14 @@ public class PagerLineChart extends BaseStatsPager {
                 if (mChangePagerListener != null) {
                     mChangePagerListener.onChangerPager(R.id.myStatsFragment);
                 }
+            }
+        });
+
+        mLineChartHolder.videoPlayer.setClipToOutline(true);
+        mLineChartHolder.videoPlayer.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), 80);
             }
         });
         mLineChartHolder.mLlPlayView.setOnClickListener(new View.OnClickListener() {
@@ -162,16 +175,20 @@ public class PagerLineChart extends BaseStatsPager {
         }
         String source1 = test.get(test.size() - 1).getVideoPath();
         Log.i("zyw", "play source1 = " + source1);
-        mLineChartHolder.videoPlayer.setUp(source1, true, "测试视频");
+        mLineChartHolder.videoPlayer.setUp(source1, true, "");
 
         //增加title
-        mLineChartHolder.videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
+//        mLineChartHolder.videoPlayer.getTitleTextView().setVisibility(View.VISIBLE);
         //设置返回键
         mLineChartHolder.videoPlayer.getBackButton().setVisibility(View.VISIBLE);
+        mLineChartHolder.videoPlayer.getFullscreenButton().setVisibility(View.GONE);
         mLineChartHolder.videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                mLineChartHolder.videoPlayer.onVideoPause();
+                mLineChartHolder.videoPlayer.release();
                 mLineChartHolder.videoPlayer.setVisibility(View.GONE);
+                backPressedCallback.remove();
             }
         });
         //是否可以滑动调整
@@ -179,21 +196,22 @@ public class PagerLineChart extends BaseStatsPager {
         //不需要屏幕旋转
         mLineChartHolder.videoPlayer.setNeedOrientationUtils(false);
 
+        mLineChartHolder.videoPlayer.setAutoFullWithSize(true);
+
         mLineChartHolder.videoPlayer.startPlayLogic();
-        mLineChartHolder.videoPlayer.setGSYVideoProgressListener(new GSYVideoProgressListener() {
-            @Override
-            public void onProgress(long progress, long secProgress, long currentPosition, long duration) {
-                Log.i("zyw", "progress = " + progress);
-                Log.i("zyw", "secProgress = " + secProgress);
-                Log.i("zyw", "currentPosition = " + currentPosition);
-                Log.i("zyw", "duration = " + duration);
-            }
-        });
-        mLineChartHolder.videoPlayer.setGSYStateUiListener(new GSYStateUiListener() {
-            @Override
-            public void onStateChanged(int state) {
-                Log.i("zyw", "state = " + state);
-            }
-        });
+
+        fragment.getActivity().getOnBackPressedDispatcher().addCallback(backPressedCallback);
     }
+
+    private OnBackPressedCallback backPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (mLineChartHolder.videoPlayer.getVisibility() == View.VISIBLE) {
+                mLineChartHolder.videoPlayer.onVideoPause();
+                mLineChartHolder.videoPlayer.release();
+                mLineChartHolder.videoPlayer.setVisibility(View.GONE);
+                backPressedCallback.remove();
+            }
+        }
+    };
 }
