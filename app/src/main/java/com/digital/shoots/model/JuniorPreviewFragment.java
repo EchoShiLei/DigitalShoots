@@ -123,6 +123,8 @@ public class JuniorPreviewFragment extends JuniorFragment {
             CameraUtil.getInstance().setScore(liveScore);
         });
 
+        mainViewModel.startModel(JUNIOR);
+
         if (mainViewModel.model instanceof JuniorModel) {
             ((JuniorModel) (mainViewModel.model)).setGameCallback(new JuniorModel.GameCallback() {
                 @Override
@@ -136,8 +138,6 @@ public class JuniorPreviewFragment extends JuniorFragment {
                 }
             });
         }
-
-        mainViewModel.startModel(JUNIOR);
     }
 
     @Override
