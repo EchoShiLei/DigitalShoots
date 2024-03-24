@@ -20,7 +20,7 @@ public class NoviceModel extends BaseModel {
 
     public NoviceModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
-        type= ModelType.NOVICE;
+        type = ModelType.NOVICE;
 
     }
 
@@ -30,7 +30,7 @@ public class NoviceModel extends BaseModel {
         hitList = new HashSet<>();
     }
 
-    public void start() {
+    public synchronized void start() {
         time = 0;
         blueScore = 0;
         count = -1;
@@ -47,7 +47,7 @@ public class NoviceModel extends BaseModel {
     }
 
     @Override
-    void doTime() {
+    synchronized void doTime() {
         time += TIME_PERIOD;
     }
 
@@ -57,7 +57,7 @@ public class NoviceModel extends BaseModel {
         if (!hitList.add((int) data)) {
             return;
         }
-        blueScore+= BleDataUtils.getScore(data);
+        blueScore += BleDataUtils.getScore(data);
         count = hitList.size();
         sendMsg(BleDataUtils.closeBlueData(hitList));
         callback.updateScore(blueScore, 0, 0);
@@ -69,13 +69,17 @@ public class NoviceModel extends BaseModel {
     }
 
     @Override
-    public void end() {
+    public synchronized void end() {
         super.end();
         saveToDB();
     }
 
     @Override
     void saveToDB() {
+        if (count != 6) {
+            //end
+            end();
+        }
         // 记数据库
         GameAchievement gameAchievement = new GameAchievement();
         gameAchievement.setType(type.ordinal());

@@ -16,7 +16,7 @@ public class BattleModel extends BaseModel {
 
     public BattleModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
-        type= ModelType.BATTLE;
+        type = ModelType.BATTLE;
 
     }
 
@@ -25,7 +25,7 @@ public class BattleModel extends BaseModel {
         super.init();
     }
 
-    public void start() {
+    public synchronized void start() {
         time = 75000;
         redScore = 0;
         blueScore = 0;
@@ -43,7 +43,7 @@ public class BattleModel extends BaseModel {
     }
 
     @Override
-    void doTime() {
+    synchronized void doTime() {
         if (time == 0) {
             end();
             return;
@@ -52,7 +52,7 @@ public class BattleModel extends BaseModel {
         checkTime();
     }
 
-    private void checkTime() {
+    private synchronized void checkTime() {
         if (blueLedTime - time >= OUT_TIME) {
             closeBlueLed(blueLed, false);
         }
@@ -115,13 +115,16 @@ public class BattleModel extends BaseModel {
     }
 
     @Override
-    public void end() {
+    public synchronized void end() {
         super.end();
         saveToDB();
     }
 
     @Override
     void saveToDB() {
+        if (time >= 10) {
+            return;
+        }
         // 记数据库
         GameAchievement gameAchievement = new GameAchievement();
         gameAchievement.setType(type.ordinal());

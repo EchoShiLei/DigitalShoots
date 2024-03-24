@@ -22,10 +22,9 @@ public class JuniorModel extends BaseModel {
     long ledTime;
 
 
-
     public JuniorModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
-        type= ModelType.JUNIOR;
+        type = ModelType.JUNIOR;
 
     }
 
@@ -35,7 +34,7 @@ public class JuniorModel extends BaseModel {
     }
 
     @Override
-    public void start() {
+    public synchronized void start() {
         time = 75000;
         blueScore = 0;
         openLed();
@@ -51,7 +50,7 @@ public class JuniorModel extends BaseModel {
     }
 
     @Override
-    void doTime() {
+    synchronized void doTime() {
         if (time == 0) {
             end();
             return;
@@ -60,7 +59,7 @@ public class JuniorModel extends BaseModel {
         checkTime();
     }
 
-    private void checkTime() {
+    private synchronized void checkTime() {
         if (ledTime - time >= OUT_TIME) {
             closeAllLed(blueLed, false);
         }
@@ -107,13 +106,16 @@ public class JuniorModel extends BaseModel {
     }
 
     @Override
-    public void end() {
+    public synchronized void end() {
         super.end();
         saveToDB();
     }
 
     @Override
     void saveToDB() {
+        if (time >= 10) {
+            return;
+        }
         // 记数据库
         GameAchievement gameAchievement = new GameAchievement();
         gameAchievement.setType(type.ordinal());

@@ -84,11 +84,15 @@ public abstract class BaseModel {
 
     }
 
-    public abstract void start();
+    public synchronized void start(){
+
+    }
 
     public abstract void ready();
 
-    public abstract void run();
+    public synchronized  void run(){
+
+    }
 
     public void end() {
         timer.cancel();
@@ -132,7 +136,9 @@ public abstract class BaseModel {
         callback.countdownTime(time);
     }
 
-    abstract void doTime();
+    synchronized void doTime(){
+
+    }
 
     public void onCmdData(String cmd, byte data) {
         switch (cmd) {
