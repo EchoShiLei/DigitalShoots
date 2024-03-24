@@ -13,6 +13,7 @@ import com.digital.shoots.model.BaseModel;
 import com.digital.shoots.model.BaseModel.ModelType;
 import com.digital.shoots.model.BattleModel;
 import com.digital.shoots.model.JuniorModel;
+import com.digital.shoots.model.JuniorPreviewModel;
 import com.digital.shoots.model.NoviceModel;
 import com.digital.shoots.utils.ToastUtils;
 
@@ -119,6 +120,9 @@ public class MainViewModel extends AndroidViewModel {
                 break;
             case BATTLE:
                 model = new BattleModel(deviceControl, callback);
+                break;
+            case JUNIOR_PREVIEW:
+                model = new JuniorPreviewModel(deviceControl, callback);
                 break;
             default:
                 break;

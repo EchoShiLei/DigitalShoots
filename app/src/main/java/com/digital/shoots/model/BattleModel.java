@@ -2,10 +2,11 @@ package com.digital.shoots.model;
 
 import com.digital.shoots.ble.BleDataUtils;
 import com.digital.shoots.ble.BleDeviceControl;
+import com.digital.shoots.db.greendao.GreenDaoManager;
+import com.digital.shoots.db.greendao.bean.GameAchievement;
 
-import java.util.HashSet;
-import java.util.Random;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class BattleModel extends BaseModel {
 
@@ -116,5 +117,22 @@ public class BattleModel extends BaseModel {
     @Override
     public void end() {
         super.end();
+        saveToDB();
+    }
+
+    @Override
+    void saveToDB() {
+        // 记数据库
+        GameAchievement gameAchievement = new GameAchievement();
+        gameAchievement.setType(type.ordinal());
+        gameAchievement.setBlueScore(blueScore);
+        gameAchievement.setRedScore(redScore);
+        gameAchievement.setRedScore(speed);
+        Date date = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+        String currentDate = sdf.format(date);
+        gameAchievement.setDay(currentDate);
+        gameAchievement.setCurrentTime(System.currentTimeMillis());
+        GreenDaoManager.insert(gameAchievement);
     }
 }

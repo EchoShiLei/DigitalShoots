@@ -9,23 +9,22 @@ import com.digital.shoots.db.greendao.bean.GameAchievement;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.HashSet;
 import java.util.Random;
-import java.util.Set;
 
-public class JuniorModel extends BaseModel {
+public class JuniorPreviewModel extends BaseModel {
 
-    private static final String TAG = "JuniorModel";
+    private GameCallback mGameCallback;
+
+    private static final String TAG = "JuniorPreviewModel";
     int[] blueBase = {1, 4, 6};
     int[] redBase = {2, 3, 5};
     int blueLed, redLed;
     long ledTime;
 
 
-
-    public JuniorModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
+    public JuniorPreviewModel(BleDeviceControl bleDeviceControl, ModelCallback callback) {
         super(bleDeviceControl, callback);
-        type= ModelType.JUNIOR;
+        type = ModelType.JUNIOR_PREVIEW;
 
     }
 
@@ -39,6 +38,9 @@ public class JuniorModel extends BaseModel {
         time = 75000;
         blueScore = 0;
         openLed();
+        if (mGameCallback != null) {
+            mGameCallback.start();
+        }
     }
 
     @Override
@@ -109,11 +111,13 @@ public class JuniorModel extends BaseModel {
     @Override
     public void end() {
         super.end();
-        saveToDB();
+        if (mGameCallback != null) {
+            mGameCallback.end();
+        }
     }
 
     @Override
-    void saveToDB() {
+    public void saveToDB() {
         // 记数据库
         GameAchievement gameAchievement = new GameAchievement();
         gameAchievement.setType(type.ordinal());
@@ -125,6 +129,9 @@ public class JuniorModel extends BaseModel {
         String currentDate = sdf.format(date);
         gameAchievement.setDay(currentDate);
         gameAchievement.setCurrentTime(System.currentTimeMillis());
+        if (!TextUtils.isEmpty(videoPath)) {
+            gameAchievement.setVideoPath(videoPath);
+        }
         GreenDaoManager.insert(gameAchievement);
     }
 
@@ -133,4 +140,16 @@ public class JuniorModel extends BaseModel {
     protected int getRandomNum() {
         return new Random().nextInt(3);
     }
+
+    public void setGameCallback(GameCallback mGameCallback) {
+        this.mGameCallback = mGameCallback;
+    }
+
+    public interface GameCallback {
+        void start();
+
+        void end();
+    }
+
+
 }

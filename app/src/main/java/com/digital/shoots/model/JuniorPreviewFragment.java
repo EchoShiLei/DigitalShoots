@@ -1,6 +1,7 @@
 package com.digital.shoots.model;
 
 import static com.digital.shoots.model.BaseModel.ModelType.JUNIOR;
+import static com.digital.shoots.model.BaseModel.ModelType.JUNIOR_PREVIEW;
 import static com.digital.shoots.model.BaseModel.ModelType.NOVICE;
 
 import android.annotation.SuppressLint;
@@ -41,6 +42,7 @@ import com.digital.shoots.camera.CameraUtil;
 import com.digital.shoots.db.greendao.GreenDaoManager;
 import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.utils.BaseConstant;
+import com.digital.shoots.utils.ProgressDialogUtil;
 import com.digital.shoots.utils.Utils;
 import com.digital.shoots.views.LedTextView;
 import com.erlei.multipartrecorder.MultiPartRecorder;
@@ -109,7 +111,9 @@ public class JuniorPreviewFragment extends JuniorFragment {
 //            }
 //        });
 
-        CameraUtil.getInstance().setTextureView(getContext(), mTextureView);
+        mainViewModel.startModel(JUNIOR_PREVIEW);
+
+        CameraUtil.getInstance().setTextureView(getActivity(), mTextureView);
 
         mainViewModel.getLivTime().observe(getActivity(), liveTime -> {
             double dbTime = liveTime;
@@ -123,17 +127,17 @@ public class JuniorPreviewFragment extends JuniorFragment {
             CameraUtil.getInstance().setScore(liveScore);
         });
 
-        mainViewModel.startModel(JUNIOR);
-
-        if (mainViewModel.model instanceof JuniorModel) {
-            ((JuniorModel) (mainViewModel.model)).setGameCallback(new JuniorModel.GameCallback() {
+        if (mainViewModel.model instanceof JuniorPreviewModel) {
+            ((JuniorPreviewModel) (mainViewModel.model)).setGameCallback(new JuniorPreviewModel.GameCallback() {
                 @Override
                 public void start() {
+                    Log.i("zyw", "start");
                     startRecord();
                 }
 
                 @Override
                 public void end() {
+                    Log.i("zyw", "end");
                     CameraUtil.getInstance().endRecord();
                 }
             });
@@ -177,9 +181,11 @@ public class JuniorPreviewFragment extends JuniorFragment {
 
                 if (mainViewModel.model != null) {
                     mainViewModel.model.videoPath = outputFile;
+                    mainViewModel.model.saveToDB();
                 } else {
                     Log.w(TAG, "not connect to bluetooth, model is null");
                 }
+                ProgressDialogUtil.hideProgressDialog(getActivity());
 
 
 //                GreenDaoManager.insert(new GameAchievement(System.currentTimeMillis(),
@@ -191,6 +197,12 @@ public class JuniorPreviewFragment extends JuniorFragment {
             @Override
             public void onRecorderFailure() {
                 Log.w(TAG, "onRecorderFailure");
+                if (mainViewModel.model != null) {
+                    mainViewModel.model.saveToDB();
+                } else {
+                    Log.w(TAG, "not connect to bluetooth, model is null");
+                }
+                ProgressDialogUtil.hideProgressDialog(getActivity());
             }
         });
     }

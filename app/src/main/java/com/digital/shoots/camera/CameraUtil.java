@@ -1,6 +1,7 @@
 package com.digital.shoots.camera;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.digital.shoots.R;
+import com.digital.shoots.utils.ProgressDialogUtil;
 import com.erlei.multipartrecorder.MultiPartRecorder;
 import com.erlei.videorecorder.camera.Camera;
 import com.erlei.videorecorder.camera.Size;
@@ -41,6 +43,9 @@ public class CameraUtil {
     private static volatile CameraUtil mInstance = null;
 
     private TextureView mTextureView;
+
+    private Activity mActivity;
+
     private Context mContext;
 
     private MultiPartRecorder mRecorder;
@@ -104,8 +109,9 @@ public class CameraUtil {
 
 
     @SuppressLint("ClickableViewAccessibility")
-    public void setTextureView(Context context, TextureView textureView) {
-        this.mContext = context;
+    public void setTextureView(Activity activity, TextureView textureView) {
+        this.mActivity = activity;
+        this.mContext = activity;
         this.mTextureView = textureView;
 
         mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
@@ -411,6 +417,7 @@ public class CameraUtil {
                 if(recordTime < 0) {
                     if (mRecorder != null && mRecorder.isRecordEnable()) {
                         mRecorder.setRecordEnabled(false);
+                        ProgressDialogUtil.showProgressDialog(mActivity, "正在保存视频，请稍后");
                     }
                     mRecorderTimer.cancel();
                     return;
@@ -429,8 +436,10 @@ public class CameraUtil {
     }
 
     public void endRecord() {
+        Log.i("zyw", "endRecord");
         if (mRecorder != null && mRecorder.isRecordEnable()) {
             recordTime = -1;
+            Log.i("zyw", "set recordTime -1");
         }
     }
 

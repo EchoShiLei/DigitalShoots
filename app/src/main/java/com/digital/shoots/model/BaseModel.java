@@ -116,24 +116,9 @@ public abstract class BaseModel {
 
 
         ToastUtils.showToast("end!");
-
-        // 记数据库
-        GameAchievement gameAchievement = new GameAchievement();
-        gameAchievement.setType(type.ordinal());
-        gameAchievement.setBlueScore(blueScore);
-        gameAchievement.setRedScore(redScore);
-        gameAchievement.setRedScore(speed);
-        Date date = new Date();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-        String currentDate = sdf.format(date);
-        gameAchievement.setDay(currentDate);
-        gameAchievement.setCurrentTime(System.currentTimeMillis());
-        if(!TextUtils.isEmpty(videoPath)) {
-            gameAchievement.setVideoPath(videoPath);
-        }
-        GreenDaoManager.insert(gameAchievement);
     }
 
+    abstract void saveToDB();
 
     public void startTime() {
         timer.schedule(new TimerTask() {
@@ -186,7 +171,7 @@ public abstract class BaseModel {
     }
 
     public enum ModelType {
-        NOVICE, JUNIOR, BATTLE;
+        NOVICE, JUNIOR, BATTLE, JUNIOR_PREVIEW;
     }
 
     public void sendMsg(byte[] data) {
