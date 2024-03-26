@@ -12,11 +12,13 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.digital.shoots.R;
 import com.digital.shoots.tab.ChangePagerListener;
 import com.digital.shoots.tab.TabFragmentAdapter;
+import com.digital.shoots.utils.LogcatHelper;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.text.SimpleDateFormat;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private BottomNavigationView mTab;
     private ViewPager2 mViewPager;
     private TabFragmentAdapter mAdapter;
+    LogcatHelper logcatHelper;
     private ChangePagerListener mChangePagerListener = new ChangePagerListener() {
         @Override
         public void onChangerPager(int id) {
@@ -44,6 +47,15 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         initContainer();
+
+
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String logPathTime = simpleDateFormat.format(System.currentTimeMillis());
+
+        logcatHelper = LogcatHelper.getInstance(getApplicationContext(), "Download/log", "shoots" + logPathTime + ".log");
+
+        logcatHelper.start("d");
 
     }
 
@@ -126,4 +138,9 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        logcatHelper.stop();
+    }
 }
