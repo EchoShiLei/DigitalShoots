@@ -14,13 +14,13 @@ public class TabFragmentAdapter extends FragmentStateAdapter {
     public static final String TAG = "TabFragmentAdapter";
 
     public static final int FRAGMENT_TYPE_TRAINERS = 0;
-    public static final int FRAGMENT_TYPE_DRILLS = 1;
-    public static final int FRAGMENT_TYPE_TRACKING = 2;
-    public static final int FRAGMENT_TYPE_MY_STATS = 3;
-    public static final int FRAGMENT_TYPE_MY_ACCOUNT = 4;
+//    public static final int FRAGMENT_TYPE_DRILLS = 1;
+    public static final int FRAGMENT_TYPE_TRACKING = 1;
+    public static final int FRAGMENT_TYPE_MY_STATS = 2;
+    public static final int FRAGMENT_TYPE_MY_ACCOUNT = 3;
 
     TrainersFragment trainersFragment;
-    Fragment drillsFragment;
+//    Fragment drillsFragment;
     Fragment trackingFragment;
     Fragment myStatsFragment;
     Fragment myAccountFragment;
@@ -33,7 +33,7 @@ public class TabFragmentAdapter extends FragmentStateAdapter {
         super(fragmentActivity);
         trainersFragment = TrainersFragment.newInstance();
 
-        drillsFragment = DrillsFragment.newInstance();
+//        drillsFragment = DrillsFragment.newInstance();
 
         trackingFragment = TrackingFragment.newInstance();
         ((TrackingFragment) trackingFragment).setChangePagerListener(changePagerListener);
@@ -44,7 +44,7 @@ public class TabFragmentAdapter extends FragmentStateAdapter {
         myAccountFragment = MyAccountFragment.newInstance();
 
         fragments.add(trainersFragment);
-        fragments.add(drillsFragment);
+//        fragments.add(drillsFragment);
         fragments.add(trackingFragment);
         fragments.add(myStatsFragment);
         fragments.add(myAccountFragment);
@@ -56,8 +56,8 @@ public class TabFragmentAdapter extends FragmentStateAdapter {
         switch (position) {
             case FRAGMENT_TYPE_TRAINERS:
                 return trainersFragment;
-            case FRAGMENT_TYPE_DRILLS:
-                return drillsFragment;
+//            case FRAGMENT_TYPE_DRILLS:
+//                return drillsFragment;
             case FRAGMENT_TYPE_TRACKING:
                 return trackingFragment;
             case FRAGMENT_TYPE_MY_STATS:
@@ -70,7 +70,7 @@ public class TabFragmentAdapter extends FragmentStateAdapter {
 
     @Override
     public int getItemCount() {
-        return 5;
+        return 4;
     }
 
 

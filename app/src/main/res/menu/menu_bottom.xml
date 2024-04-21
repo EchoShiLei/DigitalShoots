@@ -4,10 +4,6 @@
         android:icon="@drawable/bottom_trainers"
         android:title="@string/bottom_trainers"/>
     <item
-        android:id="@+id/drillsFragment"
-        android:icon="@drawable/bottom_drills"
-        android:title="@string/bottom_drills"/>
-    <item
         android:id="@+id/trackingFragment"
         android:icon="@drawable/bottom_tracking"
         android:title="@string/bottom_tracking"/>

@@ -50,6 +50,7 @@ public class FirstFragment extends BaseFragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        Log.e("zyw", "onViewCreated");
         player = view.findViewById(R.id.surfaceView);
         mUserIcon = view.findViewById(R.id.iv_user_icon);
         ImageUtils.createCircleImage(getActivity(), mUserIcon);
@@ -111,9 +112,27 @@ public class FirstFragment extends BaseFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+
+        UserInfoRefreshManger.getInstance().destroyInfoRefreshEvents(mIUserInfoRefreshEvent);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (player != null) {
+            try {
+                player.setDataPath(getContext().getAssets().openFd("splash.mp4"));
+            } catch (IOException e) {
+                Log.w(TAG, "catch IOException when play splash video");
+            }
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
         if (player != null) {
             player.release();
         }
-        UserInfoRefreshManger.getInstance().destroyInfoRefreshEvents(mIUserInfoRefreshEvent);
     }
 }

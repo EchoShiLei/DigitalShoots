@@ -3,11 +3,14 @@ package com.digital.shoots.tab;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Context;
+import android.graphics.Outline;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewOutlineProvider;
 import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -34,6 +37,7 @@ import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.engine.CropEngine;
 import com.luck.picture.lib.entity.LocalMedia;
 import com.luck.picture.lib.interfaces.OnResultCallbackListener;
+import com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer;
 import com.yalantis.ucrop.UCrop;
 
 import java.io.File;
@@ -72,6 +76,8 @@ public class MyAccountFragment extends Fragment {
     private ImageView mIvStarD;
     private ImageView mIvStarE;
 
+    private StandardGSYVideoPlayer videoPlayer;
+
     public MyAccountFragment() {
         // Required empty public constructor
     }
@@ -103,6 +109,7 @@ public class MyAccountFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mJuniorHighestScore = GreenDaoManager.getJuniorHighestScore();
+        Log.i("zyw", "mJuniorHighestScore = " + mJuniorHighestScore);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -199,6 +206,14 @@ public class MyAccountFragment extends Fragment {
         mTvDataSpeed = view.findViewById(R.id.tv_data_speed);
         mIvDataVideo = view.findViewById(R.id.iv_data_video);
         fullInfo();
+        videoPlayer = view.findViewById(R.id.video_player);
+        videoPlayer.setClipToOutline(true);
+        videoPlayer.setOutlineProvider(new ViewOutlineProvider() {
+            @Override
+            public void getOutline(View view, Outline outline) {
+                outline.setRoundRect(0, 0, view.getWidth(), view.getHeight(), 50);
+            }
+        });
     }
 
     private void initDataStar() {
@@ -264,11 +279,36 @@ public class MyAccountFragment extends Fragment {
             mIvDataVideo.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
+                    Log.i("zyw", "onClick videoPath = " + videoPath);
+                    play(videoPath);
                 }
             });
         }
 
+    }
+
+    private void play(String videoPath) {
+        videoPlayer.setVisibility(View.VISIBLE);
+        videoPlayer.setUp(videoPath, true, "");
+        videoPlayer.getBackButton().setVisibility(View.VISIBLE);
+        videoPlayer.getFullscreenButton().setVisibility(View.GONE);
+        videoPlayer.getBackButton().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("zyw", "getBackButton onClick");
+                videoPlayer.onVideoPause();
+                videoPlayer.release();
+                videoPlayer.setVisibility(View.GONE);
+            }
+        });
+        //是否可以滑动调整
+        videoPlayer.setIsTouchWiget(true);
+        //不需要屏幕旋转
+        videoPlayer.setNeedOrientationUtils(false);
+
+        videoPlayer.setAutoFullWithSize(true);
+
+        videoPlayer.startPlayLogic();
     }
 
     private CropEngine getCropFileEngine() {
@@ -376,11 +416,15 @@ public class MyAccountFragment extends Fragment {
     @Override
     public void onPause() {
         super.onPause();
+        videoPlayer.setVisibility(View.GONE);
+        videoPlayer.onVideoPause();
+        videoPlayer.release();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
     }
 
     @Override

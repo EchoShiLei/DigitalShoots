@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
 
 public class MainActivity extends AppCompatActivity {
 
-    @IntDef({R.id.trainersFragment, R.id.drillsFragment, R.id.trackingFragment,
+    @IntDef({R.id.trainersFragment, R.id.trackingFragment,
             R.id.myStatsFragment, R.id.myAccountFragment})
     @Retention(RetentionPolicy.SOURCE)
     public @interface MenuId {
@@ -63,7 +63,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initContainer() {
         mTab = findViewById(R.id.bottom);
-        mTab.setItemIconTintList(null);
         mViewPager = findViewById(R.id.container);
         mAdapter = new TabFragmentAdapter(this, mChangePagerListener);
         mViewPager.setAdapter(mAdapter);
@@ -76,16 +75,16 @@ public class MainActivity extends AppCompatActivity {
                     case 0:
                         mTab.setSelectedItemId(R.id.trainersFragment);
                         break;
+//                    case 1:
+//                        mTab.setSelectedItemId(R.id.drillsFragment);
+//                        break;
                     case 1:
-                        mTab.setSelectedItemId(R.id.drillsFragment);
-                        break;
-                    case 2:
                         mTab.setSelectedItemId(R.id.trackingFragment);
                         break;
-                    case 3:
+                    case 2:
                         mTab.setSelectedItemId(R.id.myStatsFragment);
                         break;
-                    case 4:
+                    case 3:
                         mTab.setSelectedItemId(R.id.myAccountFragment);
                         break;
                     default:
@@ -101,18 +100,18 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.trainersFragment:
                         mViewPager.setCurrentItem(0);
                         break;
-                    case R.id.drillsFragment:
+//                    case R.id.drillsFragment:
+//                        mViewPager.setCurrentItem(1);
+//                        break;
+                    case R.id.trackingFragment:
                         mViewPager.setCurrentItem(1);
                         break;
-                    case R.id.trackingFragment:
-                        mViewPager.setCurrentItem(2);
-                        break;
                     case R.id.myStatsFragment:
-                        mViewPager.setCurrentItem(3);
+                        mViewPager.setCurrentItem(2);
                         break;
                     case R.id.myAccountFragment:
                     default:
-                        mViewPager.setCurrentItem(4);
+                        mViewPager.setCurrentItem(3);
                         break;
                 }
                 return false;

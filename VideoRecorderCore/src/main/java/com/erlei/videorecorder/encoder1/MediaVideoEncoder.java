@@ -69,7 +69,15 @@ public class MediaVideoEncoder extends MediaEncoder {
         }
         if (DEBUG) LogUtil.logi(TAG, "selected codec: " + videoCodecInfo.getName());
 
-        final MediaFormat format = MediaFormat.createVideoFormat(MIME_TYPE, mVideoSize.getWidth(), mVideoSize.getHeight());
+        int formatWidth = mVideoSize.getWidth();
+        int formatHeight = mVideoSize.getHeight();
+        if ((formatWidth & 1) == 1) {
+            formatWidth--;
+        }
+        if ((formatHeight & 1) == 1) {
+            formatHeight--;
+        }
+        final MediaFormat format = MediaFormat.createVideoFormat(MIME_TYPE, formatWidth, formatHeight);
         format.setInteger(MediaFormat.KEY_COLOR_FORMAT, MediaCodecInfo.CodecCapabilities.COLOR_FormatSurface);    // API >= 18
         format.setInteger(MediaFormat.KEY_BIT_RATE, mBitRate);
         format.setInteger(MediaFormat.KEY_FRAME_RATE, mFrameRate);

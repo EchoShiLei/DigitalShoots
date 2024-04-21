@@ -168,7 +168,7 @@ public class JuniorPreviewFragment extends JuniorFragment {
     }
 
     private void startRecord() {
-        CameraUtil.getInstance().startRecord(72, new CameraUtil.OnRecorderStateListener() {
+        CameraUtil.getInstance().startRecord(12, new CameraUtil.OnRecorderStateListener() {
             @Override
             public void onRecorderStart() {
                 Log.i(TAG, "onRecorderStart");

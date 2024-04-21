@@ -10,7 +10,10 @@ import android.view.View;
 import android.view.ViewOutlineProvider;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
 
 import com.digital.shoots.R;
 import com.digital.shoots.db.greendao.GreenDaoManager;
@@ -94,6 +97,23 @@ public class PagerLineChart extends BaseStatsPager {
                 play();
             }
         });
+        fragment.getViewLifecycleOwner().getLifecycle().addObserver(new DefaultLifecycleObserver() {
+            @Override
+            public void onResume(@NonNull LifecycleOwner owner) {
+                DefaultLifecycleObserver.super.onResume(owner);
+                Log.i("zyw", "onResume");
+            }
+
+            @Override
+            public void onPause(@NonNull LifecycleOwner owner) {
+                DefaultLifecycleObserver.super.onPause(owner);
+                Log.i("zyw", "onPause");
+                mLineChartHolder.videoPlayer.setVisibility(View.GONE);
+                mLineChartHolder.videoPlayer.onVideoPause();
+                mLineChartHolder.videoPlayer.release();
+                backPressedCallback.remove();
+            }
+        });
 
         //查询最高分
         List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
@@ -167,6 +187,7 @@ public class PagerLineChart extends BaseStatsPager {
         mLineChartHolder.videoPlayer.setVisibility(View.VISIBLE);
         List<GameAchievement> test = GreenDaoManager.queryAll();
         if (test == null || test.size() < 1) {
+            mLineChartHolder.videoPlayer.setVisibility(View.GONE);
             return;
         }
         for (GameAchievement achievement :

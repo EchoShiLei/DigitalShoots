@@ -21,6 +21,8 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     private SurfaceHolder surfaceHolder;
     private MediaPlayer mediaPlayer;
 
+    private AssetFileDescriptor mPath;
+
     public MySurfaceView(Context context) {
         super(context);
     }
@@ -43,6 +45,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
     }
 
     public void setDataPath(AssetFileDescriptor path){
+        mPath = path;
         mediaPlayer.reset();
         try {
 //            mediaPlayer.setDataSource(path);
@@ -63,7 +66,13 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        mediaPlayer.setDisplay(surfaceHolder);
+        if(mediaPlayer != null) {
+            mediaPlayer.setDisplay(surfaceHolder);
+        } else {
+            mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDisplay(surfaceHolder);
+            setDataPath(mPath);
+        }
     }
 
     @Override
@@ -73,6 +82,7 @@ public class MySurfaceView extends SurfaceView implements SurfaceHolder.Callback
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        Log.e("zyw", "surfaceDestroyed");
         if (mediaPlayer!=null){
             mediaPlayer.release();
             mediaPlayer = null;
