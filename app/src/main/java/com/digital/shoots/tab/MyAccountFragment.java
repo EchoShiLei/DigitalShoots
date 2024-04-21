@@ -2,6 +2,7 @@ package com.digital.shoots.tab;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -16,11 +17,15 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.digital.shoots.R;
+import com.digital.shoots.db.greendao.GreenDaoManager;
 import com.digital.shoots.db.greendao.UserDataManager;
+import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.db.greendao.bean.User;
 import com.digital.shoots.events.UserInfoRefreshManger;
 import com.digital.shoots.utils.GlideEngine;
 import com.digital.shoots.utils.ImageUtils;
+import com.digital.shoots.utils.ToastUtils;
+import com.digital.shoots.utils.Utils;
 import com.digital.shoots.views.ImageFileCropEngine;
 import com.digital.shoots.views.MeOnMediaEditInterceptListener;
 import com.digital.shoots.views.UseInputDialog;
@@ -28,7 +33,6 @@ import com.luck.picture.lib.basic.PictureSelector;
 import com.luck.picture.lib.config.SelectMimeType;
 import com.luck.picture.lib.engine.CropEngine;
 import com.luck.picture.lib.entity.LocalMedia;
-import com.luck.picture.lib.interfaces.OnMediaEditInterceptListener;
 import com.luck.picture.lib.interfaces.OnResultCallbackListener;
 import com.yalantis.ucrop.UCrop;
 
@@ -53,9 +57,20 @@ public class MyAccountFragment extends Fragment {
     private String mParam2;
     private User mUser;
     private ImageView mIvUseIcon;
-    private TextView mTvUseName;
+    private TextView mTvUseNameTop;
     private TextView mTvTeamName;
     private TextView mTvBirthDate;
+    private TextView mTvUseName;
+    private ImageView mIvDataVideo;
+    private GameAchievement mJuniorHighestScore;
+    private TextView mTvDataDate;
+    private TextView mTvDataScore;
+    private TextView mTvDataSpeed;
+    private ImageView mIvStarA;
+    private ImageView mIvStarB;
+    private ImageView mIvStarC;
+    private ImageView mIvStarD;
+    private ImageView mIvStarE;
 
     public MyAccountFragment() {
         // Required empty public constructor
@@ -87,6 +102,7 @@ public class MyAccountFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        mJuniorHighestScore = GreenDaoManager.getJuniorHighestScore();
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
@@ -130,22 +146,33 @@ public class MyAccountFragment extends Fragment {
 
 
         });
-        mTvUseName = view.findViewById(R.id.tv_use_name);
-        mTvUseName.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog(mTvUseName);
-            }
-        });
-        mTvTeamName = view.findViewById(R.id.tv_team_name);
+        mTvUseNameTop = view.findViewById(R.id.tv_use_name_top);
+//        mTvUseNameTop.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showDialog(mTvUseNameTop);
+//            }
+//        });
 
         View teamNameLayout = view.findViewById(R.id.ll_team_name_layout);
+        mTvTeamName = view.findViewById(R.id.tv_team_name);
         teamNameLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDialog(mTvTeamName);
             }
         });
+
+
+        View useNameLayout = view.findViewById(R.id.ll_user_name_layout);
+        mTvUseName = view.findViewById(R.id.tv_use_name);
+        useNameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDialog(mTvUseName);
+            }
+        });
+
         View birthDateLayout = view.findViewById(R.id.ll_birth_date_layout);
         mTvBirthDate = view.findViewById(R.id.tv_birth_date);
         birthDateLayout.setOnClickListener(new View.OnClickListener() {
@@ -154,17 +181,94 @@ public class MyAccountFragment extends Fragment {
                 showDatePickerDialog();
             }
         });
-        ImageView ivStarA = view.findViewById(R.id.tv_star_a);
-        ImageView ivStarB = view.findViewById(R.id.tv_star_b);
-        ImageView ivStarC = view.findViewById(R.id.tv_star_c);
-        ImageView ivStarD = view.findViewById(R.id.tv_star_d);
-        ImageView ivStarE = view.findViewById(R.id.tv_star_e);
+        mIvStarA = view.findViewById(R.id.tv_star_a);
+        mIvStarB = view.findViewById(R.id.tv_star_b);
+        mIvStarC = view.findViewById(R.id.tv_star_c);
+        mIvStarD = view.findViewById(R.id.tv_star_d);
+        mIvStarE = view.findViewById(R.id.tv_star_e);
+        initDataStar();
         TextView tvHeightScores = view.findViewById(R.id.btn_height_scores);
-        TextView tvDataDate = view.findViewById(R.id.tv_data_date);
-        TextView tvDataScore = view.findViewById(R.id.tv_data_score);
-        TextView tvDataSpeed = view.findViewById(R.id.tv_data_speed);
-        ImageView tvDataVideo = view.findViewById(R.id.iv_data_video);
+        tvHeightScores.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                initData(mJuniorHighestScore);
+            }
+        });
+        mTvDataDate = view.findViewById(R.id.tv_data_date);
+        mTvDataScore = view.findViewById(R.id.tv_data_score);
+        mTvDataSpeed = view.findViewById(R.id.tv_data_speed);
+        mIvDataVideo = view.findViewById(R.id.iv_data_video);
         fullInfo();
+    }
+
+    private void initDataStar() {
+//        star_grey_icon
+//        star_half_icon
+//        star_full_icon
+        //1星：0-50，2星：50-100，3星：100-150，4星：150-200，5星>200；
+        if (mJuniorHighestScore == null || mJuniorHighestScore.getBlueScore() < 0) {
+            return;
+        }
+        int blueScore = mJuniorHighestScore.getBlueScore();
+        if (blueScore >= 25 && blueScore < 50) {
+            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
+        }
+        if (blueScore >= 75 && blueScore < 100) {
+            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
+        }
+        if (blueScore >= 125 && blueScore < 150) {
+            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarC.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
+        }
+
+        if (blueScore >= 175 && blueScore < 200) {
+            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarC.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarD.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
+        }
+        if (blueScore >= 200) {
+            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarC.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarD.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+            mIvStarE.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
+        }
+    }
+
+    private void initData(GameAchievement juniorHighestScore) {
+
+        if (juniorHighestScore == null) {
+            ToastUtils.showToast("no data");
+            return;
+        }
+        String day = juniorHighestScore.getDay();
+        if (!TextUtils.isEmpty(day)) {
+            mTvDataDate.setText(day);
+        }
+
+        int blueScore = juniorHighestScore.getBlueScore();
+        if (blueScore >= 0) {
+            mTvDataScore.setText(String.valueOf(blueScore));
+        }
+        int speed = juniorHighestScore.getSpeed();
+        if (speed >= 0) {
+            mTvDataSpeed.setText(String.valueOf(speed));
+        }
+
+        String videoPath = juniorHighestScore.getVideoPath();
+        if (!TextUtils.isEmpty(videoPath)) {
+            mIvDataVideo.setVisibility(View.VISIBLE);
+            mIvDataVideo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
     }
 
     private CropEngine getCropFileEngine() {
@@ -185,7 +289,11 @@ public class MyAccountFragment extends Fragment {
     }
 
     private String getSandboxPath() {
-        File externalFilesDir = getContext().getExternalFilesDir("");
+        Context context = getContext();
+        if (context == null) {
+            return "";
+        }
+        File externalFilesDir = context.getExternalFilesDir("");
         File customFile = new File(externalFilesDir.getAbsolutePath(), "Sandbox");
         if (!customFile.exists()) {
             customFile.mkdirs();
@@ -195,7 +303,7 @@ public class MyAccountFragment extends Fragment {
 
     private void showDialog(TextView textView) {
         Activity activity = getActivity();
-        if (textView == null) {
+        if (textView == null || activity == null) {
             return;
         }
         UseInputDialog dialog = new UseInputDialog(activity, R.style.MyDialog);
@@ -207,6 +315,9 @@ public class MyAccountFragment extends Fragment {
                 int id = textView.getId();
                 if (id == R.id.tv_use_name) {
                     UserDataManager.getInstance().setUserName(activity, content);
+                    if (mTvUseNameTop != null) {
+                        mTvUseNameTop.setText(content);
+                    }
                 }
                 if (id == R.id.tv_team_name) {
                     UserDataManager.getInstance().setUserTeamName(activity, content);
@@ -238,6 +349,7 @@ public class MyAccountFragment extends Fragment {
             ImageUtils.loadLocalPic(getActivity(), mIvUseIcon, mUser.iconPath);
         }
         if (!TextUtils.isEmpty(mUser.name)) {
+            mTvUseNameTop.setText(mUser.name);
             mTvUseName.setText(mUser.name);
         }
         if (!TextUtils.isEmpty(mUser.teamName)) {
