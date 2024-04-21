@@ -19,14 +19,17 @@ public class LedTextView extends androidx.appcompat.widget.AppCompatTextView {
 
     public LedTextView(@NonNull Context context) {
         super(context);
+        setLedFont();
     }
 
     public LedTextView(@NonNull Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
+        setLedFont();
     }
 
     public LedTextView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        setLedFont();
     }
     public void setLedFont(){
         AssetManager assets = DigitalApplication.getContext().getAssets();

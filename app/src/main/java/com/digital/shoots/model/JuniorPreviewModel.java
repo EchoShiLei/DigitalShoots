@@ -123,7 +123,7 @@ public class JuniorPreviewModel extends BaseModel {
         gameAchievement.setType(type.ordinal());
         gameAchievement.setBlueScore(blueScore);
         gameAchievement.setRedScore(redScore);
-        gameAchievement.setRedScore(speed);
+        gameAchievement.setSpeed(maxSpeed);
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         String currentDate = sdf.format(date);

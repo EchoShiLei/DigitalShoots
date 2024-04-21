@@ -37,7 +37,7 @@ public abstract class BaseModel {
 
     int redScore = 0;
     int blueScore = 0;
-    int speed = 0;
+    int maxSpeed = 0;
 
     String videoPath = "";
 
@@ -84,13 +84,13 @@ public abstract class BaseModel {
 
     }
 
-    public synchronized void start(){
+    public synchronized void start() {
 
     }
 
     public abstract void ready();
 
-    public synchronized  void run(){
+    public synchronized void run() {
 
     }
 
@@ -136,7 +136,7 @@ public abstract class BaseModel {
         callback.countdownTime(time);
     }
 
-    synchronized void doTime(){
+    synchronized void doTime() {
 
     }
 
@@ -161,6 +161,17 @@ public abstract class BaseModel {
                 break;
 
         }
+
+    }
+
+    public void onSpeed(int speed) {
+        if (callback == null) {
+            return;
+        }
+        if (speed > maxSpeed) {
+            maxSpeed = speed;
+        }
+        callback.updateScore(blueScore, redScore, speed);
 
     }
 

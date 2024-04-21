@@ -1,6 +1,5 @@
 package com.digital.shoots.ble;
 
-import android.Manifest;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothGatt;
 import android.bluetooth.BluetoothGattCallback;
@@ -8,18 +7,12 @@ import android.bluetooth.BluetoothGattCharacteristic;
 import android.bluetooth.BluetoothGattDescriptor;
 import android.bluetooth.BluetoothGattService;
 import android.bluetooth.BluetoothProfile;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
-import android.os.Looper;
 import android.util.Log;
 
 import com.digital.shoots.DigitalApplication;
-import com.digital.shoots.R;
 import com.digital.shoots.main.MainViewModel;
-import com.digital.shoots.model.BaseModel;
-import com.digital.shoots.utils.ThreadPoolManager;
 import com.digital.shoots.utils.ToastUtils;
 
 import java.util.Arrays;
@@ -27,11 +20,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
-import androidx.core.app.ActivityCompat;
-
 import static android.bluetooth.BluetoothDevice.TRANSPORT_LE;
+import static com.digital.shoots.ble.BleDeviceManager.bytes2Hex;
 import static com.digital.shoots.utils.BaseConstant.MCU_CMD_LED_HEART;
-import static com.digital.shoots.utils.BaseConstant.MCU_CMD_LED_HIT;
 
 public class BleDeviceControl {
     private static final String TAG = "BleDeviceControl";
@@ -51,7 +42,8 @@ public class BleDeviceControl {
     private static final String WRITE_DATA_UUID = "0000ffe9-0000-1000-8000-00805f9b34fb";
 
 
-    private BluetoothGatt bluetoothGatt;
+    private BluetoothGatt bluetoothGattModel;
+    private BluetoothGatt bluetoothGattSpeed;
 
     private UiConnectCallback uiConnectCallback;
     private DataCallback dataCallback;
@@ -78,11 +70,20 @@ public class BleDeviceControl {
 
 
     public void connect(BluetoothDevice device) {
-        if (bluetoothGatt == null) {
-            bluetoothGatt = device.connectGatt(DigitalApplication.getContext(),
+        if (bluetoothGattModel == null && "StarShots".equals(device.getName())) {
+            bluetoothGattModel = device.connectGatt(DigitalApplication.getContext(),
                     true, gattCallback, TRANSPORT_LE);
 
-            if (bluetoothGatt == null) {
+            if (bluetoothGattModel == null) {
+                Log.d(TAG, "firstGatt is null!");
+            }
+        }
+
+        if (bluetoothGattSpeed == null && "Myspeedz".equals(device.getName())) {
+            bluetoothGattSpeed = device.connectGatt(DigitalApplication.getContext(),
+                    true, gattCallbackSpeed, TRANSPORT_LE);
+
+            if (bluetoothGattSpeed == null) {
                 Log.d(TAG, "firstGatt is null!");
             }
         }
@@ -93,19 +94,19 @@ public class BleDeviceControl {
     }
 
     public void setNotification() {
-        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(RECEIVE_SERVICE_UUID));
+        BluetoothGattService service = bluetoothGattModel.getService(UUID.fromString(RECEIVE_SERVICE_UUID));
         if (service == null) {
             return;
         }
         BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(RECEIVE_DATA_UUID));
-        boolean isEnableNotification = bluetoothGatt.setCharacteristicNotification(characteristic, true);
+        boolean isEnableNotification = bluetoothGattModel.setCharacteristicNotification(characteristic, true);
 
         if (isEnableNotification) {
             List<BluetoothGattDescriptor> descriptorList = characteristic.getDescriptors();
             if (descriptorList != null && descriptorList.size() > 0) {
                 for (BluetoothGattDescriptor descriptor : descriptorList) {
                     descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
-                    boolean result = bluetoothGatt.writeDescriptor(descriptor);
+                    boolean result = bluetoothGattModel.writeDescriptor(descriptor);
                     Log.d(TAG, "setNotification: result: " + result);
                 }
             }
@@ -153,7 +154,7 @@ public class BleDeviceControl {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
-            List<BluetoothGattService> services = bluetoothGatt.getServices();
+            List<BluetoothGattService> services = bluetoothGattModel.getServices();
             Log.d(TAG, "onServicesDiscovered:" + services.toString());
             setNotification();
         }
@@ -187,6 +188,81 @@ public class BleDeviceControl {
         }
     };
 
+    private final BluetoothGattCallback gattCallbackSpeed = new BluetoothGattCallback() {
+        @Override
+        public void onConnectionStateChange(BluetoothGatt gatt, int status, int newState) {
+            super.onConnectionStateChange(gatt, status, newState);
+            Log.d(TAG, "onConnectionStateChange,Status: " + status);
+
+            if (status == BluetoothGatt.GATT_SUCCESS) {
+                switch (newState) {
+                    case BluetoothProfile.STATE_CONNECTED:
+                        Log.i(TAG, "gattCallback,STATE_CONNECTED");
+                        if (uiConnectCallback != null) {
+                            uiConnectCallback.onSuccess(gatt.getDevice());
+                        }
+                        gatt.discoverServices();
+                        break;
+                    case BluetoothProfile.STATE_DISCONNECTED:
+                        Log.i(TAG, "gattCallback,STATE_DISCONNECTED");
+                        break;
+                    default:
+                        Log.e(TAG, "gattCallback,STATE_OTHER");
+                }
+            } else {
+                //连接失败
+
+                if (uiConnectCallback != null) {
+                    uiConnectCallback.onFailed(gatt.getDevice().getAddress());
+                }
+                Log.e(TAG, "onConnectionStateChange fail,Status:" + status);
+                ToastUtils.showToastD("onConnectionStateChange fail,Status: " + status);
+                gatt.close();
+            }
+        }
+
+        /**
+         * 发现设备（真正建立连接）
+         * */
+        @Override
+        public void onServicesDiscovered(BluetoothGatt gatt, int status) {
+            super.onServicesDiscovered(gatt, status);
+            List<BluetoothGattService> services = bluetoothGattSpeed.getServices();
+            Log.d(TAG, "onServicesDiscovered:" + services.toString());
+            setNotification();
+        }
+
+        @Override
+        public void onCharacteristicChanged(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic) {
+            super.onCharacteristicChanged(gatt, characteristic);
+            Log.d(TAG, "onCharacteristicChanged 2 gatt=" + gatt
+                    + ", characteristic=" + characteristic
+                    + ", value=" + Arrays.toString(characteristic.getValue()));
+
+            //接收数据
+            byte[] bytes = characteristic.getValue();
+            int speed = bytes2Hex(bytes);
+            Log.i(TAG, "收到数据str:" + speed);
+            if (dataCallback != null) {
+                dataCallback.onSpeed(speed);
+            }
+        }
+
+        @Override
+        public void onCharacteristicRead(final BluetoothGatt gatt, final BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicRead(gatt, characteristic, status);
+            Log.d(TAG, "onCharacteristicRead:" + characteristic.toString());
+        }
+
+        @Override
+        public void onCharacteristicWrite(BluetoothGatt gatt, BluetoothGattCharacteristic characteristic, int status) {
+            super.onCharacteristicWrite(gatt, characteristic, status);
+            Log.d(TAG, "onCharacteristicWrite gatt=" + gatt + ", characteristic value="
+                    + Arrays.toString(characteristic.getValue()) + ", status=" + status);
+
+        }
+    };
+
     public void writeBle(byte[] value) {
         doList.add(value);
     }
@@ -197,14 +273,14 @@ public class BleDeviceControl {
             msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
         }
         Log.d(TAG, msg.toString());
-        BluetoothGattService service = bluetoothGatt.getService(UUID.fromString(WRITE_SERVICE_UUID));
+        BluetoothGattService service = bluetoothGattModel.getService(UUID.fromString(WRITE_SERVICE_UUID));
         if (service == null) {
             return;
         }
         BluetoothGattCharacteristic writeChar = service.getCharacteristic(UUID.fromString(WRITE_DATA_UUID));
 
         writeChar.setValue(value);
-        bluetoothGatt.writeCharacteristic(writeChar);
+        bluetoothGattModel.writeCharacteristic(writeChar);
     }
 
 
@@ -249,6 +325,7 @@ public class BleDeviceControl {
 
     public interface DataCallback {
         void onData(String cmd, byte data);
+        void onSpeed(int speed);
     }
 
     private void doWrite() {

@@ -17,6 +17,7 @@ import static com.digital.shoots.model.BaseModel.ModelType.NOVICE;
 public class NoviceFragment extends BaseFragment {
     LedTextView time;
     LedTextView score;
+    LedTextView speed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,6 +30,7 @@ public class NoviceFragment extends BaseFragment {
         super.onViewCreated(view, savedInstanceState);
         time = view.findViewById(R.id.game_time);
         score = view.findViewById(R.id.score);
+        speed = view.findViewById(R.id.speed);
         mainViewModel.getLivTime().observe(getActivity(), liveTime -> {
             double dbTime = liveTime;
             double ss = dbTime / 1000;
@@ -38,6 +40,9 @@ public class NoviceFragment extends BaseFragment {
         });
         mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             score.setText(liveScore.toString());
+        });
+        mainViewModel.getLiveSpeed().observe(getActivity(), liveSpeed -> {
+            speed.setText(liveSpeed.toString());
         });
         mainViewModel.startModel(NOVICE);
     }

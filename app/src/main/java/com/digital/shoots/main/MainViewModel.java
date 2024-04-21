@@ -36,6 +36,7 @@ public class MainViewModel extends AndroidViewModel {
     public BaseModel model;
     private MutableLiveData<Long> livTime = new MutableLiveData<>();
     private MutableLiveData<Integer> liveBlueScore = new MutableLiveData<>();
+    private MutableLiveData<Integer> liveSpeed = new MutableLiveData<>();
     private MutableLiveData<Integer> liveRedScore = new MutableLiveData<>();
     private MutableLiveData<Set<String>> liveConnectedMacs = new MutableLiveData<>();
 
@@ -74,11 +75,23 @@ public class MainViewModel extends AndroidViewModel {
         } else {
             deviceControl.disConnect();
         }
-        deviceControl.setDataCallback((cmd, data) -> {
-            if (model == null) {
-                return;
+        deviceControl.setDataCallback(new BleDeviceControl.DataCallback() {
+            @Override
+            public void onData(String cmd, byte data) {
+                if (model == null) {
+                    return;
+                }
+                model.onCmdData(cmd, data);
             }
-            model.onCmdData(cmd, data);
+
+            @Override
+            public void onSpeed(int speed) {
+                if (model == null) {
+                    return;
+                }
+                model.onSpeed(speed);
+                liveSpeed.postValue(speed);
+            }
         });
 
     }
@@ -153,6 +166,10 @@ public class MainViewModel extends AndroidViewModel {
 
     public MutableLiveData<Integer> getLiveRedScore() {
         return liveRedScore;
+    }
+
+    public MutableLiveData<Integer> getLiveSpeed() {
+        return liveSpeed;
     }
 
     // 获取已连接设备数

@@ -18,6 +18,7 @@ import com.digital.shoots.views.LedTextView;
 public class BattleFragment extends BaseFragment {
     LedTextView time;
     LedTextView blueScore, redScore;
+    LedTextView speed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -31,6 +32,7 @@ public class BattleFragment extends BaseFragment {
         time = view.findViewById(R.id.game_time);
         blueScore = view.findViewById(R.id.blue_score);
         redScore = view.findViewById(R.id.red_score);
+        speed = view.findViewById(R.id.speed);
         mainViewModel.getLivTime().observe(getActivity(), liveTime -> {
             double dbTime = liveTime;
             double ss = dbTime / 1000;
@@ -43,6 +45,9 @@ public class BattleFragment extends BaseFragment {
         });
         mainViewModel.getLiveRedScore().observe(getActivity(), liveScore -> {
             redScore.setText(liveScore.toString());
+        });
+        mainViewModel.getLiveSpeed().observe(getActivity(), liveSpeed -> {
+            speed.setText(liveSpeed.toString());
         });
         mainViewModel.startModel(BATTLE);
     }
