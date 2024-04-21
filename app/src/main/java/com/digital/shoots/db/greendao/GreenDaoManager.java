@@ -9,14 +9,17 @@ import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.db.greendao.gen.DaoMaster;
 import com.digital.shoots.db.greendao.gen.DaoSession;
 import com.digital.shoots.db.greendao.gen.GameAchievementDao;
+import com.digital.shoots.model.BaseModel;
 
 import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.query.QueryBuilder;
 import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Random;
+import java.util.Vector;
 
 /**
  * GreenDao管理
@@ -78,6 +81,34 @@ public class GreenDaoManager {
                 .orderDesc(GameAchievementDao.Properties.BlueScore)
                 .limit(1)
                 .unique().getBlueScore();
+    }
+
+    /**
+     * 根据游戏模式获取用户取得的历史最高分
+     * @param gameType 游戏模式的位置，使用BaseModel.ModelType.JUNIOR.ordinal()
+     * @return
+     */
+    public static GameAchievement getHighestScore(int gameType) {
+        QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
+        return qb.where(GameAchievementDao.Properties.Type.eq(gameType))
+                .orderDesc(GameAchievementDao.Properties.BlueScore)
+                .limit(1)
+                .unique();
+    }
+
+    /**
+     * 获取用户在JUNIOR模式游戏取得的历史最高得分
+     * @return
+     */
+    public static GameAchievement getJuniorHighestScore() {
+        Collection juniorTypes = new Vector();
+        juniorTypes.add(BaseModel.ModelType.JUNIOR.ordinal());
+        juniorTypes.add(BaseModel.ModelType.JUNIOR_PREVIEW.ordinal());
+        QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
+        return qb.where(GameAchievementDao.Properties.Type.in(juniorTypes))
+                .orderDesc(GameAchievementDao.Properties.BlueScore)
+                .limit(1)
+                .unique();
     }
 
     public static List<GameAchievement> getHighestScores() {
