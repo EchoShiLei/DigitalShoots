@@ -114,6 +114,27 @@ public class BleDeviceControl {
 
     }
 
+    public void setNotificationSpeed() {
+        BluetoothGattService service = bluetoothGattSpeed.getService(UUID.fromString(RECEIVE_SERVICE_UUID));
+        if (service == null) {
+            return;
+        }
+        BluetoothGattCharacteristic characteristic = service.getCharacteristic(UUID.fromString(RECEIVE_DATA_UUID));
+        boolean isEnableNotification = bluetoothGattSpeed.setCharacteristicNotification(characteristic, true);
+
+        if (isEnableNotification) {
+            List<BluetoothGattDescriptor> descriptorList = characteristic.getDescriptors();
+            if (descriptorList != null && descriptorList.size() > 0) {
+                for (BluetoothGattDescriptor descriptor : descriptorList) {
+                    descriptor.setValue(BluetoothGattDescriptor.ENABLE_NOTIFICATION_VALUE);
+                    boolean result = bluetoothGattSpeed.writeDescriptor(descriptor);
+                    Log.d(TAG, "setNotification: result: " + result);
+                }
+            }
+        }
+
+    }
+
 
     private final BluetoothGattCallback gattCallback = new BluetoothGattCallback() {
         @Override
@@ -229,7 +250,7 @@ public class BleDeviceControl {
             super.onServicesDiscovered(gatt, status);
             List<BluetoothGattService> services = bluetoothGattSpeed.getServices();
             Log.d(TAG, "onServicesDiscovered:" + services.toString());
-            setNotification();
+            setNotificationSpeed();
         }
 
         @Override
