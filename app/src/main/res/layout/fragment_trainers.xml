@@ -20,19 +20,28 @@
             android:layout_marginTop="5dp"
             android:layout_marginBottom="5dp"
             android:layout_marginStart="10dp"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
+            android:layout_width="40dp"
+            android:layout_height="20dp"
             android:background="@drawable/ble_btn_bg_un" />
 
         <TextView
             android:id="@+id/ble_status"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:textSize="20dp"
+            android:textSize="10dp"
             android:layout_marginStart="10dp"
             android:gravity="center_vertical"
             android:layout_toEndOf="@+id/btn_ble"
             android:text="@string/ble_status_disconnected" />
+
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/top"
+            android:layout_width="80dp"
+            android:layout_height="20dp"
+            android:layout_centerInParent="true"
+            android:background="@drawable/top_logo" />
     </RelativeLayout>
 
     <RelativeLayout
