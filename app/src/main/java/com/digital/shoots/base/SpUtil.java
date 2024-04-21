@@ -10,6 +10,7 @@ public class SpUtil{
     private final SharedPreferences.Editor editor;
     private static SpUtil spUtil;
     public static String KEY_LAST_BLE_MAC="key_last_ble_mac";
+    public static String KEY_LAST_BLE_MAC_SPEED="key_last_ble_mac_speed";
 
     @SuppressLint("CommitPrefEdits")
     private SpUtil(Context context){

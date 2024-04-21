@@ -1,6 +1,7 @@
 package com.digital.shoots.main;
 
 import android.app.Application;
+import android.bluetooth.BluetoothDevice;
 
 import com.digital.shoots.R;
 import com.digital.shoots.base.SpUtil;
@@ -27,6 +28,7 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.MutableLiveData;
 
 import static com.digital.shoots.base.SpUtil.KEY_LAST_BLE_MAC;
+import static com.digital.shoots.base.SpUtil.KEY_LAST_BLE_MAC_SPEED;
 
 public class MainViewModel extends AndroidViewModel {
 
@@ -49,17 +51,22 @@ public class MainViewModel extends AndroidViewModel {
         if (deviceControl == null) {
             deviceControl = new BleDeviceControl(this, new BleDeviceControl.UiConnectCallback() {
                 @Override
-                public void onSuccess(String mac) {
+                public void onSuccess(BluetoothDevice device) {
                     ToastUtils.showToastD("Success");
-                    SpUtil.getInstance(getApplication()).putString(KEY_LAST_BLE_MAC,mac);
-                    connectedMacs.add(mac);
+                    if ("StarShots".equals(device.getName())) {
+                        SpUtil.getInstance(getApplication()).putString(KEY_LAST_BLE_MAC, mac);
+                    }
+                    if ("MySpeedz".equals(device.getName())) {
+                        SpUtil.getInstance(getApplication()).putString(KEY_LAST_BLE_MAC_SPEED, mac);
+                    }
+                    connectedMacs.add(device.getAddress());
                     liveConnectedMacs.postValue(connectedMacs);
                 }
 
                 @Override
                 public void onFailed(String mac) {
-                    ToastUtils.showToastD("fail");
                     connectedMacs.remove(mac);
+                    ToastUtils.showToastD("fail");
                     liveConnectedMacs.postValue(connectedMacs);
                 }
             });

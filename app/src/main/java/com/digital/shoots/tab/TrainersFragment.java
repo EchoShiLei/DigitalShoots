@@ -8,18 +8,23 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.digital.shoots.R;
 import com.digital.shoots.base.SpUtil;
+import com.digital.shoots.ble.BleItem;
 import com.digital.shoots.main.MainViewModel;
 import com.digital.shoots.utils.Utils;
 import com.zyq.easypermission.EasyPermission;
@@ -27,6 +32,7 @@ import com.zyq.easypermission.EasyPermissionHelper;
 import com.zyq.easypermission.EasyPermissionResult;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -105,7 +111,9 @@ public class TrainersFragment extends Fragment {
         mainViewModel = new ViewModelProvider(getActivity()).get(MainViewModel.class);
 
         navController = Navigation.findNavController(view.findViewById(R.id.nav_host_fragment));
-        view.findViewById(R.id.btn_ble).setOnClickListener(new View.OnClickListener() {
+        TextView status = view.findViewById(R.id.ble_status);
+        ImageButton bleButton = view.findViewById(R.id.btn_ble);
+        bleButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.R) {
@@ -138,12 +146,28 @@ public class TrainersFragment extends Fragment {
                         }).requestPermission();
             }
         });
+
+
+        mainViewModel.getLiveConnectedMacs().observe(getActivity(), strings -> {
+            int size = strings != null ? strings.size() : 0;
+            if (size > 0) {
+                status.setText(R.string.ble_status_connected);
+                bleButton.setBackgroundResource(R.drawable.ble_btn_bg);
+            } else {
+                status.setText(R.string.ble_status_disconnected);
+                bleButton.setBackgroundResource(R.drawable.ble_btn_bg_un);
+            }
+        });
     }
 
     private void initData() {
         String lastMac = SpUtil.getInstance(getContext()).getString(SpUtil.KEY_LAST_BLE_MAC);
         if (lastMac != null && !lastMac.equals("")) {
             mainViewModel.deviceClick(lastMac);
+        }
+        String lastMac2 = SpUtil.getInstance(getContext()).getString(SpUtil.KEY_LAST_BLE_MAC_SPEED);
+        if (lastMac != null && !lastMac.equals("")) {
+            mainViewModel.deviceClick(lastMac2);
         }
     }
 

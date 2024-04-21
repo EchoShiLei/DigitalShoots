@@ -9,7 +9,7 @@
     <RelativeLayout
         android:id="@+id/title"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
         android:background="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -17,9 +17,22 @@
 
         <ImageButton
             android:id="@+id/btn_ble"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="10dp"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
-            app:srcCompat="@drawable/ble_btn_bg" />
+            android:layout_height="match_parent"
+            android:background="@drawable/ble_btn_bg_un" />
+
+        <TextView
+            android:id="@+id/ble_status"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:textSize="20dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:layout_toEndOf="@+id/btn_ble"
+            android:text="@string/ble_status_disconnected" />
     </RelativeLayout>
 
     <RelativeLayout

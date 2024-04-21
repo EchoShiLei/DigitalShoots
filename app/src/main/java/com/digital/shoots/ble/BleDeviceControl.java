@@ -125,7 +125,7 @@ public class BleDeviceControl {
                     case BluetoothProfile.STATE_CONNECTED:
                         Log.i(TAG, "gattCallback,STATE_CONNECTED");
                         if (uiConnectCallback != null) {
-                            uiConnectCallback.onSuccess(gatt.getDevice().getAddress());
+                            uiConnectCallback.onSuccess(gatt.getDevice());
                         }
                         gatt.discoverServices();
                         break;
@@ -242,7 +242,7 @@ public class BleDeviceControl {
     }
 
     public interface UiConnectCallback {
-        void onSuccess(String mac);
+        void onSuccess(BluetoothDevice device);
 
         void onFailed(String mac);
     }
