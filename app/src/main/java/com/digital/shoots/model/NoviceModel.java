@@ -78,7 +78,7 @@ public class NoviceModel extends BaseModel {
     void saveToDB() {
         if (count != 6) {
             //end
-            end();
+            return;
         }
         // 记数据库
         GameAchievement gameAchievement = new GameAchievement();
