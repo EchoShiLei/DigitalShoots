@@ -170,7 +170,7 @@ public class PagerLineChart extends BaseStatsPager {
         }
 
 //        实例化LineDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置
-        LineDataSet lineDataSet = new LineDataSet(entries, "线型图测试");
+        LineDataSet lineDataSet = new LineDataSet(entries, "线型图");
         lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
         lineDataSet.setColor(Color.parseColor("#848283"));
         lineDataSet.setLineWidth(Utils.dp2px(mContext, 1));
