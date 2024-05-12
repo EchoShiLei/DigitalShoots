@@ -12,11 +12,21 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    signingConfigs{
+        signConfig {
+            storeFile file ('digitalshoots.jks')//签名文件路径，
+            //keystore的路径通常使用项目根目录的相对路径，但也可以是使用绝对路径，尽管这不推荐
+            storePassword 'shilei1992' //密码
+            keyAlias 'digitalshoots'
+            keyPassword 'shilei1992'  //密码
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.signConfig // 配置release包的签名
         }
     }
     compileOptions {
