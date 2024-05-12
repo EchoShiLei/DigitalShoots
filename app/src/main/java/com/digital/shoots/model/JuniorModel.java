@@ -35,6 +35,7 @@ public class JuniorModel extends BaseModel {
 
     @Override
     public synchronized void start() {
+        TIME_PERIOD = 1000;
         time = 75000;
         blueScore = 0;
         openLed();

@@ -1,6 +1,7 @@
 package com.digital.shoots.ble;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -20,6 +21,7 @@ import com.digital.shoots.utils.ToastUtils;
 import com.digital.shoots.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +38,7 @@ public class BleFragment extends BaseFragment {
     RecyclerView deviceList;
     DeviceAdapter adapter;
     List<BleItem> list = new ArrayList<>();
+    Set<String> connectedList = new HashSet<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -61,28 +64,33 @@ public class BleFragment extends BaseFragment {
         mainViewModel.getLiveConnectedMacs().observe(getActivity(), new Observer<Set<String>>() {
             @Override
             public void onChanged(Set<String> strings) {
-                for (BleItem item : list) {
-                    if (!TextUtils.isEmpty(item.mac) && strings.contains(item.mac)) {
-                        item.isConnect = true;
-                    } else {
-                        item.isConnect = false;
-                    }
-                }
-                adapter.notifyDataSetChanged();
+                connectedList = strings;
+                checkConnected();
             }
         });
-
         scanBluetooth();
 
+    }
+
+    private void checkConnected() {
+        for (BleItem item : list) {
+            if (!TextUtils.isEmpty(item.mac) && connectedList.contains(item.mac)) {
+                item.isConnect = true;
+            } else {
+                item.isConnect = false;
+            }
+        }
+        if (adapter == null) {
+            return;
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void scanBluetooth() {
         list.clear();
         BleDeviceManager.getInstance().setUiScanCallback((name, address) -> {
             list.add(new BleItem(name, address));
-            if (adapter != null) {
-                adapter.notifyDataSetChanged();
-            }
+            checkConnected();
         });
         BleDeviceManager.getInstance().scan();
     }
@@ -110,6 +118,7 @@ public class BleFragment extends BaseFragment {
             BleItem bleItem = list.get(position);
             holder.itemView.setOnClickListener(view -> callback.click(bleItem.mac));
             ((BleViewHolder) holder).name.setText(bleItem.name);
+            ((BleViewHolder) holder).name.setTextColor( bleItem.isConnect ?Color.rgb(0,255,0):Color.rgb(127,127,127));
             ((BleViewHolder) holder).vStatus.setImageDrawable(Utils.getDrawable(getContext(),
                     bleItem.isConnect ? R.drawable.bluetooth_open : R.drawable.bluetooth_off));
         }

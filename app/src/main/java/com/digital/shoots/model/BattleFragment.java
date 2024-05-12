@@ -40,6 +40,10 @@ public class BattleFragment extends BaseFragment {
 //            Log.d("time",stTime);
             time.setText(stTime);
         });
+
+        mainViewModel.getLiveCutDown().observe(getActivity(), cutDownTime -> {
+            time.setText(cutDownTime);
+        });
         mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             blueScore.setText(liveScore.toString());
         });

@@ -123,6 +123,11 @@ public class JuniorPreviewFragment extends JuniorFragment {
 //            time.setText(stTime);
             CameraUtil.getInstance().setTime(stTime);
         });
+
+
+        mainViewModel.getLiveCutDown().observe(getActivity(), cutDownTime -> {
+            time.setText(cutDownTime);
+        });
         mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             CameraUtil.getInstance().setScore(liveScore);
         });

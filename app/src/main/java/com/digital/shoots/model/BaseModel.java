@@ -66,15 +66,17 @@ public abstract class BaseModel {
         Log.d("BaseModel", "show3sCountdown");
         handler.postDelayed(() -> {
             bleDeviceControl.writeBle(BleDataUtils.showNumber(3));
-
+            callback.cutDown("3");
             handler.postDelayed(() -> {
                 bleDeviceControl.writeBle(BleDataUtils.showNumber(2));
-
+                callback.cutDown("2");
                 handler.postDelayed(() -> {
                     bleDeviceControl.writeBle(BleDataUtils.showNumber(1));
+                    callback.cutDown("1");
                     handler.postDelayed(() -> {
                         Log.d("BaseModel", "start");
                         bleDeviceControl.writeBle(BleDataUtils.showNumber(0));
+                        callback.cutDown("GO");
                         startTime();
                         start();
                     }, 1000);
@@ -184,7 +186,7 @@ public abstract class BaseModel {
 
         void updateScore(int blueScore, int redScore, int speed);
 
-        void endGame();
+        void cutDown(String cutDown);
     }
 
     public enum ModelType {

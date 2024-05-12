@@ -46,6 +46,10 @@ public class JuniorFragment extends BaseFragment {
 //            Log.d("time",stTime);
             time.setText(stTime);
         });
+
+        mainViewModel.getLiveCutDown().observe(getActivity(), cutDownTime -> {
+            time.setText(cutDownTime);
+        });
         mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             score.setText(liveScore.toString());
         });

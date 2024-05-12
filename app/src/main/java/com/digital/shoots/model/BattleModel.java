@@ -26,6 +26,7 @@ public class BattleModel extends BaseModel {
     }
 
     public synchronized void start() {
+        TIME_PERIOD = 1000;
         time = 75000;
         redScore = 0;
         blueScore = 0;

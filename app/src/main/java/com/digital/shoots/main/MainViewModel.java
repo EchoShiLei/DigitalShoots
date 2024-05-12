@@ -40,6 +40,8 @@ public class MainViewModel extends AndroidViewModel {
     private MutableLiveData<Integer> liveRedScore = new MutableLiveData<>();
     private MutableLiveData<Set<String>> liveConnectedMacs = new MutableLiveData<>();
 
+    private MutableLiveData<String> liveCutDown = new MutableLiveData<>();
+
     private Set<String> connectedMacs = new HashSet<>();
 
 
@@ -126,8 +128,8 @@ public class MainViewModel extends AndroidViewModel {
             }
 
             @Override
-            public void endGame() {
-
+            public void cutDown(String cutDown) {
+                liveCutDown.postValue(cutDown);
             }
         };
 
@@ -170,6 +172,14 @@ public class MainViewModel extends AndroidViewModel {
 
     public MutableLiveData<Integer> getLiveSpeed() {
         return liveSpeed;
+    }
+
+    public MutableLiveData<String> getLiveCutDown() {
+        return liveCutDown;
+    }
+
+    public void setLiveCutDown(String liveCutDown) {
+        this.liveCutDown.postValue(liveCutDown);
     }
 
     // 获取已连接设备数
