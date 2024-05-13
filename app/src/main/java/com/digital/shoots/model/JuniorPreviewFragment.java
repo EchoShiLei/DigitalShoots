@@ -121,7 +121,7 @@ public class JuniorPreviewFragment extends JuniorFragment {
             String stTime = df2.format(ss);
 //            Log.d("time",stTime);
 //            time.setText(stTime);
-//            CameraUtil.getInstance().setTime(stTime);
+            CameraUtil.getInstance().setTime(stTime);
         });
 
 
