@@ -121,12 +121,13 @@ public class JuniorPreviewFragment extends JuniorFragment {
             String stTime = df2.format(ss);
 //            Log.d("time",stTime);
 //            time.setText(stTime);
-            CameraUtil.getInstance().setTime(stTime);
+//            CameraUtil.getInstance().setTime(stTime);
         });
 
 
         mainViewModel.getLiveCutDown().observe(getActivity(), cutDownTime -> {
-            time.setText(cutDownTime);
+//            time.setText(cutDownTime);
+            CameraUtil.getInstance().setTime(cutDownTime);
         });
         mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             CameraUtil.getInstance().setScore(liveScore);

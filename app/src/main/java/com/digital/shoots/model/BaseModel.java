@@ -97,31 +97,35 @@ public abstract class BaseModel {
     }
 
     public void end() {
-        timer.cancel();
-        handler.removeCallbacksAndMessages(null);
-        // 蓝灯闪烁三次
-        handler.postDelayed(() -> {
-            bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+        try {
+            timer.cancel();
+            handler.removeCallbacksAndMessages(null);
+            // 蓝灯闪烁三次
             handler.postDelayed(() -> {
-                bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
+                bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
                 handler.postDelayed(() -> {
-                    bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+                    bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
                     handler.postDelayed(() -> {
-                        bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
+                        bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
                         handler.postDelayed(() -> {
-                            bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+                            bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
                             handler.postDelayed(() -> {
-                                bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
-                                handlerThread.quitSafely();
+                                bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
+                                handler.postDelayed(() -> {
+                                    bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
+                                    handlerThread.quitSafely();
+                                }, 100);
                             }, 100);
                         }, 100);
                     }, 100);
                 }, 100);
             }, 100);
-        }, 100);
 
 
-        ToastUtils.showToast("end!");
+            ToastUtils.showToast("end!");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     abstract void saveToDB();

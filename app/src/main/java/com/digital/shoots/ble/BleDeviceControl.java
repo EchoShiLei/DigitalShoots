@@ -94,6 +94,9 @@ public class BleDeviceControl {
     }
 
     public void setNotification() {
+        if(bluetoothGattModel == null) {
+            return;
+        }
         BluetoothGattService service = bluetoothGattModel.getService(UUID.fromString(RECEIVE_SERVICE_UUID));
         if (service == null) {
             return;
@@ -175,6 +178,9 @@ public class BleDeviceControl {
         @Override
         public void onServicesDiscovered(BluetoothGatt gatt, int status) {
             super.onServicesDiscovered(gatt, status);
+            if(bluetoothGattModel == null) {
+                return;
+            }
             List<BluetoothGattService> services = bluetoothGattModel.getServices();
             Log.d(TAG, "onServicesDiscovered:" + services.toString());
             setNotification();
@@ -294,6 +300,9 @@ public class BleDeviceControl {
             msg.append(BleDataUtils.byte2HexStr(b)).append(" ");
         }
         Log.d(TAG, msg.toString());
+        if(bluetoothGattModel == null) {
+            return;
+        }
         BluetoothGattService service = bluetoothGattModel.getService(UUID.fromString(WRITE_SERVICE_UUID));
         if (service == null) {
             return;

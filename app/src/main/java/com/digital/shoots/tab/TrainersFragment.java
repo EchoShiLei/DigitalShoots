@@ -172,6 +172,9 @@ public class TrainersFragment extends Fragment {
     }
 
     private void gotoDevice() {
+        if(navController == null) {
+            return;
+        }
         navController.navigate(R.id.SecondFragment);
     }
 
@@ -190,6 +193,9 @@ public class TrainersFragment extends Fragment {
     }
 
     public boolean onBackPressed() {
+        if(navController == null) {
+            return false;
+        }
         return navController.navigateUp();
     }
 }
