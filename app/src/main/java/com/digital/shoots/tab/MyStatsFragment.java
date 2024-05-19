@@ -265,7 +265,6 @@ public class MyStatsFragment extends Fragment {
             ivId = R.drawable.stats_indicator_4;
             step = 3;
         }
-        Log.d("ZZQ", "score:" + score + " step:" + step);
         mIvProgressIndicator.setImageDrawable(Utils.getDrawable(getContext(), ivId));
 
         ViewGroup.LayoutParams layoutParams = mFlStatsIndicator.getLayoutParams();

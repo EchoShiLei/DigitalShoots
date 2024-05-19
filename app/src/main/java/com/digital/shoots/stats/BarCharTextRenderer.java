@@ -11,32 +11,35 @@ import android.util.Log;
 
 import com.github.mikephil.charting.animation.ChartAnimator;
 import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.interfaces.dataprovider.BarDataProvider;
 import com.github.mikephil.charting.interfaces.dataprovider.LineDataProvider;
+import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.github.mikephil.charting.renderer.BarChartRenderer;
 import com.github.mikephil.charting.renderer.LineChartRenderer;
 import com.github.mikephil.charting.utils.Transformer;
 import com.github.mikephil.charting.utils.ViewPortHandler;
 
-import java.util.Arrays;
-
-public class LineCharTextRenderer extends LineChartRenderer {
-    private ILineDataSet mDataSet;
+public class BarCharTextRenderer extends BarChartRenderer {
+    private IBarDataSet mDataSet;
     private Entry mMaxEntry;
     private Entry mMinEntry;
     private int bottomLocation;
 
-    public LineCharTextRenderer(LineDataProvider chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
+    public BarCharTextRenderer(BarDataProvider chart, ChartAnimator animator, ViewPortHandler viewPortHandler) {
         super(chart, animator, viewPortHandler);
     }
 
     @Override
-    protected void drawDataSet(Canvas c, ILineDataSet dataSet) {
-        super.drawDataSet(c, dataSet);
+    protected void drawDataSet(Canvas c, IBarDataSet dataSet, int index) {
+        super.drawDataSet(c, dataSet, index);
+
         float yMax = dataSet.getYMax();
         float yMin = dataSet.getYMin();
-        int boundsRangeCount = mXBounds.range + mXBounds.min;
         mDataSet = dataSet;
-        for (int j = mXBounds.min; j < boundsRangeCount; j++) {
+        ;
+        Log.d("ZZQ", "index:" + index + " yMax:" + yMax);
+        for (int j = 0; j < dataSet.getEntryCount(); j++) {
             Entry entry = dataSet.getEntryForIndex(j);
             if (entry.getY() == yMax) {
                 mMaxEntry = entry;
@@ -60,30 +63,9 @@ public class LineCharTextRenderer extends LineChartRenderer {
         Transformer trans = mChart.getTransformer(mDataSet.getAxisDependency());
         trans.pointValuesToPixel(mCirclesBuffer);
 
-        drawMaxBar(c, mCirclesBuffer);
-        drawMaxCircles(c, mDataSet, mCirclesBuffer);
         drawMaxText(c, mCirclesBuffer);
     }
 
-    private void drawMaxBar(Canvas c, float[] mCirclesBuffer) {
-        Paint barPaint = new Paint();
-        float y = mMaxEntry.getY();
-        float left = mCirclesBuffer[0] - 10;
-        float right = mCirclesBuffer[0] + 10;
-        float top = mCirclesBuffer[1] - y;
-        float bottom = mCirclesBuffer[1] + y + bottomLocation;
-        float temp = mCirclesBuffer[1] / (bottom - top);
-
-        int[] colors = {Color.parseColor("#33f00001"),
-                Color.parseColor("#66f00001"),
-                Color.parseColor("#33f00001")};
-        float[] pos = {0, temp, 1};
-        LinearGradient gradient = new LinearGradient(0, 0, 0, mCirclesBuffer[1],
-                colors, pos, Shader.TileMode.CLAMP);
-        barPaint.setShader(gradient);
-
-        c.drawRect(left, top, right, bottom, barPaint);
-    }
 
     private void drawMaxText(Canvas c, float[] circlesBuffer) {
         Paint txtPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -92,15 +74,23 @@ public class LineCharTextRenderer extends LineChartRenderer {
         txtPaint.setTextSize(50);
         txtPaint.setTypeface(Typeface.DEFAULT_BOLD);
         String txt1 = String.valueOf((int) mMaxEntry.getY());
-        float txt1Width = txtPaint.measureText(txt1) + 20;
-        c.drawText(txt1, circlesBuffer[0] - txt1Width, circlesBuffer[1] - 20, txtPaint);
+        float txt1Width = txtPaint.measureText(txt1);
+        c.drawText(txt1, circlesBuffer[0] - txt1Width, circlesBuffer[1] - 50, txtPaint);
+
+        txtPaint.setColor(Color.parseColor("#FC4545"));
+        txtPaint.setStyle(Paint.Style.FILL);
+        txtPaint.setTextSize(24);
+        txtPaint.setTypeface(Typeface.DEFAULT_BOLD);
+        String txt2 = "km/h";
+        float txt2Width = txtPaint.measureText(txt2);
+        c.drawText(txt2, circlesBuffer[0], circlesBuffer[1] - 50, txtPaint);
 
         txtPaint.setColor(Color.parseColor("#FC4545"));
         txtPaint.setStyle(Paint.Style.FILL);
         txtPaint.setTextSize(30);
-        String txt2 = "Scores";
-        float txt2Width = txtPaint.measureText(txt2) + 20;
-        c.drawText(txt2, circlesBuffer[0] - txt2Width, circlesBuffer[1] + 10, txtPaint);
+        String txt3 = "Best";
+        float txt3Width = txtPaint.measureText(txt3);
+        c.drawText(txt3, circlesBuffer[0] - txt3Width, circlesBuffer[1] - 20, txtPaint);
 
 
     }

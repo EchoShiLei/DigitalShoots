@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.camera.core.impl.utils.MainThreadAsyncHandler;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -23,6 +24,7 @@ import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.db.greendao.bean.User;
 import com.digital.shoots.events.IUserInfoRefreshEvent;
 import com.digital.shoots.events.UserInfoRefreshManger;
+import com.digital.shoots.model.BaseModel;
 import com.digital.shoots.tab.ChangePagerListener;
 import com.digital.shoots.utils.ImageUtils;
 import com.digital.shoots.utils.Utils;
@@ -42,6 +44,7 @@ public class PagerLineChart extends BaseStatsPager {
     private HolderStatsLineChartFragment mLineChartHolder;
     private ChangePagerListener mChangePagerListener;
     private Fragment fragment;
+    private LineCharTextRenderer mLineCharTextRenderer;
     private IUserInfoRefreshEvent mIUserInfoRefreshEvent = new IUserInfoRefreshEvent() {
         @Override
         public void onUserInfoRefresh() {
@@ -56,6 +59,7 @@ public class PagerLineChart extends BaseStatsPager {
             refreshLineData();
         }
     };
+
 
     public PagerLineChart(Context context, HolderStatsFragment holder, ChangePagerListener changePagerListener, Fragment fragment) {
         super(context, holder);
@@ -72,10 +76,7 @@ public class PagerLineChart extends BaseStatsPager {
         mLineChartHolder = (HolderStatsLineChartFragment) mHolder;
         ImageUtils.createCircleImage((Activity) mContext, mLineChartHolder.mIvUserIcon);
         initIcon();
-        LineCharTextRenderer lineCharTextRenderer = new LineCharTextRenderer(mLineChartHolder.mLineChart,
-                mLineChartHolder.mLineChart.getAnimator(),
-                mLineChartHolder.mLineChart.getViewPortHandler());
-        mLineChartHolder.mLineChart.setRenderer(lineCharTextRenderer);
+
         mLineChartHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,37 +119,44 @@ public class PagerLineChart extends BaseStatsPager {
         });
 
         //查询最高分
-        List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
+        List<GameAchievement> highestScores = getMaxJuniorData();
         if (highestScores.size() > 0) {
-            int maxScore = highestScores.get(0).getBlueScore();
-            mLineChartHolder.mTvScoreNum.setText(String.valueOf(maxScore));
+            GameAchievement gameAchievement = highestScores.get(0);
+            if (gameAchievement != null) {
+                mLineChartHolder.mTvScoreNum.setText(String.valueOf(gameAchievement.getBlueScore()));
+
+            }
         }
+        initLineCharBaseSetting();
         mLineChartHolder.mLineChart.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
+                Log.d("ZZQ", "mLineChart: mBarChart");
                 mLineChartHolder.mLineChart.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 int[] location = new int[2];
                 mLineChartHolder.mLineChart.getLocationOnScreen(location);
-                int x = location[0]; // view距离window 左边的距离（即x轴方向）
+                int x = location[0];
                 int y = location[1];
                 int measuredHeight = mLineChartHolder.mLineChart.getMeasuredHeight();
-                lineCharTextRenderer.setBottomLocation(measuredHeight + y);
+                mLineCharTextRenderer.setBottomLocation(measuredHeight + y);
                 refreshLineData();
             }
         });
-
-        initLineCharBaseSetting();
 
     }
 
     private void refreshLineData() {
         LineData data = getData();
         if (data != null) {
-            mLineChartHolder.mLineChart.setData(getData());
+            mLineChartHolder.mLineChart.setData(data);
         }
     }
 
     private void initLineCharBaseSetting() {
+        mLineCharTextRenderer = new LineCharTextRenderer(mLineChartHolder.mLineChart,
+                mLineChartHolder.mLineChart.getAnimator(),
+                mLineChartHolder.mLineChart.getViewPortHandler());
+        mLineChartHolder.mLineChart.setRenderer(mLineCharTextRenderer);
         mLineChartHolder.mLineChart.getDescription().setEnabled(false);
         mLineChartHolder.mLineChart.setTouchEnabled(false);
         mLineChartHolder.mLineChart.getLegend().setEnabled(false);
@@ -159,7 +167,7 @@ public class PagerLineChart extends BaseStatsPager {
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(10, true);
         xAxis.setAxisMinimum(0f);
-        xAxis.setAxisMaximum(20);
+        xAxis.setAxisMaximum(10);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         //设置Y轴
         YAxis yAxis = mLineChartHolder.mLineChart.getAxisLeft();
@@ -181,24 +189,23 @@ public class PagerLineChart extends BaseStatsPager {
     private LineData getData() {
 //        创建一个Entry类型的集合，并添加数据
         List<Entry> entries = new ArrayList<>();
-        Date date = new Date();
-        String strDateFormat = "yyyyMMdd";
-        SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
-        String time = sdf.format(date);
-        List<GameAchievement> top10Scores = GreenDaoManager.getTop10Scores(time);
-        if (top10Scores.size() < 1) {
+
+        List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
+        if (highestScores.size() < 1) {
             return null;
         }
-        for (int i = 0; i < top10Scores.size(); i++) {
+        int maxCount = Math.min(highestScores.size(), 10);
+        for (int i = 0; i < maxCount; i++) {
 //            添加Entry对象，传入纵轴的索引和纵轴的值
-            GameAchievement gameAchievement = top10Scores.get(i);
+            GameAchievement gameAchievement = highestScores.get(i);
             int blueScore = gameAchievement.getBlueScore();
             int redScore = gameAchievement.getRedScore();
             int score = Math.max(blueScore, redScore);
             entries.add(new Entry(i + 1, score));
         }
+
 //        ArrayList<Integer> datas = new ArrayList<>();
-//        for (int i = 0; i < 20; i++) {
+//        for (int i = 0; i < 10; i++) {
 //            int score = (int) (1 + Math.random() * (200 - 30 + 1));
 //            datas.add(Integer.valueOf(score));
 //            entries.add(new Entry(i + 1, score));
@@ -214,6 +221,23 @@ public class PagerLineChart extends BaseStatsPager {
         lineDataSet.setCircleHoleColor(Color.parseColor("#ffffff"));
 //        这个就是线型图所需的数据了
         return new LineData(lineDataSet);
+    }
+
+
+    private List<GameAchievement> getMaxJuniorData() {
+        List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
+        if (highestScores.size() < 1) {
+            return null;
+        }
+        List<GameAchievement> JuniorScores = new ArrayList<>();
+        for (GameAchievement gameData : highestScores) {
+            if ((gameData.getType() == BaseModel.ModelType.JUNIOR.ordinal() ||
+                    gameData.getType() == BaseModel.ModelType.JUNIOR_PREVIEW.ordinal())
+                    && gameData.getBlueScore() > 0) {
+                JuniorScores.add(gameData);
+            }
+        }
+        return JuniorScores;
     }
 
 
