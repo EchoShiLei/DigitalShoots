@@ -14,60 +14,6 @@
         android:layout_margin="20dp"
         android:background="@drawable/white_radius_bg">
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_margin="20dp"
-            android:background="@drawable/bg_speed"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintCircleRadius="10dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guideline3">
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical">
-
-                <com.digital.shoots.views.LedTextView
-                    android:id="@+id/tx"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="right|bottom"
-                    android:lines="1"
-                    android:text="SHOTS"
-                    android:textColor="@color/white"
-                    android:textSize="30dp" />
-
-                <com.digital.shoots.views.LedTextView
-                    android:id="@+id/tx2"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_weight="1"
-                    android:gravity="right|top"
-                    android:lines="1"
-                    android:text="S P E E D"
-                    android:textColor="@color/white"
-                    android:textSize="30dp" />
-            </LinearLayout>
-
-            <com.digital.shoots.views.LedTextView
-                android:id="@+id/speed"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:gravity="left|center_vertical"
-                android:lines="1"
-                android:text="000"
-                android:textColor="@color/white"
-                android:textSize="60dp" />
-        </LinearLayout>
-
         <RelativeLayout
             android:id="@+id/score_bg"
             android:layout_width="0dp"

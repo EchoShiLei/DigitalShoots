@@ -28,12 +28,14 @@ public class NoviceModel extends BaseModel {
     public void init() {
         super.init();
         hitList = new HashSet<>();
-    }
-
-    public synchronized void start() {
         time = 0;
         blueScore = 0;
         count = -1;
+        callback.countdownTime(time);
+        callback.updateScore(blueScore,redScore,maxSpeed);
+    }
+
+    public synchronized void start() {
         bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
     }
 
@@ -49,15 +51,23 @@ public class NoviceModel extends BaseModel {
     @Override
     synchronized void doTime() {
         time += TIME_PERIOD;
+        checkTime();
     }
 
+    @Override
+    protected synchronized void checkTime() {
+        super.checkTime();
+        if (time >= MAX_TIME) {
+            end();
+        }
+    }
 
     @Override
     public void ledHit(byte data) {
         if (!hitList.add((int) data)) {
             return;
         }
-        blueScore += BleDataUtils.getScore(data);
+        blueScore ++;
         count = hitList.size();
         sendMsg(BleDataUtils.closeBlueData(hitList));
         callback.updateScore(blueScore, 0, 0);

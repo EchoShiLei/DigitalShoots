@@ -40,7 +40,7 @@ public class NoviceFragment extends BaseFragment {
         });
 
         mainViewModel.getLiveCutDown().observe(getActivity(), cutDownTime -> {
-            time.setText(cutDownTime);
+            score.setText(cutDownTime);
         });
         mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             score.setText(liveScore.toString());
@@ -52,8 +52,8 @@ public class NoviceFragment extends BaseFragment {
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         mainViewModel.endModel();
     }
 }

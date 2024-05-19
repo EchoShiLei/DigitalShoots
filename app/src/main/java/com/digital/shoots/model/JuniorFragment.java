@@ -18,6 +18,7 @@ import com.digital.shoots.views.LedTextView;
 public class JuniorFragment extends BaseFragment {
     LedTextView time;
     LedTextView score;
+    LedTextView speed;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -35,6 +36,7 @@ public class JuniorFragment extends BaseFragment {
     protected void initView(View view) {
         time = view.findViewById(R.id.game_time);
         score = view.findViewById(R.id.score);
+        speed = view.findViewById(R.id.speed);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -53,12 +55,15 @@ public class JuniorFragment extends BaseFragment {
         mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
             score.setText(liveScore.toString());
         });
+        mainViewModel.getLiveSpeed().observe(getActivity(), liveSpeed -> {
+            speed.setText(liveSpeed.toString());
+        });
         mainViewModel.startModel(JUNIOR);
     }
 
     @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void onPause() {
+        super.onPause();
         mainViewModel.endModel();
     }
 }

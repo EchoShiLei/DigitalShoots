@@ -163,12 +163,6 @@ public class JuniorPreviewFragment extends JuniorFragment {
         super.onPause();
         CameraUtil.getInstance().cancelRecord();
         CameraUtil.getInstance().stopPreview();
-    }
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
         CameraUtil.getInstance().destroy();
         mainViewModel.endModel();
     }

@@ -62,7 +62,8 @@ public class JuniorPreviewModel extends BaseModel {
         checkTime();
     }
 
-    private void checkTime() {
+    protected void checkTime() {
+        super.checkTime();
         if (ledTime - time >= OUT_TIME) {
             closeAllLed(blueLed, false);
         }

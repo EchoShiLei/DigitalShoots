@@ -26,9 +26,10 @@ public abstract class BaseModel {
     private ModelState state = ModelState.IDLE;
     public static long TIME_PERIOD = 10;
     public static long OUT_TIME = 4500;
+    public static long MAX_TIME = 75000;
 
     BleDeviceControl bleDeviceControl;
-    HandlerThread handlerThread = new HandlerThread("BaseModel");
+    HandlerThread handlerThread;
     Handler handler;
     ModelCallback callback;
     Timer timer;
@@ -52,13 +53,12 @@ public abstract class BaseModel {
     public void init() {
         Log.d("BaseModel", "init");
         timer = new Timer();
+        handlerThread = new HandlerThread("BaseModel");
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
-        if (!BleDataUtils.isOnline) {
-            return;
-        }
         bleDeviceControl.writeBle(BleDataUtils.openAllBlueLight());
         state = ModelState.READY;
+        maxSpeed = 0;
     }
 
     //展示3s倒计时
@@ -97,8 +97,8 @@ public abstract class BaseModel {
     }
 
     public void end() {
+        timer.cancel();
         try {
-            timer.cancel();
             handler.removeCallbacksAndMessages(null);
             // 蓝灯闪烁三次
             handler.postDelayed(() -> {
@@ -114,6 +114,7 @@ public abstract class BaseModel {
                                 handler.postDelayed(() -> {
                                     bleDeviceControl.writeBle(BleDataUtils.closeAllBlueLight());
                                     handlerThread.quitSafely();
+                                    init();
                                 }, 100);
                             }, 100);
                         }, 100);
@@ -143,6 +144,10 @@ public abstract class BaseModel {
     }
 
     synchronized void doTime() {
+
+    }
+
+    protected synchronized void checkTime() {
 
     }
 

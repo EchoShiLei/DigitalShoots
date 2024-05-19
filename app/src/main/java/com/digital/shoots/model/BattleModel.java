@@ -23,13 +23,15 @@ public class BattleModel extends BaseModel {
     @Override
     public void init() {
         super.init();
-    }
-
-    public synchronized void start() {
         TIME_PERIOD = 1000;
         time = 75000;
         redScore = 0;
         blueScore = 0;
+        callback.countdownTime(time);
+        callback.updateScore(blueScore, redScore, maxSpeed);
+    }
+
+    public synchronized void start() {
         openBlueLed();
         openRedLed();
     }
@@ -53,7 +55,11 @@ public class BattleModel extends BaseModel {
         checkTime();
     }
 
-    private synchronized void checkTime() {
+    protected synchronized void checkTime() {
+        super.checkTime();
+        if (time <= 0) {
+            end();
+        }
         if (blueLedTime - time >= OUT_TIME) {
             closeBlueLed(blueLed, false);
         }

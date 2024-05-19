@@ -31,13 +31,15 @@ public class JuniorModel extends BaseModel {
     @Override
     public void init() {
         super.init();
+        TIME_PERIOD = 1000;
+        time = 75000;
+        blueScore = 0;
+        callback.countdownTime(time);
+        callback.updateScore(blueScore, redScore, maxSpeed);
     }
 
     @Override
     public synchronized void start() {
-        TIME_PERIOD = 1000;
-        time = 75000;
-        blueScore = 0;
         openLed();
     }
 
@@ -60,7 +62,11 @@ public class JuniorModel extends BaseModel {
         checkTime();
     }
 
-    private synchronized void checkTime() {
+    protected synchronized void checkTime() {
+        super.checkTime();
+        if (time <= 0) {
+            end();
+        }
         if (ledTime - time >= OUT_TIME) {
             closeAllLed(blueLed, false);
         }

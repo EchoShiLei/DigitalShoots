@@ -14,6 +14,60 @@
         android:layout_margin="20dp"
         android:background="@drawable/white_radius_bg">
 
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/bg_speed"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintCircleRadius="10dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline3">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <com.digital.shoots.views.LedTextView
+                    android:id="@+id/tx"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right|bottom"
+                    android:lines="1"
+                    android:text="SHOTS"
+                    android:textColor="@color/white"
+                    android:textSize="30dp" />
+
+                <com.digital.shoots.views.LedTextView
+                    android:id="@+id/tx2"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right|top"
+                    android:lines="1"
+                    android:text="S P E E D"
+                    android:textColor="@color/white"
+                    android:textSize="30dp" />
+            </LinearLayout>
+
+            <com.digital.shoots.views.LedTextView
+                android:id="@+id/speed"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:gravity="left|center_vertical"
+                android:lines="1"
+                android:text="000"
+                android:textColor="@color/white"
+                android:textSize="60dp" />
+        </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -25,26 +79,66 @@
 
             <TextView
                 android:id="@+id/game_time_title"
-                android:layout_centerHorizontal="true"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_centerHorizontal="true"
                 android:layout_marginTop="15dp"
+                android:gravity="center"
+                android:text="@string/game_time"
                 android:textColor="@color/yellow"
-                android:textStyle="bold"
                 android:textSize="18dp"
-                android:text="@string/game_time" />
+                android:textStyle="bold" />
 
             <com.digital.shoots.views.LedTextView
                 android:id="@+id/game_time"
-                android:layout_below="@+id/game_time_title"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:textColor="@color/yellow"
-                android:textSize="55dp"
                 android:layout_alignParentBottom="true"
-                android:text="00:00" />
+                android:layout_below="@+id/game_time_title"
+                android:gravity="center"
+                android:text="00:00"
+                android:textColor="@color/yellow"
+                android:textSize="55dp" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/score_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_margin="20dp"
+            android:background="@drawable/score_bg_red"
+            app:layout_constraintBottom_toTopOf="@id/guideline3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/guideline2">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_below="@+id/score"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="-70dp"
+                android:text="@string/score"
+                android:textColor="@color/white"
+                android:textSize="24dp"
+                android:textStyle="bold|italic" />
+
+            <com.digital.shoots.views.LedTextView
+                android:id="@+id/score"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="70dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="20dp"
+                android:gravity="center"
+                android:lines="1"
+                android:text="000"
+                android:textColor="@color/white"
+                android:textSize="150dp" />
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.Guideline
@@ -53,46 +147,6 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.18" />
-
-        <RelativeLayout
-            android:id="@+id/score_bg"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@drawable/score_bg_red"
-            android:layout_margin="20dp"
-            app:layout_constraintBottom_toTopOf="@id/guideline3"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/guideline2">
-
-            <com.digital.shoots.views.LedTextView
-                android:id="@+id/score"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="70dp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:gravity="center"
-                android:textSize="150dp"
-                android:lines="1"
-                android:textColor="@color/white"
-                android:text="000" />
-
-            <TextView
-                android:id="@+id/textView4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/score"
-                android:layout_marginTop="-70dp"
-                android:layout_marginEnd="10dp"
-                android:layout_alignParentBottom="true"
-                android:textColor="@color/white"
-                android:textSize="24dp"
-                android:layout_alignParentEnd="true"
-                android:textStyle="bold|italic"
-                android:text="@string/score" />
-        </RelativeLayout>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline3"

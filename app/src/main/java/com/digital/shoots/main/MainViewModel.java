@@ -156,6 +156,15 @@ public class MainViewModel extends AndroidViewModel {
             return;
         }
         model.end();
+        reset();
+    }
+
+    private void reset(){
+        livTime = new MutableLiveData<>();
+        liveBlueScore = new MutableLiveData<>();
+        liveSpeed = new MutableLiveData<>();
+        liveRedScore = new MutableLiveData<>();
+        liveCutDown = new MutableLiveData<>();
     }
 
     public MutableLiveData<Long> getLivTime() {
