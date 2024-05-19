@@ -159,7 +159,11 @@ public class MainViewModel extends AndroidViewModel {
         reset();
     }
 
-    private void reset(){
+    public boolean isConnected() {
+        return connectedMacs.size() > 0;
+    }
+
+    private void reset() {
         livTime = new MutableLiveData<>();
         liveBlueScore = new MutableLiveData<>();
         liveSpeed = new MutableLiveData<>();

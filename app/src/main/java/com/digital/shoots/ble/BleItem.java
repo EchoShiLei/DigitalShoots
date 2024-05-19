@@ -1,5 +1,7 @@
 package com.digital.shoots.ble;
 
+import androidx.annotation.Nullable;
+
 public class BleItem {
     public BleItem(String name, String mac) {
         this.mac = mac;

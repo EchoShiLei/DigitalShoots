@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.digital.shoots.R;
 import com.digital.shoots.base.BaseFragment;
+import com.digital.shoots.base.SpUtil;
 import com.digital.shoots.ble.BleDeviceManager;
 import com.digital.shoots.ble.BleItem;
 import com.digital.shoots.main.MainViewModel;
@@ -61,6 +62,7 @@ public class BleFragment extends BaseFragment {
 
         adapter = new DeviceAdapter(getActivity(), list, mac -> mainViewModel.deviceClick(mac));
         deviceList.setAdapter(adapter);
+        scanBluetooth();
         mainViewModel.getLiveConnectedMacs().observe(getActivity(), new Observer<Set<String>>() {
             @Override
             public void onChanged(Set<String> strings) {
@@ -68,11 +70,21 @@ public class BleFragment extends BaseFragment {
                 checkConnected();
             }
         });
-        scanBluetooth();
 
     }
 
     private void checkConnected() {
+        for (String mac : connectedList) {
+            String lastMac = SpUtil.getInstance(getContext()).getString(SpUtil.KEY_LAST_BLE_MAC);
+            if (mac.equals(lastMac) && !isListContain(mac)) {
+                list.add(0, new BleItem("StarShots", mac));
+            }
+            String lastMac2 = SpUtil.getInstance(getContext()).getString(SpUtil.KEY_LAST_BLE_MAC_SPEED);
+            if (mac.equals(lastMac2) && !isListContain(mac)) {
+                list.add(0, new BleItem("MySpeedz", mac));
+            }
+        }
+
         for (BleItem item : list) {
             if (!TextUtils.isEmpty(item.mac) && connectedList.contains(item.mac)) {
                 item.isConnect = true;
@@ -84,6 +96,15 @@ public class BleFragment extends BaseFragment {
             return;
         }
         adapter.notifyDataSetChanged();
+    }
+
+    private boolean isListContain(String mac) {
+        for (BleItem item : list) {
+            if (item.mac.equals(mac)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void scanBluetooth() {
@@ -118,7 +139,7 @@ public class BleFragment extends BaseFragment {
             BleItem bleItem = list.get(position);
             holder.itemView.setOnClickListener(view -> callback.click(bleItem.mac));
             ((BleViewHolder) holder).name.setText(bleItem.name);
-            ((BleViewHolder) holder).name.setTextColor( bleItem.isConnect ?Color.rgb(0,255,0):Color.rgb(127,127,127));
+            ((BleViewHolder) holder).name.setTextColor(bleItem.isConnect ? Color.rgb(0, 255, 0) : Color.rgb(127, 127, 127));
             ((BleViewHolder) holder).vStatus.setImageDrawable(Utils.getDrawable(getContext(),
                     bleItem.isConnect ? R.drawable.bluetooth_open : R.drawable.bluetooth_off));
         }

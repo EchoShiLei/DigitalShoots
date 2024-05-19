@@ -88,7 +88,7 @@ public class FirstFragment extends BaseFragment {
         view.findViewById(R.id.button_first).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mainViewModel.deviceControl == null) {
+                if (mainViewModel.deviceControl == null || !mainViewModel.isConnected()) {
                     ToastUtils.showToast(R.string.pls_connect);
                     return;
                 }

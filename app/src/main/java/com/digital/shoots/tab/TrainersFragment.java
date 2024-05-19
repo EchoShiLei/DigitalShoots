@@ -8,12 +8,11 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
-import android.text.TextUtils;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,15 +23,12 @@ import android.widget.Toast;
 
 import com.digital.shoots.R;
 import com.digital.shoots.base.SpUtil;
-import com.digital.shoots.ble.BleItem;
 import com.digital.shoots.main.MainViewModel;
-import com.digital.shoots.utils.Utils;
 import com.zyq.easypermission.EasyPermission;
 import com.zyq.easypermission.EasyPermissionHelper;
 import com.zyq.easypermission.EasyPermissionResult;
 
 import java.util.List;
-import java.util.Set;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -59,6 +55,7 @@ public class TrainersFragment extends Fragment {
     private final int MY_REQUEST_CODE = 1001;
 
     private MainViewModel mainViewModel;
+    CountDownTimer countDownTimer;
 
 
     public TrainersFragment() {
@@ -103,7 +100,22 @@ public class TrainersFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_trainers, container, false);
         initView(view);
-        initData();
+
+        countDownTimer = new CountDownTimer(Integer.MAX_VALUE, 2000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // 更新倒计时文本
+                autoConnected();
+            }
+
+            @Override
+            public void onFinish() {
+            }
+        };
+
+        // 启动倒计时器
+        countDownTimer.start();
+        autoConnected();
         return view;
     }
 
@@ -157,10 +169,16 @@ public class TrainersFragment extends Fragment {
                 status.setText(R.string.ble_status_disconnected);
                 bleButton.setBackgroundResource(R.drawable.ble_btn_bg_un);
             }
+            if (size == 2) {
+                countDownTimer.cancel();
+            } else {
+                countDownTimer.start();
+            }
+
         });
     }
 
-    private void initData() {
+    private void autoConnected() {
         String lastMac = SpUtil.getInstance(getContext()).getString(SpUtil.KEY_LAST_BLE_MAC);
         if (lastMac != null && !lastMac.equals("")) {
             mainViewModel.deviceClick(lastMac);
@@ -172,7 +190,7 @@ public class TrainersFragment extends Fragment {
     }
 
     private void gotoDevice() {
-        if(navController == null) {
+        if (navController == null) {
             return;
         }
         navController.navigate(R.id.SecondFragment);
@@ -193,7 +211,7 @@ public class TrainersFragment extends Fragment {
     }
 
     public boolean onBackPressed() {
-        if(navController == null) {
+        if (navController == null) {
             return false;
         }
         return navController.navigateUp();
