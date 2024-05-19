@@ -231,6 +231,7 @@
                     </RelativeLayout>
 
                     <LinearLayout
+                        android:id="@+id/ll_data_table_layout"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="4dp"
@@ -240,7 +241,9 @@
                         android:paddingStart="10dp"
                         android:paddingTop="20dp"
                         android:paddingEnd="10dp"
-                        android:paddingBottom="30dp">
+                        android:paddingBottom="30dp"
+                        android:visibility="invisible"
+                        tools:visibility="visible">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -350,13 +353,13 @@
                             android:background="#eba414" />
                     </LinearLayout>
                 </LinearLayout>
+
                 <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
                     android:id="@+id/video_player"
                     android:layout_width="match_parent"
                     android:layout_height="700dp"
                     android:layout_gravity="center_horizontal"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone" />
             </RelativeLayout>
         </FrameLayout>
     </ScrollView>

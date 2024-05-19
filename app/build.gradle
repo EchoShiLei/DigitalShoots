@@ -62,7 +62,7 @@ dependencies {
     implementation("androidx.camera:camera-video:1.2.1")
     implementation("androidx.camera:camera-view:1.2.1")
     implementation("androidx.camera:camera-extensions:1.2.1")
-
+    implementation "com.bytedance.tools.codelocator:codelocator-core-support:2.0.0"
     implementation 'io.github.lucksiege:pictureselector:v3.11.2'
     implementation 'io.github.lucksiege:ucrop:v3.11.2'
     implementation 'io.github.lucksiege:camerax:v3.11.2'

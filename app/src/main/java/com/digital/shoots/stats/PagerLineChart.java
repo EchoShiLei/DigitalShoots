@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewOutlineProvider;
+import android.view.ViewTreeObserver;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -52,7 +53,7 @@ public class PagerLineChart extends BaseStatsPager {
 
         @Override
         public void playDataRefresh() {
-            setData();
+            refreshLineData();
         }
     };
 
@@ -71,9 +72,10 @@ public class PagerLineChart extends BaseStatsPager {
         mLineChartHolder = (HolderStatsLineChartFragment) mHolder;
         ImageUtils.createCircleImage((Activity) mContext, mLineChartHolder.mIvUserIcon);
         initIcon();
-        mLineChartHolder.mLineChart.setRenderer(new LineCharTextRenderer(mLineChartHolder.mLineChart,
+        LineCharTextRenderer lineCharTextRenderer = new LineCharTextRenderer(mLineChartHolder.mLineChart,
                 mLineChartHolder.mLineChart.getAnimator(),
-                mLineChartHolder.mLineChart.getViewPortHandler()));
+                mLineChartHolder.mLineChart.getViewPortHandler());
+        mLineChartHolder.mLineChart.setRenderer(lineCharTextRenderer);
         mLineChartHolder.mLlDataTime.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -121,7 +123,32 @@ public class PagerLineChart extends BaseStatsPager {
             int maxScore = highestScores.get(0).getBlueScore();
             mLineChartHolder.mTvScoreNum.setText(String.valueOf(maxScore));
         }
+        mLineChartHolder.mLineChart.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                mLineChartHolder.mLineChart.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                int[] location = new int[2];
+                mLineChartHolder.mLineChart.getLocationOnScreen(location);
+                int x = location[0]; // view距离window 左边的距离（即x轴方向）
+                int y = location[1];
+                int measuredHeight = mLineChartHolder.mLineChart.getMeasuredHeight();
+                lineCharTextRenderer.setBottomLocation(measuredHeight + y);
+                refreshLineData();
+            }
+        });
 
+        initLineCharBaseSetting();
+
+    }
+
+    private void refreshLineData() {
+        LineData data = getData();
+        if (data != null) {
+            mLineChartHolder.mLineChart.setData(getData());
+        }
+    }
+
+    private void initLineCharBaseSetting() {
         mLineChartHolder.mLineChart.getDescription().setEnabled(false);
         mLineChartHolder.mLineChart.setTouchEnabled(false);
         mLineChartHolder.mLineChart.getLegend().setEnabled(false);
@@ -132,7 +159,7 @@ public class PagerLineChart extends BaseStatsPager {
         xAxis.setGranularity(1f);
         xAxis.setLabelCount(10, true);
         xAxis.setAxisMinimum(0f);
-        xAxis.setAxisMaximum(10);
+        xAxis.setAxisMaximum(20);
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
         //设置Y轴
         YAxis yAxis = mLineChartHolder.mLineChart.getAxisLeft();
@@ -140,7 +167,6 @@ public class PagerLineChart extends BaseStatsPager {
         axisRight.setEnabled(false);
         yAxis.setDrawGridLines(false);
         yAxis.setDrawAxisLine(true);
-        mLineChartHolder.mLineChart.setData(setData());
     }
 
 
@@ -152,7 +178,7 @@ public class PagerLineChart extends BaseStatsPager {
     }
 
 
-    private LineData setData() {
+    private LineData getData() {
 //        创建一个Entry类型的集合，并添加数据
         List<Entry> entries = new ArrayList<>();
         Date date = new Date();
@@ -160,6 +186,9 @@ public class PagerLineChart extends BaseStatsPager {
         SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
         String time = sdf.format(date);
         List<GameAchievement> top10Scores = GreenDaoManager.getTop10Scores(time);
+        if (top10Scores.size() < 1) {
+            return null;
+        }
         for (int i = 0; i < top10Scores.size(); i++) {
 //            添加Entry对象，传入纵轴的索引和纵轴的值
             GameAchievement gameAchievement = top10Scores.get(i);
@@ -168,18 +197,23 @@ public class PagerLineChart extends BaseStatsPager {
             int score = Math.max(blueScore, redScore);
             entries.add(new Entry(i + 1, score));
         }
+//        ArrayList<Integer> datas = new ArrayList<>();
+//        for (int i = 0; i < 20; i++) {
+//            int score = (int) (1 + Math.random() * (200 - 30 + 1));
+//            datas.add(Integer.valueOf(score));
+//            entries.add(new Entry(i + 1, score));
+//        }
 
 //        实例化LineDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置
         LineDataSet lineDataSet = new LineDataSet(entries, "线型图");
-        lineDataSet.setMode(LineDataSet.Mode.HORIZONTAL_BEZIER);
+        lineDataSet.setMode(LineDataSet.Mode.LINEAR);
         lineDataSet.setColor(Color.parseColor("#848283"));
         lineDataSet.setLineWidth(Utils.dp2px(mContext, 1));
         lineDataSet.setDrawCircleHole(true);
         lineDataSet.setCircleColor(Color.parseColor("#848283"));
         lineDataSet.setCircleHoleColor(Color.parseColor("#ffffff"));
 //        这个就是线型图所需的数据了
-        LineData lineData = new LineData(lineDataSet);
-        return lineData;
+        return new LineData(lineDataSet);
     }
 
 

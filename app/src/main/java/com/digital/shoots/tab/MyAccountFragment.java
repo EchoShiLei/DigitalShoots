@@ -77,6 +77,7 @@ public class MyAccountFragment extends Fragment {
     private ImageView mIvStarE;
 
     private StandardGSYVideoPlayer videoPlayer;
+    private View mDataTable;
 
     public MyAccountFragment() {
         // Required empty public constructor
@@ -154,13 +155,6 @@ public class MyAccountFragment extends Fragment {
 
         });
         mTvUseNameTop = view.findViewById(R.id.tv_use_name_top);
-//        mTvUseNameTop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showDialog(mTvUseNameTop);
-//            }
-//        });
-
         View teamNameLayout = view.findViewById(R.id.ll_team_name_layout);
         mTvTeamName = view.findViewById(R.id.tv_team_name);
         teamNameLayout.setOnClickListener(new View.OnClickListener() {
@@ -205,6 +199,7 @@ public class MyAccountFragment extends Fragment {
         mTvDataScore = view.findViewById(R.id.tv_data_score);
         mTvDataSpeed = view.findViewById(R.id.tv_data_speed);
         mIvDataVideo = view.findViewById(R.id.iv_data_video);
+        mDataTable = view.findViewById(R.id.ll_data_table_layout);
         fullInfo();
         videoPlayer = view.findViewById(R.id.video_player);
         videoPlayer.setClipToOutline(true);
@@ -291,7 +286,9 @@ public class MyAccountFragment extends Fragment {
     }
 
     private void initData(GameAchievement juniorHighestScore) {
-
+        if (mDataTable != null) {
+            mDataTable.setVisibility(View.VISIBLE);
+        }
         if (juniorHighestScore == null) {
             ToastUtils.showToast("no data");
             return;
