@@ -19,7 +19,9 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.digital.shoots.R;
+import com.digital.shoots.db.greendao.GreenDaoManager;
 import com.digital.shoots.db.greendao.UserDataManager;
+import com.digital.shoots.db.greendao.bean.GameAchievement;
 import com.digital.shoots.db.greendao.bean.User;
 import com.digital.shoots.events.IUserInfoRefreshEvent;
 import com.digital.shoots.events.UserInfoRefreshManger;
@@ -27,7 +29,10 @@ import com.digital.shoots.stats.StatsFragmentsAdapter;
 import com.digital.shoots.utils.ImageUtils;
 import com.digital.shoots.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -70,7 +75,7 @@ public class MyStatsFragment extends Fragment {
 
         @Override
         public void playDataRefresh() {
-
+            initViewData();
         }
     };
 
@@ -185,16 +190,27 @@ public class MyStatsFragment extends Fragment {
         mIvScoreStatus.post(new Runnable() {
             @Override
             public void run() {
-                initScoreView(150);
-                moveByScoreProgress(260);
-                initSpeedView(200);
+                initViewData();
             }
         });
-        mIvStatsProgress.post(new Runnable() {
-            @Override
-            public void run() {
-            }
-        });
+    }
+
+    private void initViewData() {
+        Date date = new Date();
+        String strDateFormat = "yyyyMMdd";
+        SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
+        String time = sdf.format(date);
+        int highestScore = GreenDaoManager.getJuniorHighestScore(time);
+        if (highestScore >= 0) {
+
+            initScoreView(highestScore);
+            moveByScoreProgress(highestScore);
+        }
+
+        int highestSpeed = GreenDaoManager.getJuniorHighestSpeed(time);
+        if (highestSpeed >= 0) {
+            initSpeedView(highestSpeed);
+        }
     }
 
 
@@ -206,6 +222,7 @@ public class MyStatsFragment extends Fragment {
     private void initSpeedView(int speed) {
         mTvSpeedNum.setText(String.valueOf(speed));
         mIvSpeedStatus.setImageDrawable(Utils.getDrawable(getContext(), getSpeedIvId(speed)));
+        mIvSpeedEmoji.setVisibility(View.VISIBLE);
         mIvSpeedEmoji.setImageDrawable(Utils.getDrawable(getContext(),
                 speed >= 50 ? R.drawable.emoji_good : R.drawable.emoji_pro));
     }
@@ -265,6 +282,7 @@ public class MyStatsFragment extends Fragment {
             ivId = R.drawable.stats_indicator_4;
             step = 3;
         }
+        mIvProgressIndicator.setVisibility(View.VISIBLE);
         mIvProgressIndicator.setImageDrawable(Utils.getDrawable(getContext(), ivId));
 
         ViewGroup.LayoutParams layoutParams = mFlStatsIndicator.getLayoutParams();

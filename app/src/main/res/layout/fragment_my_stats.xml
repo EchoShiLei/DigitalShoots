@@ -163,7 +163,7 @@
                     android:id="@+id/iv_stats_speed_status"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/stats_speed_2" />
+                    android:src="@drawable/stats_speed_1" />
 
                 <TextView
                     android:id="@+id/tv_stats_speed"
@@ -200,7 +200,9 @@
                         android:id="@+id/iv_speed_emoji"
                         android:layout_width="20dp"
                         android:layout_height="20dp"
-                        android:src="@drawable/emoji_good" />
+                        android:src="@drawable/emoji_good"
+                        android:visibility="invisible" />
+
 
                     <TextView
                         android:id="@+id/tv_stats_speed_num"
@@ -275,7 +277,8 @@
                         android:layout_width="22dp"
                         android:layout_height="22dp"
                         android:layout_marginTop="2dp"
-                        android:src="@drawable/stats_indicator_1" />
+                        android:src="@drawable/stats_indicator_1"
+                        android:visibility="invisible" />
                 </FrameLayout>
 
                 <LinearLayout

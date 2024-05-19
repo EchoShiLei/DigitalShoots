@@ -220,62 +220,32 @@ public class MyAccountFragment extends Fragment {
             return;
         }
         int blueScore = mJuniorHighestScore.getBlueScore();
-        if (blueScore > 0 && blueScore < 25) {
-            //0.5 star
-            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
-        }
-        if (blueScore >= 25 && blueScore < 50) {
+        if (blueScore >= 0 && blueScore < 50) {
             //1 star
             mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
         }
-        if (blueScore >= 50 && blueScore < 75) {
-            //1.5 star
-            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
-        }
-        if (blueScore >= 75 && blueScore < 100) {
+        if (blueScore >= 50 && blueScore < 100) {
             //2 star
             mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
             mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
         }
 
-        if (blueScore >= 100 && blueScore < 125) {
-            //2.5 star
-            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarC.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
-        }
-
-        if (blueScore >= 125 && blueScore < 150) {
+        if (blueScore >= 100 && blueScore < 150) {
             //3 star
             mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
             mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
             mIvStarC.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
         }
 
-        if (blueScore >= 150 && blueScore < 175) {
-            //3.5 star
-            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarC.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarD.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
-        }
-        if (blueScore >= 175 && blueScore < 200) {
+        if (blueScore >= 150 && blueScore < 200) {
             //4 star
             mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
             mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
             mIvStarC.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
             mIvStarD.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
         }
-        if (blueScore >= 200 && blueScore < 225) {
-            //4.5 star
-            mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarC.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarD.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
-            mIvStarE.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_half_icon));
-        }
-        if (blueScore >= 225) {
+
+        if (blueScore >= 200) {
             //5 star
             mIvStarA.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));
             mIvStarB.setImageDrawable(Utils.getDrawable(getActivity(), R.drawable.star_full_icon));

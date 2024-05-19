@@ -38,7 +38,6 @@ public class BarCharTextRenderer extends BarChartRenderer {
         float yMin = dataSet.getYMin();
         mDataSet = dataSet;
         ;
-        Log.d("ZZQ", "index:" + index + " yMax:" + yMax);
         for (int j = 0; j < dataSet.getEntryCount(); j++) {
             Entry entry = dataSet.getEntryForIndex(j);
             if (entry.getY() == yMax) {

@@ -76,7 +76,7 @@ public class PagerBarChart extends BaseStatsPager {
         });
         ImageUtils.createCircleImage((Activity) mContext, mBarChartFragmentsHolder.mIvUserIcon);
         initIcon();
-        List<GameAchievement> highestSpeeds = GreenDaoManager.getHighestSpeeds();
+        List<GameAchievement> highestSpeeds = StatsDataUtils.getMaxJuniorSpeedData(StatsDataUtils.MAX_DATA_SIZE);
         if (highestSpeeds.size() > 0) {
             GameAchievement gameAchievement = highestSpeeds.get(0);
             if (gameAchievement != null) {
@@ -104,24 +104,18 @@ public class PagerBarChart extends BaseStatsPager {
 
     private void refreshBarData() {
         BarData barData = getBarData();
-        if (barData != null) {
-            mBarChartFragmentsHolder.mBarChart.setData(barData);
-        }
+        mBarChartFragmentsHolder.mBarChart.setData(barData);
     }
 
-    private BarData getBarData() {
-        //        创建一个Entry类型的集合，并添加数据
-        List<BarEntry> entries = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-//            添加Entry对象，传入纵轴的索引和纵轴的值
-            entries.add(new BarEntry(i, new Random().nextInt(100)));
-        }
-//        实例化barDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置
-        BarDataSet barDataSet = new BarDataSet(entries, "线型图测试");
-        barDataSet.setColor(Color.parseColor("#353535"));
-//        这个就是线型图所需的数据了
-        return new BarData(barDataSet);
-    }
+//    private BarData getBarData() {
+//        List<BarEntry> entries = new ArrayList<>();
+//        for (int i = 0; i < 10; i++) {
+//            entries.add(new BarEntry(i, new Random().nextInt(100)));
+//        }
+//        BarDataSet barDataSet = new BarDataSet(entries, "线型图测试");
+//        barDataSet.setColor(Color.parseColor("#353535"));
+//        return new BarData(barDataSet);
+//    }
 
     private void initBarChartBaseSetting() {
         mBarCharTextRenderer = new BarCharTextRenderer(mBarChartFragmentsHolder.mBarChart,
@@ -151,40 +145,22 @@ public class PagerBarChart extends BaseStatsPager {
         }
     }
 
-//    private BarData setData() {
-////        创建一个Entry类型的集合，并添加数据
-//        List<BarEntry> entries = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-////            添加Entry对象，传入纵轴的索引和纵轴的值
-//            entries.add(new BarEntry(i, new Random().nextInt(100)));
-//        }
-////        实例化barDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置
-//        BarDataSet barDataSet = new BarDataSet(entries, "线型图测试");
-////        这个就是线型图所需的数据了
-//        BarData barData = new BarData(barDataSet);
-//        return barData;
-//    }
-
-    private BarData setData() {
+    private BarData getBarData() {
 //        创建一个Entry类型的集合，并添加数据
         List<BarEntry> entries = new ArrayList<>();
-        Date date = new Date();
-        String strDateFormat = "yyyyMMdd";
-        SimpleDateFormat sdf = new SimpleDateFormat(strDateFormat);
-        String time = sdf.format(date);
-        List<GameAchievement> top10Scores = GreenDaoManager.getTop10Scores(time);
-        for (int i = 0; i < top10Scores.size(); i++) {
-//            添加Entry对象，传入纵轴的索引和纵轴的值
-            GameAchievement gameAchievement = top10Scores.get(i);
-            int blueScore = gameAchievement.getBlueScore();
-            int redScore = gameAchievement.getRedScore();
-            int score = Math.max(blueScore, redScore);
-            entries.add(new BarEntry(i + 1, score));
-        }
+        List<GameAchievement> maxJuniorSpeedData = StatsDataUtils.getMaxJuniorSpeedData(StatsDataUtils.MAX_DATA_SIZE);
+        int index = 0;
+        for (GameAchievement data : maxJuniorSpeedData) {
 
-        BarDataSet barDataSet = new BarDataSet(entries, "条型图");
-        BarData barData = new BarData(barDataSet);
-        return barData;
+            entries.add(new BarEntry(index, data.getSpeed()));
+            index++;
+        }
+//        实例化barDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置
+        BarDataSet barDataSet = new BarDataSet(entries, "");
+        barDataSet.setColor(Color.parseColor("#353535"));
+//        这个就是线型图所需的数据了
+        return new BarData(barDataSet);
     }
+
 
 }

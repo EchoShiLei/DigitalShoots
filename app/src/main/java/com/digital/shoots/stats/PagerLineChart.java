@@ -41,6 +41,7 @@ import java.util.List;
 
 public class PagerLineChart extends BaseStatsPager {
     private int maxScore = 0;
+
     private HolderStatsLineChartFragment mLineChartHolder;
     private ChangePagerListener mChangePagerListener;
     private Fragment fragment;
@@ -119,8 +120,8 @@ public class PagerLineChart extends BaseStatsPager {
         });
 
         //查询最高分
-        List<GameAchievement> highestScores = getMaxJuniorData();
-        if (highestScores != null && highestScores.size() > 0) {
+        List<GameAchievement> highestScores = StatsDataUtils.getMaxJuniorScoreData(StatsDataUtils.MAX_DATA_SIZE);
+        if (highestScores.size() > 0) {
             GameAchievement gameAchievement = highestScores.get(0);
             if (gameAchievement != null) {
                 mLineChartHolder.mTvScoreNum.setText(String.valueOf(gameAchievement.getBlueScore()));
@@ -128,10 +129,11 @@ public class PagerLineChart extends BaseStatsPager {
             }
         }
         initLineCharBaseSetting();
+        Log.d("ZZQ", "mLineChart");
         mLineChartHolder.mLineChart.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
             public void onGlobalLayout() {
-                Log.d("ZZQ", "mLineChart: mBarChart");
+                Log.d("ZZQ", "mLineChart: mLineChart");
                 mLineChartHolder.mLineChart.getViewTreeObserver().removeOnGlobalLayoutListener(this);
                 int[] location = new int[2];
                 mLineChartHolder.mLineChart.getLocationOnScreen(location);
@@ -190,10 +192,7 @@ public class PagerLineChart extends BaseStatsPager {
 //        创建一个Entry类型的集合，并添加数据
         List<Entry> entries = new ArrayList<>();
 
-        List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
-        if (highestScores.size() < 1) {
-            return null;
-        }
+        List<GameAchievement> highestScores = StatsDataUtils.getMaxJuniorScoreData(StatsDataUtils.MAX_DATA_SIZE);
         int maxCount = Math.min(highestScores.size(), 10);
         for (int i = 0; i < maxCount; i++) {
 //            添加Entry对象，传入纵轴的索引和纵轴的值
@@ -203,13 +202,6 @@ public class PagerLineChart extends BaseStatsPager {
             int score = Math.max(blueScore, redScore);
             entries.add(new Entry(i + 1, score));
         }
-
-//        ArrayList<Integer> datas = new ArrayList<>();
-//        for (int i = 0; i < 10; i++) {
-//            int score = (int) (1 + Math.random() * (200 - 30 + 1));
-//            datas.add(Integer.valueOf(score));
-//            entries.add(new Entry(i + 1, score));
-//        }
 
 //        实例化LineDataSet类，并将Entry集合中的数据和这组数据名(或者说这个图形名)，通过这个类可以对线段进行设置
         LineDataSet lineDataSet = new LineDataSet(entries, "线型图");
@@ -222,24 +214,6 @@ public class PagerLineChart extends BaseStatsPager {
 //        这个就是线型图所需的数据了
         return new LineData(lineDataSet);
     }
-
-
-    private List<GameAchievement> getMaxJuniorData() {
-        List<GameAchievement> highestScores = GreenDaoManager.getHighestScores();
-        if (highestScores.size() < 1) {
-            return null;
-        }
-        List<GameAchievement> JuniorScores = new ArrayList<>();
-        for (GameAchievement gameData : highestScores) {
-            if ((gameData.getType() == BaseModel.ModelType.JUNIOR.ordinal() ||
-                    gameData.getType() == BaseModel.ModelType.JUNIOR_PREVIEW.ordinal())
-                    && gameData.getBlueScore() > 0) {
-                JuniorScores.add(gameData);
-            }
-        }
-        return JuniorScores;
-    }
-
 
     private void play() {
         mLineChartHolder.videoPlayer.setVisibility(View.VISIBLE);
