@@ -56,7 +56,7 @@ public class CameraUtil {
 
     private int mCountDown = 3;
 
-    private int score = 0;
+    private String score = "000";
     private int speed = 0;
 
     private int recordTime;
@@ -221,7 +221,7 @@ public class CameraUtil {
                 canvas.drawBitmap(bitmap, new Rect(0, 0, bitmap.getWidth(), bitmap.getHeight()), new Rect((int) (mScreenWidth * 0.05), (int) (mScreenHeight * 0.03), (int) (mScreenWidth * 0.95), (int) (mScreenHeight * 0.3)), mPaint);
 
                 // 绘制左侧积分
-                canvas.drawText(decimalFormat.format(getScore()), mScreenWidth * 0.053f, mScreenHeight * 0.26f, scorePaint);
+                canvas.drawText(getScore(), mScreenWidth * 0.053f, mScreenHeight * 0.26f, scorePaint);
                 canvas.drawText(decimalFormat.format(getSpeed()), mScreenWidth * 0.767f, mScreenHeight * 0.26f, scorePaint);
                 // 绘制时间部分
                 canvas.drawText(getTime(), mScreenWidth * 0.385f, mScreenHeight * 0.26f, timePaint);
@@ -377,6 +377,9 @@ public class CameraUtil {
 
 
     public void stopPreview() {
+        time = "00:00";
+        speed = 0;
+        score = "000";
         if (mRecorder != null) {
             mRecorder.stopPreview();
         }
@@ -443,11 +446,11 @@ public class CameraUtil {
         }
     }
 
-    public int getScore() {
+    public String getScore() {
         return score;
     }
 
-    public void setScore(int score) {
+    public void setScore(String score) {
         this.score = score;
     }
 

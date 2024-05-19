@@ -8,14 +8,18 @@ import android.view.ViewGroup;
 import com.digital.shoots.R;
 import com.digital.shoots.base.BaseFragment;
 import com.digital.shoots.views.LedTextView;
+import com.digital.shoots.views.LedTextView2;
+import com.erlei.videorecorder.util.LogUtil;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import static com.digital.shoots.model.BaseModel.ModelType.NOVICE;
 
+import java.text.DecimalFormat;
+
 public class NoviceFragment extends BaseFragment {
-    LedTextView time;
+    LedTextView2 time;
     LedTextView score;
     LedTextView speed;
 
@@ -33,10 +37,17 @@ public class NoviceFragment extends BaseFragment {
         speed = view.findViewById(R.id.speed);
         mainViewModel.getLivTime().observe(getActivity(), liveTime -> {
             double dbTime = liveTime;
-            double ss = dbTime / 1000;
-            String stTime = df2.format(ss);
+            int sss = (int) (dbTime % 1000)/10;
+            int ss = (int) (dbTime / 1000);
+            if(ss >= 60) {
+                ss = ss % 60;
+            }
+            int mm = (int) (dbTime / 60000);
+            String sssString = String.format("%02d", sss);
+            String ssString = String.format("%02d", ss);
+            String mmString = String.format("%02d", mm);
 //            Log.d("time",stTime);
-            time.setText(stTime);
+            time.setText(mmString + "：" + ssString + "：" + sssString);
         });
 
         mainViewModel.getLiveCutDown().observe(getActivity(), cutDownTime -> {

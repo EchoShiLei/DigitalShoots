@@ -129,16 +129,16 @@
                 android:textSize="18dp"
                 android:textStyle="bold" />
 
-            <com.digital.shoots.views.LedTextView
+            <com.digital.shoots.views.LedTextView2
                 android:id="@+id/game_time"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:layout_below="@+id/game_time_title"
                 android:gravity="center"
-                android:text="00:00"
+                android:text="00：00：00"
                 android:textColor="@color/yellow"
-                android:textSize="55dp" />
+                android:textSize="60dp" />
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.Guideline

@@ -120,7 +120,7 @@ public class PagerLineChart extends BaseStatsPager {
 
         //查询最高分
         List<GameAchievement> highestScores = getMaxJuniorData();
-        if (highestScores.size() > 0) {
+        if (highestScores != null && highestScores.size() > 0) {
             GameAchievement gameAchievement = highestScores.get(0);
             if (gameAchievement != null) {
                 mLineChartHolder.mTvScoreNum.setText(String.valueOf(gameAchievement.getBlueScore()));

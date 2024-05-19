@@ -127,10 +127,12 @@ public class JuniorPreviewFragment extends JuniorFragment {
 
         mainViewModel.getLiveCutDown().observe(getActivity(), cutDownTime -> {
 //            time.setText(cutDownTime);
-            CameraUtil.getInstance().setTime(cutDownTime);
+
+            LogUtil.logw("cutDownTime = " + cutDownTime);
+            CameraUtil.getInstance().setScore(" " + cutDownTime);
         });
         mainViewModel.getLiveBlueScore().observe(getActivity(), liveScore -> {
-            CameraUtil.getInstance().setScore(liveScore);
+            CameraUtil.getInstance().setScore(String.format("%03d", liveScore));
         });
 
         if (mainViewModel.model instanceof JuniorPreviewModel) {
@@ -168,7 +170,7 @@ public class JuniorPreviewFragment extends JuniorFragment {
     }
 
     private void startRecord() {
-        CameraUtil.getInstance().startRecord(12, new CameraUtil.OnRecorderStateListener() {
+        CameraUtil.getInstance().startRecord(75, new CameraUtil.OnRecorderStateListener() {
             @Override
             public void onRecorderStart() {
                 Log.i(TAG, "onRecorderStart");

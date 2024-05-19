@@ -353,14 +353,18 @@
                             android:background="#eba414" />
                     </LinearLayout>
                 </LinearLayout>
-
-                <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
-                    android:id="@+id/video_player"
-                    android:layout_width="match_parent"
-                    android:layout_height="700dp"
-                    android:layout_gravity="center_horizontal"
-                    android:visibility="gone" />
             </RelativeLayout>
         </FrameLayout>
     </ScrollView>
+
+    <com.shuyu.gsyvideoplayer.video.StandardGSYVideoPlayer
+        android:id="@+id/video_player"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="34dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="34dp"
+        android:visibility="gone" />
 </FrameLayout>

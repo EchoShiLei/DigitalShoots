@@ -76,11 +76,58 @@ public class GreenDaoManager {
     }
 
     public static int getHighestScore(String day) {
-        QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
-        return qb.where(GameAchievementDao.Properties.Day.eq(day))
-                .orderDesc(GameAchievementDao.Properties.BlueScore)
-                .limit(1)
-                .unique().getBlueScore();
+        try {
+            QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
+            return qb.where(GameAchievementDao.Properties.Day.eq(day))
+                    .orderDesc(GameAchievementDao.Properties.BlueScore)
+                    .limit(1)
+                    .unique().getBlueScore();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * 根据日期取某天（当天）junior 模式下最高分
+     * @param day
+     * @return
+     */
+    public static int getJuniorHighestScore(String day) {
+        try {
+            QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
+            Collection juniorTypes = new Vector();
+            juniorTypes.add(BaseModel.ModelType.JUNIOR.ordinal());
+            juniorTypes.add(BaseModel.ModelType.JUNIOR_PREVIEW.ordinal());
+            return qb.where(GameAchievementDao.Properties.Day.eq(day), GameAchievementDao.Properties.Type.in(juniorTypes))
+                    .orderDesc(GameAchievementDao.Properties.BlueScore)
+                    .limit(1)
+                    .unique().getBlueScore();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
+
+    /**
+     * 根据日期取某天（当天）junior 模式下最高speed
+     * @param day
+     * @return
+     */
+    public static int getJuniorHighestSpeed(String day) {
+        try {
+            QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
+            Collection juniorTypes = new Vector();
+            juniorTypes.add(BaseModel.ModelType.JUNIOR.ordinal());
+            juniorTypes.add(BaseModel.ModelType.JUNIOR_PREVIEW.ordinal());
+            return qb.where(GameAchievementDao.Properties.Day.eq(day), GameAchievementDao.Properties.Type.in(juniorTypes))
+                    .orderDesc(GameAchievementDao.Properties.Speed)
+                    .limit(1)
+                    .unique().getSpeed();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     /**
@@ -115,11 +162,11 @@ public class GreenDaoManager {
         List<GameAchievement> list = new ArrayList<>();
         Cursor cursor = null;
         try {
-            String sql = "SELECT _id,type,MAX(score),speed,day,VideoPath FROM GAME_ACHIEVEMENT GROUP BY day";
+            String sql = "SELECT _id,type,MAX(blueScore),speed,day,VideoPath FROM GAME_ACHIEVEMENT GROUP BY day";
             cursor = daoSession.getGameAchievementDao().getDatabase().rawQuery(sql, null);
             int mCurrentTimeIndex = cursor.getColumnIndex(GameAchievementDao.Properties.CurrentTime.columnName);
             int mTypeIndex = cursor.getColumnIndex(GameAchievementDao.Properties.Type.columnName);
-            int mScoreIndex = cursor.getColumnIndex("MAX(score)");
+            int mScoreIndex = cursor.getColumnIndex("MAX(blueScore)");
             int mSpeedIndex = cursor.getColumnIndex(GameAchievementDao.Properties.Speed.columnName);
             int mDayIndex = cursor.getColumnIndex(GameAchievementDao.Properties.Day.columnName);
             int mVideoPathIndex = cursor.getColumnIndex(GameAchievementDao.Properties.VideoPath.columnName);
@@ -134,6 +181,7 @@ public class GreenDaoManager {
                 list.add(gameAchievement);
             }
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if(cursor != null) {
                 cursor.close();
@@ -152,11 +200,16 @@ public class GreenDaoManager {
     }
 
     public static int getHighestSpeed(String day) {
-        QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
-        return qb.where(GameAchievementDao.Properties.Day.eq(day))
-                .orderDesc(GameAchievementDao.Properties.Speed)
-                .limit(1)
-                .unique().getSpeed();
+        try {
+            QueryBuilder<GameAchievement> qb = daoSession.queryBuilder(GameAchievement.class);
+            return qb.where(GameAchievementDao.Properties.Day.eq(day))
+                    .orderDesc(GameAchievementDao.Properties.Speed)
+                    .limit(1)
+                    .unique().getSpeed();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return -1;
     }
 
     public static List<GameAchievement> getHighestSpeeds() {
